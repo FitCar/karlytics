@@ -1,7 +1,15 @@
 import React from "react";
-import { Image, StyleSheet, Text, TouchableOpacity, View } from "react-native";
+import {
+  Image,
+  ScrollView,
+  StyleSheet,
+  Text,
+  TouchableOpacity,
+  View,
+} from "react-native";
 import { Icon } from "react-native-elements";
 import tw from "tailwind-react-native-classnames";
+import ServiceButton from "../components/ServiceButton";
 
 const Home = () => {
   return (
@@ -12,9 +20,9 @@ const Home = () => {
           <Text>How's your car feeling today</Text>
         </View>
       </View>
-      <View style={tw`mb-7`}>
+      <View style={tw`mb-7 h-1/3`}>
         <Image
-          style={tw`ml-20 mt-10`}
+          style={tw`ml-28 mt-10`}
           source={require("../assets/icons/garage-car.png")}
         />
         <Text style={tw`ml-20 mt-5`}>Add your car(s) to get started</Text>
@@ -24,19 +32,27 @@ const Home = () => {
           <Text style={tw`text-center`}>Add Car</Text>
         </TouchableOpacity>
       </View>
-      <View style={tw`bg-gray-100 h-1/2 rounded-t-3xl`}>
-        <Text style={tw`ml-7 mt-5`}>Make a request</Text>
-        <TouchableOpacity style={tw`bg-white flex-row ml-5 mr-5 rounded-xl py-10`}>
-          <Image
-          style={tw`ml-7`}
-          source={require("../assets/icons/scan.png")}
-          />
-          <Text style={tw`ml-7 mt-2`}>Request a scan to view health report</Text>
-        </TouchableOpacity>
-      </View>
-      <View>
-        <TouchableOpacity></TouchableOpacity>
-      </View>
+      <ScrollView style={tw`bg-gray-100 h-1/2 rounded-t-3xl`}>
+        <View style={tw`mb-5`}>
+          <Text style={tw`ml-7 mt-5`}>Make a request</Text>
+          <TouchableOpacity
+            style={tw`bg-white flex-row ml-5 mr-5 rounded-xl py-10`}
+          >
+            <Image
+              style={tw`ml-7`}
+              source={require("../assets/icons/scan.png")}
+            />
+            <Text style={tw`ml-7 mt-2`}>
+              Request a scan to view health report
+            </Text>
+          </TouchableOpacity>
+        </View>
+        <View style={tw`flex-row`}>
+          <ServiceButton />
+          <ServiceButton />
+          <ServiceButton />
+        </View>
+      </ScrollView>
     </View>
   );
 };

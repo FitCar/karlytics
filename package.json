@@ -8,6 +8,7 @@
     "eject": "expo eject"
   },
   "dependencies": {
+    "@eliav2/react-native-collapsible-view": "^1.4.0",
     "@react-navigation/bottom-tabs": "^6.0.8",
     "@react-navigation/native": "^6.0.5",
     "@react-navigation/native-stack": "^6.2.3",

@@ -18,7 +18,7 @@ export default function App() {
     <Provider store={store}>
       <NavigationContainer>
       <SafeAreaView style={styles.container}>
-        <Stack.Navigator>
+        <Stack.Navigator screenOptions={{headerShown: false}}>
    
       <Stack.Screen name="Tabs" component={Tabs} />
     

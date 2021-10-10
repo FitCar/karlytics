@@ -1,5 +1,5 @@
 import React from "react";
-import { StyleSheet, Text, TouchableOpacity, View } from "react-native";
+import { ScrollView, StyleSheet, Text, TouchableOpacity, View } from "react-native";
 import RequestCard from "../components/RequestCard";
 import tw from "tailwind-react-native-classnames";
 import { Icon } from "react-native-elements";
@@ -13,10 +13,14 @@ const Requests = () => {
           <Text>View your requests</Text>
         </View>
       </View>
+      <ScrollView>
       <RequestCard />
       <RequestCard />
       <RequestCard />
       <RequestCard />
+      <RequestCard />
+      <RequestCard />
+      </ScrollView>
     </View>
   );
 };

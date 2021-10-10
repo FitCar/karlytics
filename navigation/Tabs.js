@@ -2,12 +2,14 @@ import React from "react";
 import { Image, StyleSheet, Text, View } from "react-native";
 import { createBottomTabNavigator } from "@react-navigation/bottom-tabs";
 import Home from "../screens/Home";
+import Requests from "../screens/Requests";
+import Garage from "../screens/Garage";
 
 const Tab = createBottomTabNavigator();
 
 const Tabs = () => {
   return (
-    <Tab.Navigator>
+    <Tab.Navigator screenOptions={{headerShown: false}}>
       <Tab.Screen
         name="Home"
         component={Home}
@@ -26,7 +28,7 @@ const Tabs = () => {
       />
       <Tab.Screen
         name="Requests"
-        component={Home}
+        component={Requests}
         options={{
           tabBarIcon: ({ focused }) => (
             <Image
@@ -42,7 +44,7 @@ const Tabs = () => {
       />
       <Tab.Screen
         name="Garage"
-        component={Home}
+        component={Garage}
         options={{
           tabBarIcon: ({ focused }) => (
             <Image
