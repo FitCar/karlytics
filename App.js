@@ -21,6 +21,8 @@ export default function App() {
         <Stack.Navigator screenOptions={{headerShown: false}}>
    
       <Stack.Screen name="Tabs" component={Tabs} />
+      <Stack.Screen name="Diagnostic" component={Diagnostic} />
+      <Stack.Screen name="Quotation" component={Quotation} /><Stack.Screen name="Basket" component={Basket} />
     
     </Stack.Navigator>
     </SafeAreaView>

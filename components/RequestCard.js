@@ -3,9 +3,12 @@ import { StyleSheet, Text, TouchableOpacity, View } from "react-native";
 import { Icon } from "react-native-elements";
 import tw from "tailwind-react-native-classnames";
 import CollapsibleView from "@eliav2/react-native-collapsible-view";
+import { NavigationContainer, useNavigation } from "@react-navigation/native";
+import Diagnostic from "../screens/Diagnostic";
 
 const RequestCard = () => {
   const [expanded, setExpanded] = useState(false);
+  const navigation = useNavigation()
 
   const toggle = () => {
     setExpanded(!expanded);
@@ -34,7 +37,7 @@ const RequestCard = () => {
       >
         <View>
           <TouchableOpacity
-            style={tw`border-0 rounded-3xl self-center w-10/12 p-2 mt-10 mb-10 bg-pry-color-1`}
+            style={tw`border-0 rounded-3xl self-center w-10/12 p-2 mt-10 mb-10 bg-pry-color-1`} onPress={()=>navigation.navigate("Diagnostic")}
           >
             <Text style={tw`text-center`}>Diagnosis(Ongoing)</Text>
           </TouchableOpacity>
