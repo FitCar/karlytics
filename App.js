@@ -7,16 +7,28 @@ import Basket from "./screens/Basket";
 import { Provider } from "react-redux";
 import { store } from "./store";
 import { NavigationContainer } from "@react-navigation/native";
+import { createNativeStackNavigator } from '@react-navigation/native-stack';
+import Tabs from "./navigation/Tabs";
+import Requests from "./screens/Requests";
+import Garage from "./screens/Garage";
 
 export default function App() {
+  const Stack = createNativeStackNavigator();
   return (
     <Provider store={store}>
       <NavigationContainer>
-    <SafeAreaView style={styles.container}>
-      <Basket />
+      <SafeAreaView style={styles.container}>
+        <Stack.Navigator>
+   
+      <Stack.Screen name="Tabs" component={Tabs} />
+    
+    </Stack.Navigator>
     </SafeAreaView>
     </NavigationContainer>
     </Provider>
+    // <View style={styles.container}>
+    //   <Garage />
+    // </View>
   );
 }
 
