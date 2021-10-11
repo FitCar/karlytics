@@ -1,3 +1,4 @@
+import { useNavigation } from "@react-navigation/native";
 import React from "react";
 import {
   Image,
@@ -9,10 +10,13 @@ import {
 } from "react-native";
 import { Icon } from "react-native-elements";
 import tw from "tailwind-react-native-classnames";
+import HealthCard from "../components/HealthCard";
 import ServiceButton from "../components/ServiceButton";
 
 const Home = () => {
+  const navigation = useNavigation();
   return (
+    <ScrollView >
     <View style={tw`bg-white`}>
       <View style={tw`ml-5 mt-5`}>
         <View style={tw`mb-8`}>
@@ -32,7 +36,8 @@ const Home = () => {
           <Text style={tw`text-center`}>Add Car</Text>
         </TouchableOpacity>
       </View>
-      <ScrollView style={tw`bg-gray-100 h-1/2 rounded-t-3xl`}>
+      
+        <View style={tw`bg-gray-100 h-1/2 rounded-t-3xl`}>
         <View style={tw`mb-5`}>
           <Text style={tw`ml-7 mt-5`}>Make a request</Text>
           <TouchableOpacity
@@ -48,12 +53,26 @@ const Home = () => {
           </TouchableOpacity>
         </View>
         <View style={tw`flex-row`}>
-          <ServiceButton />
-          <ServiceButton />
-          <ServiceButton />
+          <ServiceButton
+            title="Repair"
+            onPress={() => navigation.navigate("Repairs")}
+          />
+          <ServiceButton
+            title="Maintenance"
+            onPress={() => navigation.navigate("Maintenance")}
+          />
+          <ServiceButton
+            title="Inspection"
+            onPress={() => navigation.navigate("Inspection")}
+          />
         </View>
-      </ScrollView>
+        <View>
+          <HealthCard />
+        </View>
+        </View>
+      
     </View>
+    </ScrollView>
   );
 };
 
