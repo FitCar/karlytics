@@ -105,6 +105,7 @@ const Home = () => {
             <HealthCard />
           </View>
         </View>
+        <View style={tw`mb-60`}></View>
       </View>
     </ScrollView>
   );

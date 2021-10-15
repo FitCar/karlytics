@@ -98,7 +98,7 @@ export default function Login({ navigation }) {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: '#e93b81',
+    backgroundColor: 'gray',
     paddingTop: 50,
     paddingHorizontal: 12
   },
