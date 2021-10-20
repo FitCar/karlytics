@@ -32,17 +32,17 @@ const Home = () => {
   };
   return (
     <ScrollView>
-      <View style={tw`flex-row`}>
-        <IconButton
-          name="logout"
-          size={24}
-          color="#2bced6"
-          onPress={handleSignOut}
-        />
-        <Text style={tw`ml-5`}>Logout</Text>
-      </View>
-
       <View style={tw`bg-white`}>
+        <View style={tw`flex-row`}>
+          <IconButton
+            name="logout"
+            size={24}
+            color="#2bced6"
+            onPress={handleSignOut}
+          />
+          <Text style={tw`ml-5`}>Logout</Text>
+        </View>
+
         <View style={tw`ml-5 mt-5`}>
           <View style={tw`mb-8`}>
             <Text style={tw`font-bold text-lg text-black`}>
@@ -69,7 +69,7 @@ const Home = () => {
             >Your UID is: {user.uid} </Text> */}
         </View>
 
-        <View style={tw`bg-gray-100 h-1/2 rounded-t-3xl`}>
+        <View style={tw`bg-gray-100  rounded-t-3xl`}>
           <View style={tw`mb-5`}>
             <Text style={tw`ml-7 mt-5`}>Make a request</Text>
             <TouchableOpacity
@@ -105,7 +105,7 @@ const Home = () => {
             <HealthCard />
           </View>
         </View>
-        <View style={tw`mb-60`}></View>
+        <View style={tw``}></View>
       </View>
     </ScrollView>
   );

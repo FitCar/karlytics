@@ -10,12 +10,17 @@ import Maintenance from '../screens/Maintenance';
 import Inspection from '../screens/Inspection';
 import Repairs from '../screens/Repairs';
 import CarRegisteration from '../screens/CarRegisteration';
+import { SafeAreaView } from 'react-native';
+import CarMakes from '../screens/CarMakes';
+import CarModels from '../screens/CarModels';
 
 const Stack = createNativeStackNavigator();
 
 export default function HomeStack() {
   return (
-    <Stack.Navigator headerMode='none'>
+   
+    <Stack.Navigator headerMode='none' screenOptions={{headerShown: false}}>
+      
       <Stack.Screen name="Tabs" component={Tabs} />
             <Stack.Screen name="Diagnostic" component={Diagnostic} />
             <Stack.Screen name="Quotation" component={Quotation} />
@@ -23,7 +28,11 @@ export default function HomeStack() {
             <Stack.Screen name="Maintenance" component={Maintenance} />
             <Stack.Screen name="Inspection" component={Inspection} />
             <Stack.Screen name="Repairs" component={Repairs} />
+            <Stack.Screen name="CarMake" component={CarMakes} />
+            <Stack.Screen name="CarModel" component={CarModels} />
             <Stack.Screen name="CarRegisteration" component={CarRegisteration} />
+            
     </Stack.Navigator>
+   
   );
 }

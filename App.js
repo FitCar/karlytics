@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 
 import { Provider } from "react-redux";
 import { store } from "./store";
@@ -7,6 +7,9 @@ import Routes from './navigation/index';
 import { StyleSheet, View } from "react-native";
 import CarCard from "./components/CarCard";
 import CarRegisteration from "./screens/CarRegisteration";
+import { Picker } from "@react-native-community/picker";
+import CarMakes from "./screens/CarMakes";
+
 
 
 
@@ -15,12 +18,18 @@ export default function App() {
 
   const Stack = createNativeStackNavigator();
   return (
-    // <Provider store={store}>
-    //    <Routes />
-    // </Provider>
-    <View >
-      <CarRegisteration />
-    </View>
+    <Provider store={store}>
+       <Routes />
+    </Provider>
+    // <View >
+    //   <CarRegisteration />
+    // </View>
+    // <View>
+    //     <CarMakes />
+    // </View>
+    
+
+
   );
 }
 
