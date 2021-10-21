@@ -140,11 +140,12 @@ const CarRegisteration = () => {
             setItems={setBody}
             style={tw`mb-5`}
           />
-
+          <View style={tw`mt-36`}>
           <Button
             title="submit"
             onPress={() => navigation.navigate("Garage")}
           />
+          </View>
         </View>
       </KeyboardAvoidingView>
     </View>

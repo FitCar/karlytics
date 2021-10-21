@@ -14,7 +14,7 @@ const DiagnosticCard = () => {
   };
 
   return (
-    <TouchableOpacity
+    <View
       style={tw`bg-white mx-4 rounded-xl mb-8 p-5 justify-center shadow-2xl`}
     >
       <View style={tw`flex-row justify-between h-12`}>
@@ -32,7 +32,7 @@ const DiagnosticCard = () => {
         <Text style={tw`text-center`}>Injector</Text>
       </View>
       </CollapsibleView>
-    </TouchableOpacity>
+    </View>
   );
 };
 

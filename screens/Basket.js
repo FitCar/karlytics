@@ -1,5 +1,5 @@
 import React from 'react'
-import { SafeAreaView, StyleSheet, Text, View } from 'react-native'
+import { SafeAreaView, ScrollView, StyleSheet, Text, View } from 'react-native'
 import { Icon } from 'react-native-elements';
 import tw from 'tailwind-react-native-classnames';
 import BasketCard from '../components/BasketCard';
@@ -30,11 +30,17 @@ const Basket = () => {
   />
 </View>
 </View>
+<ScrollView>
 <BasketCard />
 <BasketCard />
 <BasketCard />
 <BasketCard />
 <BasketCard />
+<BasketCard />
+<BasketCard />
+<BasketCard />
+<BasketCard />
+</ScrollView>
 
 </View>
   )

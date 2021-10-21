@@ -33,7 +33,7 @@ const Home = () => {
   return (
     <ScrollView>
       <View style={tw`bg-white`}>
-        <View style={tw`flex-row`}>
+        <View style={tw`flex-row mt-10`}>
           <IconButton
             name="logout"
             size={24}

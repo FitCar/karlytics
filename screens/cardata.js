@@ -1,25 +1,3 @@
-import { useNavigation } from "@react-navigation/native";
-import React from "react";
-import {
-  FlatList,
-  StyleSheet,
-  Text,
-  TouchableOpacity,
-  View,
-} from "react-native";
-import tw from "tailwind-react-native-classnames";
-import { useDispatch, useSelector } from "react-redux";
-import { selectMake } from "../slices/carSlice";
-// const { uuid } = require('uuidv4');
-
-const cars = [
-  { model: "Venza", index: '1' },
-  { model: "Highlander", index: '2' },
-  { model: "Camry", index: '3' },
-  { model: "Prado", index: '4' },
-  { model: "Matrix", index: '5' },
-];
-
 const models = [
   {
       "model_name": "1000",
@@ -283,40 +261,8 @@ const models = [
 }
 ]
 
+const newArray = models.filter((make)=>{
+  return make.model_make_id === honda
+})
 
-
-
-
-const CarModels = () => {
-  const navigation = useNavigation()
-  const make = useSelector(selectMake)
-  console.log(make)
-
-  const newArray = models.filter((mod)=>{
-    return mod.model_make_id === make
-  })
-  let target = [];
-  newArray.map((mod)=>target.push(mod.model_name))
-  
-  console.log(target)
-  
-  
-
-  return (
-    <View style={tw`mt-20`}>
-      <FlatList
-        data={target}
-        renderItem={({item}) => (
-          <TouchableOpacity style={tw`bg-gray-100 border-2 h-10 text-center`} onPress={() => navigation.navigate('CarRegisteration')}>
-            <Text style={tw`text-black`}>{item}</Text>
-          </TouchableOpacity>
-        )}
-        keyExtractor={item => item.index}
-      />
-    </View>
-  );
-};
-
-export default CarModels;
-
-const styles = StyleSheet.create({});
+console.log(newArray)

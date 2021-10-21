@@ -1,6 +1,6 @@
 import { useNavigation } from '@react-navigation/native';
 import React from 'react'
-import { SafeAreaView, StyleSheet, Text, View } from 'react-native'
+import { SafeAreaView, ScrollView, StyleSheet, Text, View } from 'react-native'
 import { Icon } from 'react-native-elements';
 import tw from 'tailwind-react-native-classnames';
 import DiagnosticCard from '../components/DiagnosticCard';
@@ -26,10 +26,16 @@ const Diagnostic = () => {
   />
 </View>
 </View>
+<ScrollView style={tw`mb-5`}>
 <DiagnosticCard />
 <DiagnosticCard />
 <DiagnosticCard />
 <DiagnosticCard />
+<DiagnosticCard />
+<DiagnosticCard />
+<DiagnosticCard />
+</ScrollView>
+<View style={tw`mt-5`}></View>
 </View>
   )
 }
