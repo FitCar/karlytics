@@ -113,6 +113,8 @@ const CarRegisteration = () => {
       </View>
       <KeyboardAvoidingView>
         <View>
+          <TextInput placeholder="licence"></TextInput>
+          <TextInput placeholder="Mileage"></TextInput>
           <DropDownPicker
             placeholder="select Year"
             zIndex={3000}

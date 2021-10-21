@@ -14,7 +14,7 @@ import { addMake, selectMake } from '../slices/carSlice'
 const cars = [
   { model: "Toyota", index: '1' },
   { model: "honda", index: '2' },
-  { model: "Mercedes", index: '3' },
+  { model: "Mercedes-Benz", index: '3' },
   { model: "Range Rover", index: '4' },
   { model: "Hyundai", index: '5' },
   { model: "Kia", index: '6' },

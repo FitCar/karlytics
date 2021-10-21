@@ -18,7 +18,6 @@ const CarCard = () => {
       <View>
         <Text>Licence: xxxxx</Text>
         <Text>Body type: xxxx</Text>
-        <Text>Fuel type: xxxx</Text>
         <Text>Mileaege: xxxx</Text>
       </View>
       </View>
