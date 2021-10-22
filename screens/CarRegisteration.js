@@ -13,10 +13,20 @@ import tw from "tailwind-react-native-classnames";
 import uuid from "react-native-uuid";
 import DropDownPicker from "react-native-dropdown-picker";
 import { useNavigation } from "@react-navigation/native";
+import { useDispatch, useSelector } from "react-redux";
+import { selectMake, selectModel } from "../slices/carSlice";
+import Firebase from "../config/firebase";
+
+const firestore = Firebase.firestore();
 
 const CarRegisteration = () => {
+  const make = useSelector(selectMake);
+  const model = useSelector(selectModel);
+  
 
-  const navigation = useNavigation()
+  const carRef = firestore.collection("make")
+  
+  const navigation = useNavigation();
   // let years = [];
   // const year = () => {
   //   let min = 1998;
@@ -31,8 +41,6 @@ const CarRegisteration = () => {
   // year();
 
   // console.log(years.length);
-
- 
 
   const [yearOpen, setYearOpen] = useState(false);
   const [bodyOpen, setBodyOpen] = useState(false);
@@ -143,10 +151,13 @@ const CarRegisteration = () => {
             style={tw`mb-5`}
           />
           <View style={tw`mt-36`}>
-          <Button
-            title="submit"
-            onPress={() => navigation.navigate("Garage")}
-          />
+            <Button
+              title="submit"
+              onPress={() => {
+                carRef.doc().set({ name: "James" });
+                navigation.navigate("Garage");
+              }}
+            />
           </View>
         </View>
       </KeyboardAvoidingView>
