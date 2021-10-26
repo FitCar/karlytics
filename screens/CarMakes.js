@@ -13,13 +13,20 @@ import { addMake, selectMake } from '../slices/carSlice'
 
 const cars = [
   { model: "Toyota", index: '1' },
-  { model: "honda", index: '2' },
+  { model: "Honda", index: '2' },
   { model: "Mercedes-Benz", index: '3' },
   { model: "Range Rover", index: '4' },
   { model: "Hyundai", index: '5' },
   { model: "Kia", index: '6' },
   { model: "BMW", index: '7' },
   { model: "Lexus", index: '8' },
+  { model: "Ford", index: '9' },
+  { model: "Mitsubushi", index: '10' },
+  { model: "Audi", index: '11' },
+  { model: "Volkswagen", index: '12' },
+  { model: "Land Rover", index: '13' },
+  { model: "Nissan", index: '14' },
+  { model: "Jaguar", index: '15' },
 ];
 
 

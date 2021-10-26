@@ -1,6 +1,6 @@
 import { useNavigation } from "@react-navigation/native";
 import { StatusBar } from "expo-status-bar";
-import React, { useContext } from "react";
+import React, { useContext, useEffect, useState } from "react";
 import {
   Image,
   ScrollView,
@@ -17,10 +17,18 @@ import ServiceButton from "../components/ServiceButton";
 import { IconButton } from "../components";
 import Firebase from "../config/firebase";
 import { AuthenticatedUserContext } from "../navigation/AuthenticatedUserProvider";
+import ServiceInfo from "../components/ServiceInfo";
 
 const auth = Firebase.auth();
+const firestore = Firebase.firestore();
 
 const Home = () => {
+
+  const [garage, setGarage] = useState([]); // Initial empty array of users
+  const [selectedCar, setSelectedCar] = useState("");
+  const [loading, setLoading] = useState(true); // Set loading to true on component mount
+
+
   const navigation = useNavigation();
   const { user } = useContext(AuthenticatedUserContext);
   const handleSignOut = async () => {
@@ -30,6 +38,28 @@ const Home = () => {
       console.log(error);
     }
   };
+
+
+  useEffect(() => {
+    const subscriber = firestore
+      .collection("make")
+      .onSnapshot((querySnapshot) => {
+        const garage = [];
+
+        querySnapshot.forEach((documentSnapshot) => {
+          garage.push({
+            ...documentSnapshot.data(),
+            key: documentSnapshot.id,
+          });
+        });
+        // console.log(garage);
+        setGarage(garage);
+        setLoading(false);
+      });
+  }, []);
+
+
+
   return (
     <ScrollView>
       <View style={tw`bg-white`}>
@@ -51,7 +81,9 @@ const Home = () => {
             <Text>How's your car feeling today</Text>
           </View>
         </View>
-        <AddCar />
+
+        {garage.length!==0?<ServiceInfo />:<AddCar />}
+        {/* <AddCar /> */}
 
         <View
         // style={styles.container}
@@ -74,6 +106,7 @@ const Home = () => {
             <Text style={tw`ml-7 mt-5`}>Make a request</Text>
             <TouchableOpacity
               style={tw`bg-white flex-row ml-5 mr-5 rounded-xl py-10`}
+              onPress={() => navigation.navigate("Scan")}
             >
               <Image
                 style={tw`ml-7`}
@@ -105,7 +138,7 @@ const Home = () => {
             <HealthCard />
           </View>
         </View>
-        <View style={tw``}></View>
+        {/* <View style={tw``}></View> */}
       </View>
     </ScrollView>
   );

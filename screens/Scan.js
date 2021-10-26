@@ -18,7 +18,7 @@ import SelectDropdown from "react-native-select-dropdown";
 
 const firestore = Firebase.firestore();
 
-const Inspection = () => {
+const Scan = () => {
   const location = ["On-Site", "Pick-up", "Drop-off"];
   const navigation = useNavigation();
   const [expanded, setExpanded] = useState(false);
@@ -68,8 +68,8 @@ const Inspection = () => {
     // };
 
     const data = {
-      requestIcon: '../assets/icons/Inspect.png',
-      requestType: 'Inspection',
+      requestIcon: "../assets/icons/maintain.png",
+      requestType: "Scan",
       Car: selectedCar,
       Location: selectedLocation,
       Schedule: newdate,
@@ -110,7 +110,7 @@ const Inspection = () => {
       <View style={tw`ml-5 mt-5`}>
         <View style={tw`mb-8`}>
           <Text style={tw`font-bold text-lg text-black`}>
-            Request Inspection
+            Request Scan
           </Text>
           <Text>Select a car</Text>
         </View>
@@ -134,6 +134,7 @@ const Inspection = () => {
           {console.log(garage)}
         </CollapsibleView> */}
         <SelectDropdown
+          buttonStyle={tw`mb-5 self-center`}
           data={garage}
           onSelect={(selectedItem, index) => {
             console.log(selectedItem.Make, index);
@@ -150,7 +151,7 @@ const Inspection = () => {
             return item.Make + " " + item.Model;
           }}
         />
-        <View
+        {/* <View
           style={tw`mb-8 flex-row justify-around h-20 items-center shadow-md border-0`}
         >
           <TouchableOpacity>
@@ -168,7 +169,7 @@ const Inspection = () => {
           <TouchableOpacity>
             <Image source={require("../assets/icons/brake.png")} />
           </TouchableOpacity>
-        </View>
+        </View> */}
         {/* <CollapsibleView style={tw`mb-8`} title="select location">
           <TouchableOpacity>
             <Text>On-site</Text>
@@ -181,6 +182,7 @@ const Inspection = () => {
           </TouchableOpacity>
         </CollapsibleView> */}
         <SelectDropdown
+          buttonStyle={tw`mb-5 self-center`}
           data={location}
           onSelect={(selectedItem, index) => {
             console.log(selectedItem, index);
@@ -228,6 +230,6 @@ const Inspection = () => {
   );
 };
 
-export default Inspection;
+export default Scan;
 
 const styles = StyleSheet.create({});

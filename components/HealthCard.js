@@ -31,7 +31,11 @@ const HealthCard = () => {
   const screenWidth = Dimensions.get("window").width;
 
   return (
-    <View style={tw`flex-row bg-white rounded-2xl mx-2 mb-5`}>
+    <View style={tw`bg-white rounded-2xl mx-2 mb-5`}>
+      <Text style={tw`font-bold text-center text-lg`}>Vehicle Health</Text>
+    
+    <View style={tw`flex-row`}>
+      
       <ProgressChart
   data={data}
   width={screenWidth}
@@ -50,6 +54,7 @@ source={require("../assets/icons/garage-car.png")}
 <Text>Faults: 0</Text>
 <Text>Status: Very good</Text>
 </View>
+    </View>
     </View>
   )
 }

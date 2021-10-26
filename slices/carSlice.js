@@ -29,6 +29,6 @@ export const { addCar, removeCar, addMake, addModel } = carSlice.actions;
 
 export const selectCar = (state) => state.car.cars;
 export const selectMake = (state) => state.car.make;
-export const selectModel = (state) => state.car.make;
+export const selectModel = (state) => state.car.model;
 
 export default carSlice.reducer;

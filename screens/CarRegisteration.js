@@ -22,6 +22,10 @@ const firestore = Firebase.firestore();
 const CarRegisteration = () => {
   const make = useSelector(selectMake);
   const model = useSelector(selectModel);
+   const data = {
+     Make: make,
+     Model: model
+   }
   
 
   const carRef = firestore.collection("make")
@@ -154,7 +158,7 @@ const CarRegisteration = () => {
             <Button
               title="submit"
               onPress={() => {
-                carRef.doc().set({ name: "James" });
+                carRef.doc().set(data);
                 navigation.navigate("Garage");
               }}
             />

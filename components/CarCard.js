@@ -4,7 +4,7 @@ import { Icon } from "react-native-elements";
 import tw from "tailwind-react-native-classnames";
 
 
-const CarCard = () => {
+const CarCard = ({make, model}) => {
   return (
     <TouchableOpacity style={tw`bg-white rounded-3xl mx-10 py-5 pl-5 mb-10 shadow-xl`}>
       <View style={tw`flex-row`}>
@@ -16,8 +16,8 @@ const CarCard = () => {
         }}/>
       </View>
       <View>
-        <Text>Licence: xxxxx</Text>
-        <Text>Body type: xxxx</Text>
+      <Text>Make: {make}</Text>
+        <Text>Model: {model}</Text>
         <Text>Mileaege: xxxx</Text>
       </View>
       </View>

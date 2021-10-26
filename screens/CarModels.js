@@ -9,7 +9,7 @@ import {
 } from "react-native";
 import tw from "tailwind-react-native-classnames";
 import { useDispatch, useSelector } from "react-redux";
-import { selectMake } from "../slices/carSlice";
+import { addModel, selectMake } from "../slices/carSlice";
 // const { uuid } = require('uuidv4');
 import models from './models'
 
@@ -1174,8 +1174,9 @@ const cars = [
 
 const CarModels = () => {
   const navigation = useNavigation()
+  const dispatch = useDispatch()
   const make = useSelector(selectMake)
-  console.log(make)
+  
 
   const newArray = models.filter((mod)=>{
     return mod.model_make_id === make
@@ -1189,10 +1190,13 @@ const CarModels = () => {
 
   return (
     <View style={tw`mt-20`}>
+      <Text>{make}</Text>
       <FlatList
         data={target}
         renderItem={({item}) => (
-          <TouchableOpacity style={tw`bg-gray-100 border-2 h-10 text-center`} onPress={() => navigation.navigate('CarRegisteration')}>
+          <TouchableOpacity style={tw`bg-gray-100 border-2 h-10 text-center`} onPress={() => {navigation.navigate('CarRegisteration')
+          dispatch(addModel(item))}
+          }>
             <Text style={tw`text-black`}>{item}</Text>
           </TouchableOpacity>
         )}
