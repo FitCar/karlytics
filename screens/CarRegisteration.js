@@ -1,5 +1,5 @@
 import { Picker } from "@react-native-community/picker";
-import React, { useCallback, useState } from "react";
+import React, { useCallback, useContext, useState } from "react";
 import {
   Button,
   KeyboardAvoidingView,
@@ -16,19 +16,23 @@ import { useNavigation } from "@react-navigation/native";
 import { useDispatch, useSelector } from "react-redux";
 import { selectMake, selectModel } from "../slices/carSlice";
 import Firebase from "../config/firebase";
+import { AuthenticatedUserContext } from "../navigation/AuthenticatedUserProvider";
 
 const firestore = Firebase.firestore();
 
 const CarRegisteration = () => {
+  const { user } = useContext(AuthenticatedUserContext);
   const make = useSelector(selectMake);
   const model = useSelector(selectModel);
+  const garageId = user.uid
    const data = {
      Make: make,
-     Model: model
+     Model: model,
+     garageId
    }
   
 
-  const carRef = firestore.collection("make")
+  const carRef = firestore.collection("Garage").doc(garageId).collection("Garage")
   
   const navigation = useNavigation();
   // let years = [];

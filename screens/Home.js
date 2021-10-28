@@ -23,11 +23,9 @@ const auth = Firebase.auth();
 const firestore = Firebase.firestore();
 
 const Home = () => {
-
   const [garage, setGarage] = useState([]); // Initial empty array of users
   const [selectedCar, setSelectedCar] = useState("");
   const [loading, setLoading] = useState(true); // Set loading to true on component mount
-
 
   const navigation = useNavigation();
   const { user } = useContext(AuthenticatedUserContext);
@@ -39,10 +37,9 @@ const Home = () => {
     }
   };
 
-
   useEffect(() => {
     const subscriber = firestore
-      .collection("make")
+      .collection("Garage").doc(user.uid).collection('Garage').where('garageId', '==', user.uid)
       .onSnapshot((querySnapshot) => {
         const garage = [];
 
@@ -56,14 +53,24 @@ const Home = () => {
         setGarage(garage);
         setLoading(false);
       });
-  }, []);
+  },[]);
 
-
+  
 
   return (
+    <View style={tw`bg-white`}>
+    <View style={styles.header}>
+    <View style={tw`mt-10 ml-5 flex-row`}>
+      <Image
+        source={require("../assets/Images/karlyticsLogo.png")}
+        style={tw`h-10 w-10`}
+      />
+      <Text style={tw`text-2xl text-pry-1`}>Karlytics</Text>
+    </View>
+    </View>
     <ScrollView>
       <View style={tw`bg-white`}>
-        <View style={tw`flex-row mt-10`}>
+        {/* <View style={tw`flex-row mt-10`}>
           <IconButton
             name="logout"
             size={24}
@@ -71,7 +78,8 @@ const Home = () => {
             onPress={handleSignOut}
           />
           <Text style={tw`ml-5`}>Logout</Text>
-        </View>
+        </View> */}
+      
 
         <View style={tw`ml-5 mt-5`}>
           <View style={tw`mb-8`}>
@@ -82,7 +90,7 @@ const Home = () => {
           </View>
         </View>
 
-        {garage.length!==0?<ServiceInfo />:<AddCar />}
+        {garage.length !== 0 ? <ServiceInfo /> : <AddCar />}
         {/* <AddCar /> */}
 
         <View
@@ -103,7 +111,9 @@ const Home = () => {
 
         <View style={tw`bg-gray-100  rounded-t-3xl`}>
           <View style={tw`mb-5`}>
-            <Text style={tw`ml-7 mt-5`}>Make a request</Text>
+            <Text style={tw`ml-7 mt-5 text-center font-bold mb-5 text-lg`}>
+              Make a request
+            </Text>
             <TouchableOpacity
               style={tw`bg-white flex-row ml-5 mr-5 rounded-xl py-10`}
               onPress={() => navigation.navigate("Scan")}
@@ -141,12 +151,18 @@ const Home = () => {
         {/* <View style={tw``}></View> */}
       </View>
     </ScrollView>
+    </View>
   );
 };
 
 export default Home;
 
-// const styles = StyleSheet.create({
+const styles = StyleSheet.create({
+  // header: {
+  //   position: "absolute",
+  //   top: 0
+  
+  // },
 //   container: {
 //     flex: 1,
 //     backgroundColor: "#e93b81",
@@ -169,4 +185,4 @@ export default Home;
 //     fontWeight: "normal",
 //     color: "#fff",
 //   },
-// });
+});

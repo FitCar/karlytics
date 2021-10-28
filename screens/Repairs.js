@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useContext, useEffect, useState } from "react";
 import {
   Button,
   Image,
@@ -15,10 +15,12 @@ import Firebase from "../config/firebase";
 import DateTimePicker from "@react-native-community/datetimepicker";
 import { useNavigation } from "@react-navigation/native";
 import SelectDropdown from "react-native-select-dropdown";
+import { AuthenticatedUserContext } from "../navigation/AuthenticatedUserProvider";
 
 const firestore = Firebase.firestore();
 
 const Repairs = () => {
+  const { user } = useContext(AuthenticatedUserContext);
   const location = ["On-Site", "Pick-up", "Drop-off"];
   const navigation = useNavigation();
   const [expanded, setExpanded] = useState(false);
@@ -66,13 +68,14 @@ const Repairs = () => {
     //   newvalue,
     //   requestId,
     // };
-
+    const requestId = user.uid
     const data = {
       requestIcon: '../assets/icons/repair.png',
       requestType: 'Repairs',
       Car: selectedCar,
       Location: selectedLocation,
       Schedule: newdate,
+      requestId
     };
 
     // const requestRef = firestore()
@@ -80,7 +83,7 @@ const Repairs = () => {
     //   .doc(requestId)
     //   .collection("requests");
 
-    const requestRef = firestore.collection("Requests");
+    const requestRef = firestore.collection("Requests").doc(requestId).collection('Requests');;;
 
     requestRef.doc().set(data);
 
@@ -89,7 +92,7 @@ const Repairs = () => {
 
   useEffect(() => {
     const subscriber = firestore
-      .collection("make")
+      .collection("Garage").doc(user.uid).collection('Garage').where('garageId', '==', user.uid)
       .onSnapshot((querySnapshot) => {
         const garage = [];
 
@@ -103,8 +106,8 @@ const Repairs = () => {
         setGarage(garage);
         setLoading(false);
       });
-  }, []);
-
+  },[]);
+  
   return (
     <View style={tw`bg-white`}>
       <View style={tw`ml-5 mt-5`}>

@@ -31,8 +31,8 @@ const HealthCard = () => {
   const screenWidth = Dimensions.get("window").width;
 
   return (
-    <View style={tw`bg-white rounded-2xl mx-2 mb-5`}>
-      <Text style={tw`font-bold text-center text-lg`}>Vehicle Health</Text>
+    <View style={tw`bg-white rounded-2xl mx-2 mb-24`}>
+      <Text style={tw`font-bold text-center text-lg`}>Vehicle Health (Coming soon)</Text>
     
     <View style={tw`flex-row`}>
       

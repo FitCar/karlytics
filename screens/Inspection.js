@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useContext, useEffect, useState } from "react";
 import {
   Button,
   Image,
@@ -15,10 +15,12 @@ import Firebase from "../config/firebase";
 import DateTimePicker from "@react-native-community/datetimepicker";
 import { useNavigation } from "@react-navigation/native";
 import SelectDropdown from "react-native-select-dropdown";
+import { AuthenticatedUserContext } from "../navigation/AuthenticatedUserProvider";
 
 const firestore = Firebase.firestore();
 
 const Inspection = () => {
+  const { user } = useContext(AuthenticatedUserContext);
   const location = ["On-Site", "Pick-up", "Drop-off"];
   const navigation = useNavigation();
   const [expanded, setExpanded] = useState(false);
@@ -66,13 +68,15 @@ const Inspection = () => {
     //   newvalue,
     //   requestId,
     // };
-
+    
+    const requestId = user.uid
     const data = {
       requestIcon: '../assets/icons/Inspect.png',
       requestType: 'Inspection',
       Car: selectedCar,
       Location: selectedLocation,
       Schedule: newdate,
+      requestId
     };
 
     // const requestRef = firestore()
@@ -80,7 +84,7 @@ const Inspection = () => {
     //   .doc(requestId)
     //   .collection("requests");
 
-    const requestRef = firestore.collection("Requests");
+    const requestRef = firestore.collection("Requests").doc(requestId).collection('Requests');
 
     requestRef.doc().set(data);
 

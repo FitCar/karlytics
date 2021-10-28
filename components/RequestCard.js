@@ -31,7 +31,7 @@ const RequestCard = ({ car, requestid, schedule, location, requestType }) => {
             style={tw`mt-8`}
             source={require("../assets/icons/Inspect.png")}
           />
-        ) : requestType == "repair" ? (
+        ) : requestType == "Repairs" ? (
           <Image
             style={tw`mt-8`}
             source={require("../assets/icons/repair.png")}
