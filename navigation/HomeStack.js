@@ -14,6 +14,7 @@ import { SafeAreaView } from 'react-native';
 import CarMakes from '../screens/CarMakes';
 import CarModels from '../screens/CarModels';
 import Scan from '../screens/Scan';
+import Checkout from '../screens/Checkout';
 
 const Stack = createNativeStackNavigator();
 
@@ -33,6 +34,7 @@ export default function HomeStack() {
             <Stack.Screen name="CarMake" component={CarMakes} />
             <Stack.Screen name="CarModel" component={CarModels} />
             <Stack.Screen name="CarRegisteration" component={CarRegisteration} />
+            <Stack.Screen name="Checkout" component={Checkout} />
             
     </Stack.Navigator>
    

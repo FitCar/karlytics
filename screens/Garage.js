@@ -41,8 +41,10 @@ const Garage = () => {
       });
   },[]);
 
+  console.log(garage);
+
   return (
-    <View style={tw`mb-24`}>
+    <ScrollView style={tw`mb-8`}>
       <View>
         <View style={tw`ml-5 mt-5 mb-5`}>
           <View style={tw`mb-8`}>
@@ -61,7 +63,7 @@ const Garage = () => {
         keyExtractor={(item) => item.key}
       />
       
-    </View>
+    </ScrollView>
   );
 };
 

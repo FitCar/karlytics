@@ -47,7 +47,7 @@ const Requests = () => {
         <FlatList 
           data={requests}
           renderItem={({ item }) => (
-            <RequestCard car={item.Car} schedule={item.Schedule} location={item.Location} requestid={item.key} requestType={item.requestType} icon={item.requestIcon} />
+            <RequestCard car={item.Car} schedule={item.Schedule} location={item.Location} requestid={item.key} requestType={item.requestType} icon={item.requestIcon} status={item.status} />
           )}
           keyExtractor={(item) => item.key}
         

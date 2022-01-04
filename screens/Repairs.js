@@ -68,14 +68,15 @@ const Repairs = () => {
     //   newvalue,
     //   requestId,
     // };
-    const requestId = user.uid
+    const requestId = user.uid;
     const data = {
-      requestIcon: '../assets/icons/repair.png',
-      requestType: 'Repairs',
+      requestIcon: "../assets/icons/repair.png",
+      requestType: "Repairs",
       Car: selectedCar,
       Location: selectedLocation,
       Schedule: newdate,
-      requestId
+      requestId,
+      status: "Pending"
     };
 
     // const requestRef = firestore()
@@ -83,7 +84,10 @@ const Repairs = () => {
     //   .doc(requestId)
     //   .collection("requests");
 
-    const requestRef = firestore.collection("Requests").doc(requestId).collection('Requests');;;
+    const requestRef = firestore
+      .collection("Requests")
+      .doc(requestId)
+      .collection("Requests");
 
     requestRef.doc().set(data);
 
@@ -92,7 +96,10 @@ const Repairs = () => {
 
   useEffect(() => {
     const subscriber = firestore
-      .collection("Garage").doc(user.uid).collection('Garage').where('garageId', '==', user.uid)
+      .collection("Garage")
+      .doc(user.uid)
+      .collection("Garage")
+      .where("garageId", "==", user.uid)
       .onSnapshot((querySnapshot) => {
         const garage = [];
 
@@ -106,15 +113,13 @@ const Repairs = () => {
         setGarage(garage);
         setLoading(false);
       });
-  },[]);
-  
+  }, []);
+
   return (
     <View style={tw`bg-white`}>
       <View style={tw`ml-5 mt-5`}>
         <View style={tw`mb-8`}>
-          <Text style={tw`font-bold text-lg text-black`}>
-            Request Repairs
-          </Text>
+          <Text style={tw`font-bold text-lg text-black`}>Request Repairs</Text>
           <Text>Select a car</Text>
         </View>
       </View>
@@ -137,11 +142,13 @@ const Repairs = () => {
           {console.log(garage)}
         </CollapsibleView> */}
         <SelectDropdown
+          buttonStyle={tw`mb-5 self-center`}
           data={garage}
           onSelect={(selectedItem, index) => {
             console.log(selectedItem.Make, index);
             setSelectedCar(selectedItem.Make + " " + selectedItem.Model);
           }}
+          defaultButtonText="Select your Car"
           buttonTextAfterSelection={(selectedItem, index) => {
             // text represented after item is selected
             // if data array is an array of objects then return selectedItem.property to render after item is selected
@@ -153,7 +160,7 @@ const Repairs = () => {
             return item.Make + " " + item.Model;
           }}
         />
-        <View
+        {/* <View
           style={tw`mb-8 flex-row justify-around h-20 items-center shadow-md border-0`}
         >
           <TouchableOpacity>
@@ -171,7 +178,7 @@ const Repairs = () => {
           <TouchableOpacity>
             <Image source={require("../assets/icons/brake.png")} />
           </TouchableOpacity>
-        </View>
+        </View> */}
         {/* <CollapsibleView style={tw`mb-8`} title="select location">
           <TouchableOpacity>
             <Text>On-site</Text>
@@ -184,11 +191,13 @@ const Repairs = () => {
           </TouchableOpacity>
         </CollapsibleView> */}
         <SelectDropdown
+          buttonStyle={tw`mb-5 self-center`}
           data={location}
           onSelect={(selectedItem, index) => {
             console.log(selectedItem, index);
             setSelectedLocation(selectedItem);
           }}
+          defaultButtonText="Select Location"
           buttonTextAfterSelection={(selectedItem, index) => {
             // text represented after item is selected
             // if data array is an array of objects then return selectedItem.property to render after item is selected

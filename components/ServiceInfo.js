@@ -57,9 +57,9 @@ const ServiceInfo = () => {
         <ProgressBar progress={0.5} color="#2bced6"/>
       </View>
       <Text style={tw`ml-10 font-bold`}>Due by 120,000km</Text>
-      <View style={tw`mx-10 my-2`}>
+      {/* <View style={tw`mx-10 my-2`}>
         <ProgressBar progress={0.5} color="#2bced6"/>
-      </View>
+      </View> */}
       <Text style={tw`ml-72 font-bold mb-5`}>Set Reminder</Text>
     </View>
   );

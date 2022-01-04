@@ -75,7 +75,8 @@ const Scan = () => {
       Car: selectedCar,
       Location: selectedLocation,
       Schedule: newdate,
-      requestId
+      requestId,
+      status: "Pending"
     };
 
     // const requestRef = firestore()
@@ -92,7 +93,7 @@ const Scan = () => {
 
   useEffect(() => {
     const subscriber = firestore
-      .collection("make")
+      .collection("Garage").doc(user.uid).collection('Garage').where('garageId', '==', user.uid)
       .onSnapshot((querySnapshot) => {
         const garage = [];
 
@@ -106,7 +107,7 @@ const Scan = () => {
         setGarage(garage);
         setLoading(false);
       });
-  }, []);
+  },[]);
 
   return (
     <View style={tw`bg-white`}>
@@ -143,6 +144,7 @@ const Scan = () => {
             console.log(selectedItem.Make, index);
             setSelectedCar(selectedItem.Make + " " + selectedItem.Model);
           }}
+          defaultButtonText="Select your Car"
           buttonTextAfterSelection={(selectedItem, index) => {
             // text represented after item is selected
             // if data array is an array of objects then return selectedItem.property to render after item is selected
@@ -191,6 +193,7 @@ const Scan = () => {
             console.log(selectedItem, index);
             setSelectedLocation(selectedItem);
           }}
+          defaultButtonText="Select Location"
           buttonTextAfterSelection={(selectedItem, index) => {
             // text represented after item is selected
             // if data array is an array of objects then return selectedItem.property to render after item is selected
