@@ -14,20 +14,25 @@ import uuid from "react-native-uuid";
 import DropDownPicker from "react-native-dropdown-picker";
 import { useNavigation } from "@react-navigation/native";
 import { useDispatch, useSelector } from "react-redux";
-import { setServiceDate, selectMake, selectModel } from "../slices/carSlice";
+import {
+  setLastServiceDate,
+  setNextDate,
+  selectMake,
+  selectModel,
+} from "../slices/carSlice";
 import Firebase from "../config/firebase";
 import { AuthenticatedUserContext } from "../navigation/AuthenticatedUserProvider";
 import DateTimePicker from "@react-native-community/datetimepicker";
-
+import { add } from "date-fns";
+import { formatDistanceToNow } from 'date-fns'
 
 const firestore = Firebase.firestore();
-
 
 const CarRegisteration = () => {
   const { user } = useContext(AuthenticatedUserContext);
   const make = useSelector(selectMake);
   const model = useSelector(selectModel);
-  const dispatch = useDispatch()
+  const dispatch = useDispatch();
   const garageId = user.uid;
 
   const carRef = firestore
@@ -98,7 +103,7 @@ const CarRegisteration = () => {
   ]);
 
   const [lastServiceDate, setLastServiceDate] = useState(new Date());
-  console.log(lastServiceDate);
+
   const [mode, setMode] = useState("date");
   const [show, setShow] = useState(false);
 
@@ -117,18 +122,24 @@ const CarRegisteration = () => {
     showMode("date");
   };
 
+  const newLastServiceDate = lastServiceDate.toString();
+  const nextDate = add(lastServiceDate, {months: 4});
+  console.log(nextDate);
+  const duration = formatDistanceToNow(nextDate)
+  console.log(duration)
+
   const submit = () => {
-    const newLastServiceDate = lastServiceDate.toDateString();
     const data = {
       Make: make,
       Model: model,
       garageId,
       lastServiceDate: newLastServiceDate,
+      nextServiceDate: nextDate.toDateString()
     };
-    
-    dispatch(setServiceDate(newLastServiceDate));
+    // console.log(newLastServiceDate);
+    // dispatch(setLastServiceDate('Sat 23rd 2022'));
     carRef.doc().set(data);
-    
+    dispatch(setNextDate(nextDate.toString()))
     navigation.navigate("Garage");
   };
 

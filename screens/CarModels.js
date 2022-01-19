@@ -1184,8 +1184,6 @@ const CarModels = () => {
   let target = [];
   newArray.map((mod)=>target.push(mod.model_name))
   
-  console.log(target)
-  
   
 
   return (

@@ -15,6 +15,7 @@ import CarMakes from '../screens/CarMakes';
 import CarModels from '../screens/CarModels';
 import Scan from '../screens/Scan';
 import Checkout from '../screens/Checkout';
+import Plans from '../screens/Plans';
 
 const Stack = createNativeStackNavigator();
 
@@ -35,6 +36,7 @@ export default function HomeStack() {
             <Stack.Screen name="CarModel" component={CarModels} />
             <Stack.Screen name="CarRegisteration" component={CarRegisteration} />
             <Stack.Screen name="Checkout" component={Checkout} />
+            <Stack.Screen name="Plans" component={Plans} />
             
     </Stack.Navigator>
    

@@ -7,7 +7,8 @@ const initialState = {
   requestId: "",
   basket: [],
   grandTotal: 0,
-  lastServiceDate: ""
+  lastServiceDate: "",
+  nextDate: ""
 };
 
 export const carSlice = createSlice({
@@ -35,13 +36,16 @@ export const carSlice = createSlice({
     setGrandTotal: (state, action) => {
       state.grandTotal = action.payload;
     },
-    setServiceDate: (state, action) => {
-      state.setLastServiceDate = action.payload;
+    setLastServiceDate: (state, action) => {
+      state.lastServiceDate = action.payload;
+    },
+    setNextDate: (state, action) => {
+      state.nextDate = action.payload;
     }
   },
 });
 
-export const { addCar, removeCar, addMake, addModel, setRequestId, addToBasket, setGrandTotal, setLastServiceDate } = carSlice.actions;
+export const { addCar, removeCar, addMake, addModel, setRequestId, addToBasket, setGrandTotal, setLastServiceDate, setNextDate } = carSlice.actions;
 
 export const selectCar = (state) => state.car.cars;
 export const selectMake = (state) => state.car.make;
@@ -49,6 +53,7 @@ export const selectModel = (state) => state.car.model;
 export const selectRequest = (state) => state.car.requestId;
 export const selectBasket = (state) => state.car.basket;
 export const selectGrandTotal = (state) => state.car.grandTotal;
-export const selectLastServiceDate = (state) => state.car.grandTotal;
+export const selectLastServiceDate = (state) => state.car.lastServiceDate;
+export const selectNextDate = (state) => state.car.nextDate;
 
 export default carSlice.reducer;

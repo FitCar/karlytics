@@ -37,7 +37,6 @@ export default function Register({ navigation }) {
       });
   },[]);
 
-  console.log(users.length);
 
   const handlePasswordVisibility = () => {
     if (rightIcon === "eye") {

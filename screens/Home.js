@@ -19,12 +19,11 @@ import Firebase from "../config/firebase";
 import { AuthenticatedUserContext } from "../navigation/AuthenticatedUserProvider";
 import ServiceInfo from "../components/ServiceInfo";
 import { useSelector } from "react-redux";
-import { selectLastServiceDate } from "../slices/carSlice"
+import { selectLastServiceDate } from "../slices/carSlice";
+import { formatDistanceToNow } from "date-fns";
 
 const auth = Firebase.auth();
 const firestore = Firebase.firestore();
-
-
 
 const Home = () => {
   const [garage, setGarage] = useState([]); // Initial empty array of users
@@ -57,11 +56,27 @@ const Home = () => {
             key: documentSnapshot.id,
           });
         });
-        // console.log(garage);
+        console.log(garage);
         setGarage(garage);
         setLoading(false);
       });
   }, []);
+
+  const dt = garage.length !== 0 ? new Date(garage[3].nextServiceDate): new Date()
+  const lstDt = garage.length !== 0 ? new Date(garage[3].lastServiceDate) : new Date()
+  console.log(dt)
+  const duration = formatDistanceToNow(dt);
+  console.log(duration)
+
+  const now = new Date()
+  const one_day = 1000 * 60 * 60 * 24
+  const totalDays = (Math.round(dt.getTime() - lstDt.getTime()) / one_day).toFixed(0);
+  console.log(totalDays)
+  const leftDays = (Math.round(dt.getTime() - new Date().getTime()) / one_day).toFixed(0);
+  console.log(leftDays)
+
+  const progressLeft = (leftDays/totalDays)
+  console.log(progressLeft)
 
   return (
     <View style={tw`bg-white`}>
@@ -87,15 +102,23 @@ const Home = () => {
         </View> */}
 
           <View style={tw`ml-5 mt-5`}>
+            <View>
             <View style={tw`mb-8`}>
               <Text style={tw`font-bold text-lg text-black`}>
                 Welcome {user.email}{" "}
               </Text>
               <Text>How's your car feeling today</Text>
             </View>
+            <View>
+            <Image
+                  style={tw`ml-7`}
+                  source={require("../assets/icons/scan.png")}
+                />
+            </View>
+            </View>
           </View>
 
-          {garage.length !== 0 ? <ServiceInfo /> : <AddCar />}
+          {garage.length !== 0 ? <ServiceInfo serviceDate={garage[3].nextServiceDate} duration={duration} progressLeft={progressLeft} /> : <AddCar />}
           {/* <AddCar /> */}
 
           <View
@@ -135,7 +158,7 @@ const Home = () => {
                 </Text>
               </TouchableOpacity>
             </View>
-            <View style={tw`flex-row mb-24`}>
+            <View style={tw`flex-row mb-24 flex-wrap`}>
               <ServiceButton
                 title="Repair"
                 image={require("../assets/icons/repair.png")}
@@ -150,6 +173,11 @@ const Home = () => {
                 title="Inspection"
                 image={require("../assets/icons/Inspect.png")}
                 onPress={() => navigation.navigate("Inspection")}
+              />
+              <ServiceButton
+                title="Plans"
+                image={require("../assets/icons/wpf_renew-subscription.png")}
+                onPress={() => navigation.navigate("Plans")}
               />
             </View>
           </View>
