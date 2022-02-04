@@ -1,49 +1,112 @@
-import React, { useState } from 'react'
-import { Button, StyleSheet, TextInput, View } from 'react-native'
+import { StatusBar } from 'expo-status-bar';
+import React from 'react';
+import { useState } from 'react';
+import { StyleSheet, Text, View, Button as RNButton } from 'react-native';
 
-import auth from '@react-native-firebase/auth';
+import { Button, InputField, ErrorMessage } from '../components';
+import Firebase from '../config/firebase';
 
-function Login() {
-  const [email, setEmail] = useState('')
-  const [password, setPassword] = useState('')
-  const [name, setName] = useState('')
-  
+const auth = Firebase.auth();
 
-  const login = (e) => {
-   
-    auth().signInWithEmailAndPassword(email, password)
-    .then((auth)=> {
-        console.log(auth);
-    })
-    .catch(error => alert(error.message))
-}
+export default function Login({ navigation }) {
+  const [email, setEmail] = useState('');
+  const [password, setPassword] = useState('');
+  const [passwordVisibility, setPasswordVisibility] = useState(true);
+  const [rightIcon, setRightIcon] = useState('eye');
+  const [loginError, setLoginError] = useState('');
+
+  const handlePasswordVisibility = () => {
+    if (rightIcon === 'eye') {
+      setRightIcon('eye-off');
+      setPasswordVisibility(!passwordVisibility);
+    } else if (rightIcon === 'eye-off') {
+      setRightIcon('eye');
+      setPasswordVisibility(!passwordVisibility);
+    }
+  };
+
+  const onLogin = async () => {
+    try {
+      if (email !== '' && password !== '') {
+        await auth.signInWithEmailAndPassword(email, password);
+      }
+    } catch (error) {
+      setLoginError(error.message);
+    }
+  };
 
   return (
     <View style={styles.container}>
-     
-      <TextInput 
-        placeholder = "email"
-        onChangeText={(email) => setEmail(email)}
+      <StatusBar style='dark-content' />
+      <Text style={styles.title}>Login</Text>
+      <InputField
+        inputStyle={{
+          fontSize: 14
+        }}
+        containerStyle={{
+          backgroundColor: '#fff',
+          marginBottom: 20
+        }}
+        leftIcon='email'
+        placeholder='Enter email'
+        autoCapitalize='none'
+        keyboardType='email-address'
+        textContentType='emailAddress'
+        autoFocus={true}
+        value={email}
+        onChangeText={text => setEmail(text)}
       />
-      <TextInput 
-        placeholder = "password"
-        secureTextEntry={true}
-        onChangeText={(password) => setPassword(password)}
+      <InputField
+        inputStyle={{
+          fontSize: 14
+        }}
+        containerStyle={{
+          backgroundColor: '#fff',
+          marginBottom: 20
+        }}
+        leftIcon='lock'
+        placeholder='Enter password'
+        autoCapitalize='none'
+        autoCorrect={false}
+        secureTextEntry={passwordVisibility}
+        textContentType='password'
+        rightIcon={rightIcon}
+        value={password}
+        onChangeText={text => setPassword(text)}
+        handlePasswordVisibility={handlePasswordVisibility}
       />
-
+      {loginError ? <ErrorMessage error={loginError} visible={true} /> : null}
       <Button
-          title='Login'
-          onPress={login}
+        onPress={onLogin}
+        backgroundColor='#2bced6'
+        title='Login'
+        tileColor='#fff'
+        titleSize={20}
+        containerStyle={{
+          marginBottom: 24
+        }}
+      />
+      <RNButton
+        onPress={() => navigation.navigate('Register')}
+        title='Go to Signup'
+        color='#2bced6'
       />
     </View>
-  )
+  );
 }
 
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    justifyContent: 'center'
+    backgroundColor: 'gray',
+    paddingTop: 50,
+    paddingHorizontal: 12
+  },
+  title: {
+    fontSize: 24,
+    fontWeight: '600',
+    color: '#fff',
+    alignSelf: 'center',
+    paddingBottom: 24
   }
-})
-
-export default Login
+});

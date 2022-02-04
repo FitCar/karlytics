@@ -4,6 +4,8 @@ import { createBottomTabNavigator } from "@react-navigation/bottom-tabs";
 import Home from "../screens/Home";
 import Requests from "../screens/Requests";
 import Garage from "../screens/Garage";
+import Options from "../screens/Options";
+import tw from "tailwind-react-native-classnames";
 
 const Tab = createBottomTabNavigator();
 
@@ -59,12 +61,12 @@ const Tabs = () => {
         }}
       />
       <Tab.Screen
-        name="More"
-        component={Home}
+        name="Options"
+        component={Options}
         options={{
           tabBarIcon: ({ focused }) => (
             <Image
-              source={require("../assets/icons/home.png")}
+              source={require("../assets/icons/more.png")}
               resizeMode="contain"
               style={{
                 width: 25,
