@@ -7,14 +7,26 @@ import { NavigationContainer, useNavigation } from "@react-navigation/native";
 import Diagnostic from "../screens/Diagnostic";
 import Inspection from "../screens/Inspection";
 import Maintenance from "../screens/Maintenance";
+import { useDispatch, useSelector } from "react-redux";
+import { setRequestId } from '../slices/carSlice'
 
-const RequestCard = ({ car, requestid, schedule, location, requestType }) => {
+const RequestCard = ({ car, requestid, schedule, location, requestType, status }) => {
   const [expanded, setExpanded] = useState(false);
   const navigation = useNavigation();
+  const dispatch = useDispatch()
 
   const toggle = () => {
     setExpanded(!expanded);
   };
+
+  let req = requestid
+
+  const openDiagnosis = () => {
+    dispatch(setRequestId(req))
+    navigation.navigate("Diagnostic")
+  }
+
+  console.log(req)
 
   return (
     <View
@@ -31,7 +43,7 @@ const RequestCard = ({ car, requestid, schedule, location, requestType }) => {
             style={tw`mt-8`}
             source={require("../assets/icons/Inspect.png")}
           />
-        ) : requestType == "repair" ? (
+        ) : requestType == "Repairs" ? (
           <Image
             style={tw`mt-8`}
             source={require("../assets/icons/repair.png")}
@@ -50,7 +62,8 @@ const RequestCard = ({ car, requestid, schedule, location, requestType }) => {
           {/* <Text>AC, Engine, Suspension...</Text> */}
           <Text>Location: {location}</Text>
           <Text style={tw`w-44`}>Schedule: {schedule}</Text>
-          {/* <Text>Confirmed</Text> */}
+          <Text style={tw`w-44`}>Status: {status}</Text>
+          
         </View>
         <Icon name="sort-down" type="font-awesome" onPress={toggle} />
       </View>
@@ -62,7 +75,7 @@ const RequestCard = ({ car, requestid, schedule, location, requestType }) => {
         <View>
           <TouchableOpacity
             style={tw`border-0 rounded-3xl self-center w-10/12 p-2 mt-10 mb-10 bg-pry-color-1`}
-            onPress={() => navigation.navigate("Diagnostic")}
+            onPress={openDiagnosis}
           >
             <Text style={tw`text-center`}>Diagnosis(Ongoing)</Text>
           </TouchableOpacity>

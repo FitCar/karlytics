@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useContext, useEffect, useState } from "react";
 import {
   Button,
   Image,
@@ -15,10 +15,12 @@ import Firebase from "../config/firebase";
 import DateTimePicker from "@react-native-community/datetimepicker";
 import { useNavigation } from "@react-navigation/native";
 import SelectDropdown from "react-native-select-dropdown";
+import { AuthenticatedUserContext } from "../navigation/AuthenticatedUserProvider";
 
 const firestore = Firebase.firestore();
 
 const Scan = () => {
+  const { user } = useContext(AuthenticatedUserContext);
   const location = ["On-Site", "Pick-up", "Drop-off"];
   const navigation = useNavigation();
   const [expanded, setExpanded] = useState(false);
@@ -66,13 +68,15 @@ const Scan = () => {
     //   newvalue,
     //   requestId,
     // };
-
+    const requestId = user.uid
     const data = {
       requestIcon: "../assets/icons/maintain.png",
       requestType: "Scan",
       Car: selectedCar,
       Location: selectedLocation,
       Schedule: newdate,
+      requestId,
+      status: "Pending"
     };
 
     // const requestRef = firestore()
@@ -80,7 +84,7 @@ const Scan = () => {
     //   .doc(requestId)
     //   .collection("requests");
 
-    const requestRef = firestore.collection("Requests");
+    const requestRef = firestore.collection("Requests").doc(requestId).collection('Requests');;
 
     requestRef.doc().set(data);
 
@@ -89,7 +93,7 @@ const Scan = () => {
 
   useEffect(() => {
     const subscriber = firestore
-      .collection("make")
+      .collection("Garage").doc(user.uid).collection('Garage').where('garageId', '==', user.uid)
       .onSnapshot((querySnapshot) => {
         const garage = [];
 
@@ -103,7 +107,7 @@ const Scan = () => {
         setGarage(garage);
         setLoading(false);
       });
-  }, []);
+  },[]);
 
   return (
     <View style={tw`bg-white`}>
@@ -140,6 +144,7 @@ const Scan = () => {
             console.log(selectedItem.Make, index);
             setSelectedCar(selectedItem.Make + " " + selectedItem.Model);
           }}
+          defaultButtonText="Select your Car"
           buttonTextAfterSelection={(selectedItem, index) => {
             // text represented after item is selected
             // if data array is an array of objects then return selectedItem.property to render after item is selected
@@ -188,6 +193,7 @@ const Scan = () => {
             console.log(selectedItem, index);
             setSelectedLocation(selectedItem);
           }}
+          defaultButtonText="Select Location"
           buttonTextAfterSelection={(selectedItem, index) => {
             // text represented after item is selected
             // if data array is an array of objects then return selectedItem.property to render after item is selected

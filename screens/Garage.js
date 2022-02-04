@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useContext, useEffect, useState } from "react";
 import {
   FlatList,
   Image,
@@ -14,16 +14,18 @@ import { Icon } from "react-native-elements";
 import AddCar from "../components/AddCar";
 import CarCard from "../components/CarCard";
 import Firebase from "../config/firebase";
+import { AuthenticatedUserContext } from "../navigation/AuthenticatedUserProvider";
 
 const firestore = Firebase.firestore();
 
 const Garage = () => {
+  const { user } = useContext(AuthenticatedUserContext);
   const [loading, setLoading] = useState(true); // Set loading to true on component mount
   const [garage, setGarage] = useState([]); // Initial empty array of users
 
   useEffect(() => {
     const subscriber = firestore
-      .collection("make")
+      .collection("Garage").doc(user.uid).collection('Garage').where('garageId', '==', user.uid)
       .onSnapshot((querySnapshot) => {
         const garage = [];
 
@@ -39,8 +41,10 @@ const Garage = () => {
       });
   },[]);
 
+  console.log(garage);
+
   return (
-    <View>
+    <ScrollView style={tw`mb-8`}>
       <View>
         <View style={tw`ml-5 mt-5 mb-5`}>
           <View style={tw`mb-8`}>
@@ -59,7 +63,7 @@ const Garage = () => {
         keyExtractor={(item) => item.key}
       />
       
-    </View>
+    </ScrollView>
   );
 };
 

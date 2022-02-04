@@ -1,5 +1,5 @@
 import { Picker } from "@react-native-community/picker";
-import React, { useCallback, useState } from "react";
+import React, { useCallback, useContext, useState } from "react";
 import {
   Button,
   KeyboardAvoidingView,
@@ -14,22 +14,32 @@ import uuid from "react-native-uuid";
 import DropDownPicker from "react-native-dropdown-picker";
 import { useNavigation } from "@react-navigation/native";
 import { useDispatch, useSelector } from "react-redux";
-import { selectMake, selectModel } from "../slices/carSlice";
+import {
+  setLastServiceDate,
+  setNextDate,
+  selectMake,
+  selectModel,
+} from "../slices/carSlice";
 import Firebase from "../config/firebase";
+import { AuthenticatedUserContext } from "../navigation/AuthenticatedUserProvider";
+import DateTimePicker from "@react-native-community/datetimepicker";
+import { add } from "date-fns";
+import { formatDistanceToNow } from 'date-fns'
 
 const firestore = Firebase.firestore();
 
 const CarRegisteration = () => {
+  const { user } = useContext(AuthenticatedUserContext);
   const make = useSelector(selectMake);
   const model = useSelector(selectModel);
-   const data = {
-     Make: make,
-     Model: model
-   }
-  
+  const dispatch = useDispatch();
+  const garageId = user.uid;
 
-  const carRef = firestore.collection("make")
-  
+  const carRef = firestore
+    .collection("Garage")
+    .doc(garageId)
+    .collection("Garage");
+
   const navigation = useNavigation();
   // let years = [];
   // const year = () => {
@@ -91,6 +101,47 @@ const CarRegisteration = () => {
     { label: "SUV", value: "SUV" },
     { label: "Pick Up", value: "Pick Up" },
   ]);
+
+  const [lastServiceDate, setLastServiceDate] = useState(new Date());
+
+  const [mode, setMode] = useState("date");
+  const [show, setShow] = useState(false);
+
+  const onChange = (event, selectedDate) => {
+    const currentDate = selectedDate || lastServiceDate;
+    setShow(Platform.OS === "ios");
+    setLastServiceDate(currentDate);
+  };
+
+  const showMode = (currentMode) => {
+    setShow(true);
+    setMode(currentMode);
+  };
+
+  const showDatepicker = () => {
+    showMode("date");
+  };
+
+  const newLastServiceDate = lastServiceDate.toString();
+  const nextDate = add(lastServiceDate, {months: 4});
+  console.log(nextDate);
+  const duration = formatDistanceToNow(nextDate)
+  console.log(duration)
+
+  const submit = () => {
+    const data = {
+      Make: make,
+      Model: model,
+      garageId,
+      lastServiceDate: newLastServiceDate,
+      nextServiceDate: nextDate.toDateString()
+    };
+    // console.log(newLastServiceDate);
+    // dispatch(setLastServiceDate('Sat 23rd 2022'));
+    carRef.doc().set(data);
+    dispatch(setNextDate(nextDate.toString()))
+    navigation.navigate("Garage");
+  };
 
   //   fetch('https://parseapi.back4app.com/classes/Carmodels_Car_Model_List?limit=10', {
   //   method: 'GET',
@@ -154,14 +205,24 @@ const CarRegisteration = () => {
             setItems={setBody}
             style={tw`mb-5`}
           />
-          <View style={tw`mt-36`}>
-            <Button
-              title="submit"
-              onPress={() => {
-                carRef.doc().set(data);
-                navigation.navigate("Garage");
-              }}
+
+          <View style={tw`mt-28`}>
+            <Button onPress={showDatepicker} title="Last service date" />
+          </View>
+
+          {show && (
+            <DateTimePicker
+              testID="dateTimePicker"
+              value={lastServiceDate}
+              mode={mode}
+              is24Hour={true}
+              display="default"
+              onChange={onChange}
             />
+          )}
+
+          <View style={tw`mt-36`}>
+            <Button title="submit" onPress={submit} />
           </View>
         </View>
       </KeyboardAvoidingView>
