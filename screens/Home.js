@@ -2,7 +2,9 @@ import { useNavigation } from "@react-navigation/native";
 import { StatusBar } from "expo-status-bar";
 import React, { useContext, useEffect, useState } from "react";
 import {
+  FlatList,
   Image,
+  Modal,
   ScrollView,
   StyleSheet,
   Text,
@@ -21,6 +23,7 @@ import ServiceInfo from "../components/ServiceInfo";
 import { useSelector } from "react-redux";
 import { selectLastServiceDate } from "../slices/carSlice";
 import { formatDistanceToNow } from "date-fns";
+import CarCard from "../components/CarCard";
 
 const auth = Firebase.auth();
 const firestore = Firebase.firestore();
@@ -29,6 +32,7 @@ const Home = () => {
   const [garage, setGarage] = useState([]); // Initial empty array of users
   const [selectedCar, setSelectedCar] = useState("");
   const [loading, setLoading] = useState(true); // Set loading to true on component mount
+  const [isVisible, setIsVisible] = useState(false)
   const lastServiceDate = useSelector(selectLastServiceDate);
 
   const navigation = useNavigation();
@@ -62,24 +66,54 @@ const Home = () => {
       });
   }, []);
 
-  const dt = garage.length !== 0 ? new Date(garage[3].nextServiceDate): new Date()
-  const lstDt = garage.length !== 0 ? new Date(garage[3].lastServiceDate) : new Date()
-  console.log(dt)
+  const dt =
+    garage.length !== 0 ? new Date(garage[3].nextServiceDate) : new Date();
+  const lstDt =
+    garage.length !== 0 ? new Date(garage[3].lastServiceDate) : new Date();
+  console.log(dt);
   const duration = formatDistanceToNow(dt);
-  console.log(duration)
+  console.log(duration);
 
-  const now = new Date()
-  const one_day = 1000 * 60 * 60 * 24
-  const totalDays = (Math.round(dt.getTime() - lstDt.getTime()) / one_day).toFixed(0);
-  console.log(totalDays)
-  const leftDays = (Math.round(dt.getTime() - new Date().getTime()) / one_day).toFixed(0);
-  console.log(leftDays)
+  const now = new Date();
+  const one_day = 1000 * 60 * 60 * 24;
+  const totalDays = (
+    Math.round(dt.getTime() - lstDt.getTime()) / one_day
+  ).toFixed(0);
+  console.log(totalDays);
+  const leftDays = (
+    Math.round(dt.getTime() - new Date().getTime()) / one_day
+  ).toFixed(0);
+  console.log(leftDays);
 
-  const progressLeft = (leftDays/totalDays)
-  console.log(progressLeft)
+  const progressLeft = leftDays / totalDays;
+  console.log(progressLeft);
+
+ const openModal = () => {
+    setIsVisible(true)
+  }
+
+  const closeModal = () => {
+    setIsVisible(false)
+  }
 
   return (
     <View style={tw`bg-white`}>
+      <Modal
+        animationType={"slide"}
+        transparent={false}
+        visible={isVisible}
+        
+      >
+        
+        <FlatList
+        data={garage}
+        renderItem={({ item }) => (
+          <CarCard make={item.Make} model={item.Model} onSelect={closeModal} />
+        )}
+        keyExtractor={(item) => item.key}
+      />
+      </Modal>
+
       <View style={styles.header}>
         <View style={tw`mt-10 ml-5 flex-row`}>
           <Image
@@ -102,23 +136,29 @@ const Home = () => {
         </View> */}
 
           <View style={tw`ml-5 mt-5`}>
-            <View>
-            <View style={tw`mb-8`}>
-              <Text style={tw`font-bold text-lg text-black`}>
-                Welcome {user.email}{" "}
-              </Text>
-              <Text>How's your car feeling today</Text>
-            </View>
-            <View>
-            <Image
-                  style={tw`ml-7`}
-                  source={require("../assets/icons/scan.png")}
-                />
-            </View>
+            <View style={tw`flex-row justify-between mr-7`}>
+              <View style={tw`mb-8`}>
+                <Text style={tw`font-bold text-lg text-black`}>
+                  Welcome {user.email}{" "}
+                </Text>
+                <Text>How's your car feeling today</Text>
+              </View>
+              <TouchableOpacity>
+                <Text>Select car</Text>
+                <Icon name="sort-down" type="font-awesome" onPress={openModal} />
+              </TouchableOpacity>
             </View>
           </View>
 
-          {garage.length !== 0 ? <ServiceInfo serviceDate={garage[3].nextServiceDate} duration={duration} progressLeft={progressLeft} /> : <AddCar />}
+          {garage.length !== 0 ? (
+            <ServiceInfo
+              serviceDate={garage[3].nextServiceDate}
+              duration={duration}
+              progressLeft={progressLeft}
+            />
+          ) : (
+            <AddCar />
+          )}
           {/* <AddCar /> */}
 
           <View

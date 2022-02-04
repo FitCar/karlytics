@@ -3,14 +3,17 @@ import { Button, Image, StyleSheet, Text, TouchableOpacity, View } from "react-n
 import { Icon } from "react-native-elements";
 import tw from "tailwind-react-native-classnames";
 import CollapsibleView from "@eliav2/react-native-collapsible-view";
+import { useNavigation } from "@react-navigation/native";
 
 
-const CarCard = ({make, model}) => {
+const CarCard = ({make, model, onSelect}) => {
   const [expanded, setExpanded] = useState(false);
 
   const toggle = () => {
     setExpanded(!expanded);
   };
+
+  const navigation = useNavigation()
 
 
   return (
@@ -47,6 +50,7 @@ const CarCard = ({make, model}) => {
         </View>
         <Button
          title='Select Car'
+         onPress={onSelect}
         />
       </CollapsibleView>
     </TouchableOpacity>

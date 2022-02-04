@@ -16,6 +16,8 @@ const Requests = () => {
   const [loading, setLoading] = useState(true); // Set loading to true on component mount
   const [requests, setRequests] = useState([]); // Initial empty array of users
 
+  console.log(requests)
+
   useEffect(() => {
     const subscriber = firestore
       .collection("Requests").doc(user.uid).collection('Requests').where('requestId', '==', user.uid)
