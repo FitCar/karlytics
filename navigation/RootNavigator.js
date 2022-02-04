@@ -1,6 +1,6 @@
 import React, { useContext, useEffect, useState } from 'react';
 import { NavigationContainer } from '@react-navigation/native';
-import { View, ActivityIndicator } from 'react-native';
+import { View, ActivityIndicator, SafeAreaView } from 'react-native';
 import { createNativeStackNavigator } from "@react-navigation/native-stack";
 
 import Firebase from '../config/firebase';
@@ -39,7 +39,9 @@ export default function RootNavigator() {
 
   return (
     <NavigationContainer>
+      
       {user ? <HomeStack /> : <AuthStack />}
+      
     </NavigationContainer>
   );
 }

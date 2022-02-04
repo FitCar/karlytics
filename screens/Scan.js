@@ -19,7 +19,7 @@ import { AuthenticatedUserContext } from "../navigation/AuthenticatedUserProvide
 
 const firestore = Firebase.firestore();
 
-const Maintenance = () => {
+const Scan = () => {
   const { user } = useContext(AuthenticatedUserContext);
   const location = ["On-Site", "Pick-up", "Drop-off"];
   const navigation = useNavigation();
@@ -68,11 +68,10 @@ const Maintenance = () => {
     //   newvalue,
     //   requestId,
     // };
-
-    const requestId = user.uid;
+    const requestId = user.uid
     const data = {
       requestIcon: "../assets/icons/maintain.png",
-      requestType: "Maintenance",
+      requestType: "Scan",
       Car: selectedCar,
       Location: selectedLocation,
       Schedule: newdate,
@@ -85,10 +84,7 @@ const Maintenance = () => {
     //   .doc(requestId)
     //   .collection("requests");
 
-    const requestRef = firestore
-      .collection("Requests")
-      .doc(requestId)
-      .collection("Requests");
+    const requestRef = firestore.collection("Requests").doc(requestId).collection('Requests');;
 
     requestRef.doc().set(data);
 
@@ -97,10 +93,7 @@ const Maintenance = () => {
 
   useEffect(() => {
     const subscriber = firestore
-      .collection("Garage")
-      .doc(user.uid)
-      .collection("Garage")
-      .where("garageId", "==", user.uid)
+      .collection("Garage").doc(user.uid).collection('Garage').where('garageId', '==', user.uid)
       .onSnapshot((querySnapshot) => {
         const garage = [];
 
@@ -114,14 +107,14 @@ const Maintenance = () => {
         setGarage(garage);
         setLoading(false);
       });
-  }, []);
+  },[]);
 
   return (
     <View style={tw`bg-white`}>
       <View style={tw`ml-5 mt-5`}>
         <View style={tw`mb-8`}>
           <Text style={tw`font-bold text-lg text-black`}>
-            Request Maintenance
+            Request Scan
           </Text>
           <Text>Select a car</Text>
         </View>
@@ -243,6 +236,6 @@ const Maintenance = () => {
   );
 };
 
-export default Maintenance;
+export default Scan;
 
 const styles = StyleSheet.create({});
