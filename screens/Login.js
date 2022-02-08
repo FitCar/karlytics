@@ -40,13 +40,8 @@ export default function Login({ navigation }) {
       <StatusBar style='dark-content' />
       <Text style={styles.title}>Login</Text>
       <InputField
-        inputStyle={{
-          fontSize: 14
-        }}
-        containerStyle={{
-          backgroundColor: '#fff',
-          marginBottom: 20
-        }}
+        inputStyle={styles.input}
+        containerStyle={styles.inputContainer}
         leftIcon='email'
         placeholder='Enter email'
         autoCapitalize='none'
@@ -57,13 +52,8 @@ export default function Login({ navigation }) {
         onChangeText={text => setEmail(text)}
       />
       <InputField
-        inputStyle={{
-          fontSize: 14
-        }}
-        containerStyle={{
-          backgroundColor: '#fff',
-          marginBottom: 20
-        }}
+        inputStyle={styles.input}
+        containerStyle={styles.inputContainer}
         leftIcon='lock'
         placeholder='Enter password'
         autoCapitalize='none'
@@ -78,13 +68,8 @@ export default function Login({ navigation }) {
       {loginError ? <ErrorMessage error={loginError} visible={true} /> : null}
       <Button
         onPress={onLogin}
-        backgroundColor='#2bced6'
         title='Login'
-        tileColor='#fff'
-        titleSize={20}
-        containerStyle={{
-          marginBottom: 24
-        }}
+        containerStyle={styles.login}
       />
       <RNButton
         onPress={() => navigation.navigate('Register')}
@@ -98,15 +83,33 @@ export default function Login({ navigation }) {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: 'gray',
+    backgroundColor: 'white',
     paddingTop: 50,
     paddingHorizontal: 12
   },
   title: {
-    fontSize: 24,
+    fontSize: 30,
     fontWeight: '600',
-    color: '#fff',
+    color: 'black',
     alignSelf: 'center',
     paddingBottom: 24
+  },
+
+  inputContainer: {
+    borderRadius: 12,
+    marginBottom: 20,
+    borderWidth: 2,
+    borderColor: '#2bced6'
+  },
+
+  input: {
+    fontSize: 24
+  }, 
+
+  login: {
+    marginBottom: 24,
+    backgroundColor: '#2bced6',
+    color: '#fff',
+    fontSize: 20
   }
 });

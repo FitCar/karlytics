@@ -2,6 +2,7 @@ import { StatusBar } from "expo-status-bar";
 import React, { useEffect } from "react";
 import { useState } from "react";
 import { StyleSheet, Text, View, Button as RNButton } from "react-native";
+
 const { uuid } = require('uuidv4');
 
 import { Button, InputField, ErrorMessage } from "../components";
@@ -51,35 +52,24 @@ export default function Register({ navigation }) {
   const onHandleSignup = async () => {
     try {
       if (email !== "" && password !== "") {
-        await auth
-          .createUserWithEmailAndPassword(email, password)
-          // .then(() => {
-          //   dispatch(
-          //     login({
-          //       email: email,
-          //     })
-          //   );
-          // })
-          .then((response) => {
+        await auth.createUserWithEmailAndPassword(email, password)
+              .then((response) => {
             
-            const uid = response.user.uid;
-            const data = {
-              name: name,
-              email: email,
-              uid: uid,
-              id: users.length + 1
-              
-            };
+              const uid = response.user.uid;
+              const data = {
+                name: name,
+                email: email,
+                uid: uid,
+                id: users.length + 1
+                
+              };
 
-          
-
-            const userRef = firestore.collection("users");
-
-            userRef.doc(uid).set(data);
-            console.log(response);
-            console.log(email);
-            console.log(name);
-            console.log(uid);
+              const userRef = firestore.collection("users");
+              userRef.doc(uid).set(data);
+              console.log(response);
+              console.log(email);
+              console.log(name);
+              console.log(uid);
           });
       }
     } catch (error) {
@@ -91,28 +81,20 @@ export default function Register({ navigation }) {
     <View style={styles.container}>
       <StatusBar style="dark-content" />
       <Text style={styles.title}>Create new account</Text>
+      
       <InputField
-        inputStyle={{
-          fontSize: 14,
-        }}
-        containerStyle={{
-          backgroundColor: "#fff",
-          marginBottom: 20,
-        }}
+        inputStyle={styles.input}
+        containerStyle={styles.inputContainer}
         leftIcon="account"
         placeholder="Enter Fullname"
-        autoCapitalize = "true"
+        autoCapitalize="words"
         onChangeText={(text) => setName(text)}
       />
+
       <InputField
-        inputStyle={{
-          fontSize: 14,
-        }}
-        
-        containerStyle={{
-          backgroundColor: "#fff",
-          marginBottom: 20,
-        }}
+        inputStyle={styles.input}
+        containerStyle={styles.inputContainer}
+
         leftIcon="email"
         placeholder="Enter email"
         autoCapitalize="none"
@@ -122,14 +104,10 @@ export default function Register({ navigation }) {
         value={email}
         onChangeText={(text) => setEmail(text)}
       />
+      
       <InputField
-        inputStyle={{
-          fontSize: 14,
-        }}
-        containerStyle={{
-          backgroundColor: "#fff",
-          marginBottom: 20,
-        }}
+        inputStyle={styles.input}
+        containerStyle={styles.inputContainer}
         leftIcon="lock"
         placeholder="Enter password"
         autoCapitalize="none"
@@ -164,15 +142,27 @@ export default function Register({ navigation }) {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: "gray",
+    backgroundColor: "white",
     paddingTop: 50,
     paddingHorizontal: 12,
   },
   title: {
     fontSize: 24,
     fontWeight: "600",
-    color: "#fff",
+    color: "black",
     alignSelf: "center",
     paddingBottom: 24,
   },
+
+  inputContainer: {
+    borderRadius: 12,
+    marginBottom: 20,
+    borderWidth: 2,
+    borderColor: '#2bced6'
+  },
+
+  input: {
+    fontSize: 16
+  }, 
+
 });
