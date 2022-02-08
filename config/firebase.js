@@ -18,6 +18,8 @@ let Firebase;
 
 if (firebase.apps.length === 0) {
   Firebase = firebase.initializeApp(firebaseConfig);
+}else{
+  Firebase = firebase.app()
 }
 
 export default Firebase;
