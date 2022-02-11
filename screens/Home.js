@@ -20,10 +20,11 @@ import { IconButton } from "../components";
 import Firebase from "../config/firebase";
 import { AuthenticatedUserContext } from "../navigation/AuthenticatedUserProvider";
 import ServiceInfo from "../components/ServiceInfo";
-import { useSelector } from "react-redux";
+import { useSelector, useDispatch } from "react-redux";
 import { selectLastServiceDate } from "../slices/carSlice";
 import { formatDistanceToNow } from "date-fns";
 import CarCard from "../components/CarCard";
+import { getCars } from '../slices/carSlice'
 
 const firestore = Firebase.firestore();
 
@@ -37,6 +38,7 @@ const Home = () => {
 
   const navigation = useNavigation();
   const { user } = useContext(AuthenticatedUserContext);
+  const dispatch = useDispatch()
   
   useEffect(() => {
     const subscriber = firestore
@@ -55,6 +57,7 @@ const Home = () => {
         });
         console.log(garage);
         setGarage(garage);
+        dispatch(getCars(garage))
         setLoading(false);
       });
   }, []);
@@ -166,9 +169,11 @@ const Home = () => {
               <View>
                 <HealthCard />
               </View>
+
               <Text style={tw`ml-7 mt-5 text-center font-bold mb-5 text-lg`}>
                 Make a request
               </Text>
+              
               <TouchableOpacity
                 style={tw`bg-white flex-row ml-5 mr-5 rounded-xl py-10`}
                 onPress={() => navigation.navigate("Scan")}
