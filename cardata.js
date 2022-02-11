@@ -1,3 +1,5 @@
+export const pryColor = '#2bced6'
+
 export const car_years =  [
     { label: "1998", value: "1998" },
     { label: "1999", value: "1999" },
@@ -47,3 +49,56 @@ export const cars = [
     { model: "Nissan", index: '14' },
     { model: "Jaguar", index: '15' },
   ]
+
+export const MaintenancePlanData = {
+    Basic: {
+        price: 15000,
+        features: ['Engine oil replacement', 'Oil filter replacement', 'Air filter cleaning', 'Coolant top up', 'Wiper fluid replacement', 'Battery water top up', 'Heater spark plugs checking', 'Car wash', 'Interior vacuuming (Carpets & Seats)']
+    },
+
+    Standard: {
+        price: 25000,
+        features: ['Engine oil replacement', 'Oil filter replacement', 'Air filter cleaning', 'Coolant top up', 'Wiper fluid replacement', 'Battery water top up', 'Heater spark plugs checking', 'Car wash', 'Interior vacuuming (Carpets & Seats)']
+    },
+
+    Comprehensive: {
+        price: 40000,
+        features: ['Engine oil replacement', 'Oil filter replacement', 'Air filter cleaning', 'Coolant top up', 'Wiper fluid replacement', 'Battery water top up', 'Heater spark plugs checking', 'Car wash', 'Interior vacuuming (Carpets & Seats)']
+    }
+}
+
+export const InsurancePlanData = {
+    ThirdParty: {
+        price: 10000,
+        features: ['Engine oil replacement', 'Oil filter replacement', 'Air filter cleaning', 'Coolant top up', 'Wiper fluid replacement']
+    },
+
+    Comprehensive: {
+        price: 16000,
+        features: ['Engine oil replacement', 'Oil filter replacement', 'Air filter cleaning', 'Coolant top up', 'Wiper fluid replacement', 'Battery water top up', 'Heater spark plugs checking', 'Car wash', 'Interior vacuuming (Carpets & Seats)']
+    }
+}
+
+export const MembershipPlanData = {
+    Gold: {
+        price: 30000,
+        features: ['Air filter cleaning', 'Coolant top up', 'Wiper fluid replacement']
+    },
+
+    Silver: {
+        price: 50000,
+        features: ['Engine oil replacement', 'Oil filter replacement', 'Air filter cleaning', 'Coolant top up', 'Wiper fluid replacement', 'Battery water top up', 'Heater spark plugs checking', 'Car wash', 'Interior vacuuming (Carpets & Seats)']
+    }
+}
+
+export const HealthPlan = {
+    Basic: {
+        price: 12000,
+        features: ['Engine oil replacement', 'Oil filter replacement', 'Wiper fluid replacement', 'Battery water top up', 'Heater spark plugs checking', 'Car wash', 'Interior vacuuming (Carpets & Seats)']
+    },
+
+    Comprehensive: {
+        price: 20000,
+        features: ['Engine oil replacement', 'Oil filter replacement', 'Air filter cleaning', 'Coolant top up', 'Wiper fluid replacement', 'Battery water top up', 'Heater spark plugs checking', 'Car wash', 'Interior vacuuming (Carpets & Seats)']
+    }   
+}
