@@ -67,26 +67,24 @@ const Home = () => {
       }
       
       fetchuserData()
-    }, [])
+    }, [user])
   
 
   const dt =
-    garage.length !== 0 ? new Date(garage[3].nextServiceDate) : new Date();
+    garage.length !== 0 ? new Date(garage[0].nextServiceDate) : new Date();
   const lstDt =
-    garage.length !== 0 ? new Date(garage[3].lastServiceDate) : new Date();
+    garage.length !== 0 ? new Date(garage[0].lastServiceDate) : new Date();
   // console.log(dt);
   const duration = formatDistanceToNow(dt);
   // console.log(duration);
 
   const now = new Date();
   const one_day = 1000 * 60 * 60 * 24;
-  const totalDays = (
-    Math.round(dt.getTime() - lstDt.getTime()) / one_day
-  ).toFixed(0);
+  const totalDays = (Math.round(dt.getTime() - lstDt.getTime()) / one_day).toFixed(0);
+  
   console.log(totalDays);
-  const leftDays = (
-    Math.round(dt.getTime() - new Date().getTime()) / one_day
-  ).toFixed(0);
+  
+  const leftDays = (Math.round(dt.getTime() - new Date().getTime()) / one_day).toFixed(0);
   console.log(leftDays);
 
   const progressLeft = leftDays / totalDays;
@@ -102,7 +100,7 @@ const Home = () => {
 
   return (
     <View style={tw`bg-white`}>
-      {/* <Modal
+      <Modal
         animationType={"slide"}
         transparent={false}
         visible={isVisible}
@@ -115,7 +113,7 @@ const Home = () => {
         )}
         keyExtractor={(item) => item.key}
       />
-      </Modal> */}
+      </Modal>
 
       {/* section 1: navbar */}
       <View style={styles.header}>
@@ -140,7 +138,7 @@ const Home = () => {
                 <Text>How's your car feeling today</Text>
               </View>
 
-             {garage === [] ? 
+             {garage.length > 0 ? 
               <TouchableOpacity>
                 <Text>Select car</Text>
                 <Icon name="sort-down" type="font-awesome" onPress={openModal} />
@@ -155,7 +153,7 @@ const Home = () => {
 
           {garage.length !== 0 ? (
             <ServiceInfo
-              serviceDate={garage[3].nextServiceDate}
+              serviceDate={garage[0].nextServiceDate}
               duration={duration}
               progressLeft={progressLeft}
             />

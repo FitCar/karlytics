@@ -16,7 +16,7 @@ const AddCar = () => {
         <Text style={tw`mt-5`}>Add your car(s) to get started</Text>
         
         <TouchableOpacity
-          style={tw`border-0 rounded-3xl self-center w-10/12 p-2 mt-5 bg-pry-color-1`}
+          style={tw`border-0 rounded-3xl self-center w-10/12 p-2 mt-5 bg-blue-200`}
           onPress={() => navigation.navigate('CarMake')}
         >
           <Text style={tw`text-center font-medium text-lg`}>Add Car</Text>

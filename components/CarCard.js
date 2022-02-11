@@ -17,27 +17,27 @@ const CarCard = ({make, model, onSelect}) => {
 
 
   return (
-    <TouchableOpacity style={tw`bg-white rounded-3xl mx-10 py-5 pl-5 mb-10 shadow-xl`} onPress={toggle}>
+    <TouchableOpacity style={tw`bg-white items-center mt-10 rounded-3xl mx-10 py-5 pl-5 shadow-xl`} onPress={toggle}>
       <View style={tw`flex-row`}>
-      <View>
-        <Image source={require("../assets/icons/garage-car.png")}
-        resizeMode = "contain" 
-        style={{height: 100,
-          marginRight: 20
-        }}/>
+        <View>
+          <Image source={require("../assets/icons/garage-car.png")}
+          resizeMode = "contain" 
+          style={styles.image}/>
+        </View>
+
+        <View>
+            <Text style={styles.mainInfo}>Make: {make}</Text>
+            <Text style={styles.mainInfo}>Model: {model}</Text>
+            <Text style={styles.mainInfo}>Mileaege: xxxx</Text>
+        </View>
       </View>
-      <View>
-      <Text>Make: {make}</Text>
-        <Text>Model: {model}</Text>
-        <Text>Mileaege: xxxx</Text>
-      </View>
-      </View>
+
       <View style={tw`flex-row items-center`}>
         <Text style={tw`text-center mr-5`}>Health Report</Text>
         <Image source={require("../assets/Images/healthreport.png")} />
       </View>
+
       <CollapsibleView
-        noArrow={true}
         expanded={expanded}
         style={{ borderWidth: 0 }}
       >
@@ -48,6 +48,7 @@ const CarCard = ({make, model, onSelect}) => {
           <Text>Papers: OK</Text>
           <Text>Value: 15mNGN</Text>
         </View>
+
         <Button
          title='Select Car'
          onPress={onSelect}
@@ -59,4 +60,15 @@ const CarCard = ({make, model, onSelect}) => {
 
 export default CarCard;
 
-const styles = StyleSheet.create({});
+const styles = StyleSheet.create({
+  image: {
+    height: 80,
+    width: 100,
+    marginRight: 20
+  },
+
+  mainInfo: {
+    fontWeight: "700",
+    fontSize: 16
+  }
+});
