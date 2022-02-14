@@ -39,7 +39,7 @@
     "react-native-elements": "^3.4.2",
     "react-native-firebase": "^5.6.0",
     "react-native-fusioncharts": "^5.1.0",
-    "react-native-gesture-handler": "~1.10.2",
+    "react-native-gesture-handler": "^2.2.0",
     "react-native-paper": "^4.9.2",
     "react-native-paystack-webview": "^4.0.3",
     "react-native-reanimated": "~2.2.0",

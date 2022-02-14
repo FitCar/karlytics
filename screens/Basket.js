@@ -38,9 +38,10 @@ const Basket = () => {
   const vat = (sum + labour) * 0.075
   const grandTotal = sum + labour + vat
   return (
-    <View>
-      <View style={tw`flex-row justify-around mt-5`}>
-        <View style={tw`mb-8 flex-row`}>
+    <View style={tw`pt-10 pb-5`}>
+      <View style={tw`flex-row justify-around mb-8`}>
+        
+        <View style={tw`flex-row`}>
           <View>
             <Text style={tw`font-bold text-lg text-black`}>Basket</Text>
             <Text>View your basket</Text>
@@ -49,21 +50,27 @@ const Basket = () => {
             <Icon name="shopping-basket" type="font-awesome" />
           </View>
         </View>
-        <View style={tw`content-center flex-row`}>
-          <Text style={tw`mr-2`}>Checkout</Text>
-          <Icon name="chevron-right" type="font-awesome" />
-        </View>
+        
+        <TouchableOpacity
+          style={tw`items-center flex-row bg-green-400 px-3 rounded-lg`}
+          onPress={() => {
+            dispatch(setGrandTotal(grandTotal))
+            navigation.navigate('Checkout')
+          }}
+        > 
+          <Text style={tw`mr-2 text-white font-semibold`}>Checkout</Text>
+          <Icon name="chevron-right" color={'white'} type="font-awesome" />
+        </TouchableOpacity>
       </View>
-      <TouchableOpacity
-        style={tw`bg-green-800 mx-4 rounded-xl mb-8 p-5 shadow-2xl`}
-        onPress={() => {
-          dispatch(setGrandTotal(grandTotal))
-          navigation.navigate('Checkout')}}
-      >
-        <Text>Check Out</Text>
-      </TouchableOpacity>
+
       <ScrollView style={tw`mb-44`}>
         {basket.map((item) => {
+          if(item.plan) return (
+            <BasketCard
+              details={item}
+            />
+          )
+          
           return (
             <BasketCard
               description={item.description}
@@ -73,9 +80,10 @@ const Basket = () => {
             />
           );
         })}
+
         <Text>Sub-total: {sum} </Text>
-      <Text>Labour: {labour}</Text>
-      <Text>7.5% VAT: {vat}</Text>
+        <Text>Labour: {labour}</Text>
+        <Text>7.5% VAT: {vat}</Text>
         <Text>Grand Total: {grandTotal} </Text>
       </ScrollView>
     </View>
