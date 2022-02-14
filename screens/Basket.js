@@ -64,10 +64,11 @@ const Basket = () => {
       </View>
 
       <ScrollView style={tw`mb-44`}>
-        {basket.map((item) => {
+        {basket.map((item, index) => {
           if(item.plan) return (
             <BasketCard
               details={item}
+              index={index+1}
             />
           )
           
@@ -77,6 +78,7 @@ const Basket = () => {
               qty={item.qty}
               unitPrice={item.unitPrice}
               total={item.total}
+              index={index+1}
             />
           );
         })}
