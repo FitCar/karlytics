@@ -1,7 +1,10 @@
-import React from "react";
+import React, { useState } from "react";
 import { StyleSheet, Text, TouchableOpacity, View, Image } from "react-native";
 import { Icon } from "react-native-elements";
 import tw from "tailwind-react-native-classnames";
+import AwesomeAlert from 'react-native-awesome-alerts';
+import { removeFromBasket } from "../slices/carSlice";
+import { useDispatch } from "react-redux";
 
 const ChooseImageForPlan = ({ name }) =>{
   
@@ -14,9 +17,22 @@ const ChooseImageForPlan = ({ name }) =>{
   return <Image source={require("../assets/icons/healthplan.png")} style={{ resizeMode: "contain", height: 40 }} />
 } 
 
-const BasketCard = ({ description, qty, total, unitPrice, details }) => {
+const BasketCard = ({ description, qty, total, unitPrice, details, index }) => {
+  
+  const [showAlert, setshowAlert] = useState(false)
+  const dispatch = useDispatch()
+
+  const confirmRemove = () => {
+    dispatch(removeFromBasket(index))
+    return setshowAlert(false)
+  }
+
+
   if(details) return (
-    <View style={tw`bg-white mx-4 rounded-xl mb-5 p-4 shadow-xl`}>
+    <TouchableOpacity 
+      style={tw`bg-white mx-4 rounded-xl mb-5 p-4 shadow-xl`} key={index}
+      onLongPress={() => setshowAlert(true)}
+    >
       <View style={tw`flex-row justify-start h-max items-center`}>
         <ChooseImageForPlan name={details.plan.Name} />
         
@@ -27,10 +43,26 @@ const BasketCard = ({ description, qty, total, unitPrice, details }) => {
           <Text style={tw`font-semibold mt-2`}>Cost: {details.plan.price}</Text>  
         </View>
       </View>
-    </View>
+
+      {/* renders the alert that is shown before item is removed from basket */}
+      <AwesomeAlert
+          show={showAlert}
+          title={"remove from basket?"}
+          message={`Are you sure you want to remove ${details.plan.Name} for your ${details.Make}`}
+          closeOnTouchOutside={true}
+          closeOnHardwareBackPress={false}
+          showCancelButton={true}
+          showConfirmButton={true}
+          cancelText="No, cancel"
+          confirmText="Yes, delete it"
+          confirmButtonColor="#DD6B55"
+          onCancelPressed={() => setshowAlert(false)}
+          onConfirmPressed={() => confirmRemove()}
+        />
+    </TouchableOpacity>
   )
   return (
-    <View style={tw`bg-white mx-4 rounded-xl mb-5 p-4 shadow-xl`}>
+    <View style={tw`bg-white mx-4 rounded-xl mb-5 p-4 shadow-xl`} key={index}>
       <View style={tw`flex-row h-12 items-center`}>
         <Icon style={tw`flex-1 mr-10`} name="gas-pump" type="font-awesome-5" />
         
