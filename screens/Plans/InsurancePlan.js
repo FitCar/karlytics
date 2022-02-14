@@ -1,10 +1,12 @@
+import { useNavigation } from '@react-navigation/native';
 import React from 'react'
 import { useState } from 'react';
-import { Image, Text, TouchableOpacity, View, StyleSheet, ScrollView, Modal, FlatList } from 'react-native'
-import { useSelector } from 'react-redux';
+import { Image, Text, TouchableOpacity, View, StyleSheet, ScrollView, Modal, FlatList, Alert } from 'react-native'
+import { useDispatch, useSelector } from 'react-redux';
 import tw from "tailwind-react-native-classnames";
 import { InsurancePlanData } from '../../cardata.js'
 import CarItem from '../../components/CarItem.js';
+import { addToBasket } from '../../slices/carSlice.js';
 
 function InsurancePlan() {
   
@@ -12,7 +14,9 @@ function InsurancePlan() {
   const [plan, setplan] = useState(null)
   const [selectedCars, setselectedCars] = useState([])
 
-  const { cars } = useSelector(state => state.car)
+  const { cars, basket } = useSelector(state => state.car)
+  const dispatch = useDispatch()
+  const navigation = useNavigation()
 
   const addCommaToValue = (num) =>{
     let to_string = `${num}`
@@ -28,6 +32,20 @@ function InsurancePlan() {
   const handleClose = () =>{
     setmodalVisible(false)
     setselectedCars([])
+  }
+
+  const addPlanToBasket = () =>{
+    selectedCars.forEach(car => {
+      const filteredPlans = basket.filter(carPlan => carPlan.key === car.key && carPlan.plan.Name === plan.Name && carPlan.plan.type === plan.type)
+      if(filteredPlans.length < 1){
+        dispatch(addToBasket({ ...car, plan }))
+      }else {
+        Alert.alert(`the ${plan.type} for ${plan.Name} plan is already added for your ${car.make} car`)
+      }
+      
+    })
+    navigation.navigate("Basket")
+    return handleClose()
   }
 
   return (
@@ -62,6 +80,7 @@ function InsurancePlan() {
             selectedCars.length > 0 &&
             <TouchableOpacity 
               style={[tw`w-10/12 mx-auto p-3 rounded-md shadow-md`, { backgroundColor: "#2bced6" }]}
+              onPress={() => addPlanToBasket()}
             >
               <Text style={tw`text-center`}>Add the <Text style={tw`font-semibold`}>{plan?.Name} {plan.type}</Text> to basket- Total: <Text style={tw`text-lg font-semibold`}>{addCommaToValue(plan?.price*(selectedCars.length))}</Text></Text>
             </TouchableOpacity>

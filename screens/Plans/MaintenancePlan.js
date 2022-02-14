@@ -1,11 +1,12 @@
 import { useNavigation } from "@react-navigation/native";
 import React from "react";
 import { useState } from "react";
-import { FlatList, Image, Modal, ScrollView, StyleSheet, Text, TouchableOpacity, View } from "react-native";
+import { Alert, FlatList, Image, Modal, ScrollView, StyleSheet, Text, TouchableOpacity, View } from "react-native";
 import tw from "tailwind-react-native-classnames";
 import { MaintenancePlanData } from '../../cardata'
 import { useSelector, useDispatch } from 'react-redux'
 import CarItem from "../../components/CarItem";
+import { addToBasket } from "../../slices/carSlice";
  
 function MaintenancePlan() {
 
@@ -14,7 +15,8 @@ function MaintenancePlan() {
   const [plan, setplan] = useState(null)
   const [selectedCars, setselectedCars] = useState([])
 
-  const { cars } = useSelector(state => state.car)
+  const { cars, basket } = useSelector(state => state.car)
+  const dispatch = useDispatch()
 
   const addCommaToValue = (num) =>{
     let to_string = `${num}`
@@ -32,7 +34,19 @@ function MaintenancePlan() {
     setselectedCars([])
   }
 
-  console.log(selectedCars)
+  const addPlanToBasket = () =>{
+    selectedCars.forEach(car => {
+      const filteredPlans = basket.filter(carPlan => carPlan.key === car.key && carPlan.plan.Name === plan.Name && carPlan.plan.type === plan.type)
+      if(filteredPlans.length < 1){
+        dispatch(addToBasket({ ...car, plan }))
+      }else {
+        Alert.alert(`the ${plan.type} for ${plan.Name} plan is already added for your ${car.make} car`)
+      }
+      
+    })
+    navigation.navigate("Basket")
+    return handleClose()
+  }
 
   return (
     <ScrollView style={tw`mt-10 px-5 mb-5`}>
@@ -63,7 +77,10 @@ function MaintenancePlan() {
 
           {
             selectedCars.length > 0 &&
-            <TouchableOpacity style={[tw`w-10/12 mx-auto p-3 rounded-md shadow-md`, { backgroundColor: "#2bced6" }]}>
+            <TouchableOpacity 
+              style={[tw`w-10/12 mx-auto p-3 rounded-md shadow-md`, { backgroundColor: "#2bced6" }]}
+              onPress={() => addPlanToBasket()}
+            >
               <Text style={tw`text-center`}>Add the <Text style={tw`font-semibold`}>{plan?.Name} {plan.type}</Text> to basket- Total: <Text style={tw`text-lg font-semibold`}>{addCommaToValue(plan?.price*(selectedCars.length))}</Text></Text>
             </TouchableOpacity>
           }
