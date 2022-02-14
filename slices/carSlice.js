@@ -34,7 +34,7 @@ export const carSlice = createSlice({
       state.requestId = action.payload;
     },
     addToBasket: (state, action) => {
-      state.basket = [...state.basket, action.payload];
+      state.basket = [action.payload, ...state.basket];
     },
     setGrandTotal: (state, action) => {
       state.grandTotal = action.payload;
