@@ -1,12 +1,20 @@
 import { useNavigation } from "@react-navigation/native";
 import React from "react";
-import { Image, ScrollView, StyleSheet, Text, TouchableOpacity, View } from "react-native";
+import { useState } from "react";
+import { FlatList, Image, Modal, ScrollView, StyleSheet, Text, TouchableOpacity, View } from "react-native";
 import tw from "tailwind-react-native-classnames";
 import { MaintenancePlanData } from '../../cardata'
-
+import { useSelector, useDispatch } from 'react-redux'
+import CarItem from "../../components/CarItem";
+ 
 function MaintenancePlan() {
 
   const navigation = useNavigation()
+  const [modalVisible, setmodalVisible] = useState(false)
+  const [plan, setplan] = useState(null)
+  const [selectedCars, setselectedCars] = useState([])
+
+  const { cars } = useSelector(state => state.car)
 
   const addCommaToValue = (num) =>{
     let to_string = `${num}`
@@ -14,8 +22,55 @@ function MaintenancePlan() {
     return to_string.substring(0, 2) + ',' + to_string.substring(2, to_string.length);
   }
 
+  const handleNext = (selectedPlan) =>{
+    setmodalVisible(true)
+    setplan(selectedPlan)
+  } 
+
+  const handleClose = () =>{
+    setmodalVisible(false)
+    setselectedCars([])
+  }
+
+  console.log(selectedCars)
+
   return (
     <ScrollView style={tw`mt-10 px-5 mb-5`}>
+      <Modal
+        animationType="slide"
+        visible={modalVisible}
+
+      >
+        <View style={tw`flex-grow py-10 px-5`}>
+          <View style={tw`flex-row justify-between mb-10`}>
+            <View>
+              <Text style={tw`text-xl font-semibold`}>Select Car for {plan?.Name} Plan</Text>
+              <Text style={tw`text-gray-600 font-medium`}>What Car are you selecting the {plan?.type} for?</Text>
+            </View>
+
+            <TouchableOpacity style={tw`items center`} onPress={() => handleClose()}>
+              <Text style={tw`text-xl capitalize text-red-600`}>close</Text>
+            </TouchableOpacity>
+          </View>
+
+          <FlatList
+            data={cars}
+            renderItem={({ item }) => (
+              <CarItem car={item} selectedCars={selectedCars} setselectedCars={setselectedCars} />
+            )}
+            keyExtractor={(item) => item.key}
+          />
+
+          {
+            selectedCars.length > 0 &&
+            <TouchableOpacity style={[tw`w-10/12 mx-auto p-3 rounded-md shadow-md`, { backgroundColor: "#2bced6" }]}>
+              <Text style={tw`text-center`}>Add the <Text style={tw`font-semibold`}>{plan?.Name} {plan.type}</Text> to basket- Total: <Text style={tw`text-lg font-semibold`}>{addCommaToValue(plan?.price*(selectedCars.length))}</Text></Text>
+            </TouchableOpacity>
+          }
+        </View>
+        
+      </Modal>
+
       <Text style={tw`text-xl font-semibold`}>Maintenance Plan</Text>
       
       <View style={tw`flex-row mb-6 mt-5 items-center`}>
@@ -45,7 +100,7 @@ function MaintenancePlan() {
 
           <TouchableOpacity
             style={[tw`border-0 rounded-3xl  w-32 p-2 mt-5 mb-5`, styles.pryColor]}
-            onPress={() => navigation.navigate('Basket')}
+            onPress={() => handleNext({Name: 'Maintenance', type: 'Basic', price: MaintenancePlanData.Basic.price})}
           >
             <Text style={tw`text-white text-center`}>Select and Pay <Text>{addCommaToValue(MaintenancePlanData.Basic.price)}</Text></Text>
           </TouchableOpacity>
@@ -59,7 +114,10 @@ function MaintenancePlan() {
             ))
           }
 
-          <TouchableOpacity style={[tw`border-0 text-white text-center rounded-3xl  w-32 p-2 mt-5 mb-5`, styles.pryColor]}>
+          <TouchableOpacity 
+            style={[tw`border-0 text-white text-center rounded-3xl  w-32 p-2 mt-5 mb-5`, styles.pryColor]}
+            onPress={() => handleNext({Name: 'Maintenance', type: 'Standard', price: MaintenancePlanData.Standard.price})}
+          >
             <Text style={tw`text-white text-center`}>Select and Pay {addCommaToValue(MaintenancePlanData.Standard.price)}</Text>
           </TouchableOpacity>
         </View>
@@ -73,7 +131,10 @@ function MaintenancePlan() {
             )
           )}
 
-          <TouchableOpacity style={[tw`border-0 text-white text-center rounded-3xl  w-32 p-2 mt-5 mb-5`, styles.pryColor]}>
+          <TouchableOpacity 
+            style={[tw`border-0 text-white text-center rounded-3xl  w-32 p-2 mt-5 mb-5`, styles.pryColor]}
+            onPress={() => handleNext({Name: 'Maintenance', type: 'Comprehensive', price: MaintenancePlanData.Comprehensive.price})}
+          >
             <Text style={tw`text-white text-center`}>Select and Pay {addCommaToValue(MaintenancePlanData.Comprehensive.price)}</Text>
           </TouchableOpacity>
         </View>

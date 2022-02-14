@@ -1,17 +1,77 @@
 import React from 'react'
-import { Image, Text, TouchableOpacity, View, StyleSheet, ScrollView } from 'react-native'
+import { useState } from 'react';
+import { Image, Text, TouchableOpacity, View, StyleSheet, ScrollView, Modal, FlatList } from 'react-native'
+import { useSelector } from 'react-redux';
 import tw from "tailwind-react-native-classnames";
 import { InsurancePlanData } from '../../cardata.js'
+import CarItem from '../../components/CarItem.js';
 
 function InsurancePlan() {
+  
+  const [modalVisible, setmodalVisible] = useState(false)
+  const [plan, setplan] = useState(null)
+  const [selectedCars, setselectedCars] = useState([])
+
+  const { cars } = useSelector(state => state.car)
+
   const addCommaToValue = (num) =>{
     let to_string = `${num}`
 
     return to_string.substring(0, 2) + ',' + to_string.substring(2, to_string.length);
   }
 
+  const handleNext = (selectedPlan) =>{
+    setmodalVisible(true)
+    setplan(selectedPlan)
+  } 
+
+  const handleClose = () =>{
+    setmodalVisible(false)
+    setselectedCars([])
+  }
+
   return (
     <ScrollView style={tw`mt-10 px-5`}>
+      {/* modal */}
+      <Modal
+        animationType="slide"
+        visible={modalVisible}
+
+      >
+        <View style={tw`flex-grow py-10 px-5`}>
+          <View style={tw`flex-row justify-between mb-10`}>
+            <View>
+              <Text style={tw`text-xl font-semibold`}>Select Car for {plan?.Name} Plan</Text>
+              <Text style={tw`text-gray-600 font-medium`}>What Car are you selecting the {plan?.type} for?</Text>
+            </View>
+
+            <TouchableOpacity style={tw`items center`} onPress={() => handleClose()}>
+              <Text style={tw`text-xl capitalize text-red-600`}>close</Text>
+            </TouchableOpacity>
+          </View>
+
+          <FlatList
+            data={cars}
+            renderItem={({ item }) => (
+              <CarItem car={item} selectedCars={selectedCars} setselectedCars={setselectedCars} />
+            )}
+            keyExtractor={(item) => item.key}
+          />
+
+          {
+            selectedCars.length > 0 &&
+            <TouchableOpacity 
+              style={[tw`w-10/12 mx-auto p-3 rounded-md shadow-md`, { backgroundColor: "#2bced6" }]}
+            >
+              <Text style={tw`text-center`}>Add the <Text style={tw`font-semibold`}>{plan?.Name} {plan.type}</Text> to basket- Total: <Text style={tw`text-lg font-semibold`}>{addCommaToValue(plan?.price*(selectedCars.length))}</Text></Text>
+            </TouchableOpacity>
+          }
+        </View>
+        
+      </Modal>
+
+      {/* end of modal */}
+
       <Text style={tw`text-xl font-semibold`}>Insurance Plan</Text>
         
         <View style={tw`flex-row mb-6 mt-5 items-center`}>
@@ -42,7 +102,7 @@ function InsurancePlan() {
 
             <TouchableOpacity
               style={[tw`border-0 rounded-3xl  w-32 p-2 mt-5 mb-5`, styles.pryColor]}
-              onPress={() => navigation.navigate('Basket')}
+              onPress={() => handleNext({Name: 'Insurance', type: '3rd Party', price: InsurancePlanData.ThirdParty.price})}
             >
               <Text style={tw`text-white text-center`}>Select and Pay <Text>{addCommaToValue(InsurancePlanData.ThirdParty.price)}</Text></Text>
             </TouchableOpacity>
@@ -60,7 +120,7 @@ function InsurancePlan() {
 
             <TouchableOpacity
               style={[tw`border-0 rounded-3xl  w-32 p-2 mt-5 mb-5`, styles.pryColor]}
-              onPress={() => navigation.navigate('Basket')}
+              onPress={() => handleNext({Name: 'Insurance', type: 'Comprehensive', price: InsurancePlanData.Comprehensive.price})}
             >
               <Text style={tw`text-white text-center`}>Select and Pay <Text>{addCommaToValue(InsurancePlanData.Comprehensive.price)}</Text></Text>
             </TouchableOpacity>
