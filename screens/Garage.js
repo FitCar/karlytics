@@ -13,35 +13,12 @@ import tw from "tailwind-react-native-classnames";
 import { Icon } from "react-native-elements";
 import AddCar from "../components/AddCar";
 import CarCard from "../components/CarCard";
-import Firebase from "../config/firebase";
-import { AuthenticatedUserContext } from "../navigation/AuthenticatedUserProvider";
-
-const firestore = Firebase.firestore();
+import { useSelector } from "react-redux";
 
 const Garage = () => {
-  const { user } = useContext(AuthenticatedUserContext);
   const [loading, setLoading] = useState(true); // Set loading to true on component mount
-  const [garage, setGarage] = useState([]); // Initial empty array of users
-
-  useEffect(() => {
-    const subscriber = firestore
-      .collection("Garage").doc(user.uid).collection('Garage').where('garageId', '==', user.uid)
-      .onSnapshot((querySnapshot) => {
-        const garage = [];
-
-        querySnapshot.forEach((documentSnapshot) => {
-          garage.push({
-            ...documentSnapshot.data(),
-            key: documentSnapshot.id,
-          });
-        });
-        // console.log(garage);
-        setGarage(garage);
-        setLoading(false);
-      });
-  },[]);
-
-  console.log(garage);
+  
+  const { cars } = useSelector(state => state.car)
 
   return (
     <ScrollView style={tw`mb-8`}>
@@ -56,9 +33,9 @@ const Garage = () => {
       </View>
       
       <FlatList
-        data={garage}
+        data={cars}
         renderItem={({ item }) => (
-          <CarCard make={item.Make} model={item.Model} />
+          <CarCard car_details={item} />
         )}
         keyExtractor={(item) => item.key}
       />
