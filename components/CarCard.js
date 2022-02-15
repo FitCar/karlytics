@@ -4,17 +4,24 @@ import { Icon } from "react-native-elements";
 import tw from "tailwind-react-native-classnames";
 import CollapsibleView from "@eliav2/react-native-collapsible-view";
 import { useNavigation } from "@react-navigation/native";
+import { useDispatch } from 'react-redux'
+import { setCurrentCar } from "../slices/carSlice";
 
 
-const CarCard = ({make, model, onSelect}) => {
+const CarCard = ({ car_details }) => {
   const [expanded, setExpanded] = useState(false);
+  
+  const navigation = useNavigation()
+  const dispatch = useDispatch()
 
   const toggle = () => {
     setExpanded(!expanded);
   };
 
-  const navigation = useNavigation()
-
+  const handleSelectCar = () =>{
+    dispatch(setCurrentCar(car_details))
+    navigation.navigate("Home")
+  } 
 
   return (
     <TouchableOpacity style={tw`bg-white items-center mt-10 rounded-3xl mx-10 py-5 pl-5 shadow-xl`} onPress={toggle}>
@@ -26,8 +33,8 @@ const CarCard = ({make, model, onSelect}) => {
         </View>
 
         <View>
-            <Text style={styles.mainInfo}>Make: {make}</Text>
-            <Text style={styles.mainInfo}>Model: {model}</Text>
+            <Text style={styles.mainInfo}>Make: {car_details.Make}</Text>
+            <Text style={styles.mainInfo}>Model: {car_details.Model}</Text>
             <Text style={styles.mainInfo}>Mileaege: xxxx</Text>
         </View>
       </View>
@@ -51,7 +58,7 @@ const CarCard = ({make, model, onSelect}) => {
 
         <Button
          title='Select Car'
-         onPress={onSelect}
+         onPress={() => handleSelectCar()}
         />
       </CollapsibleView>
     </TouchableOpacity>
