@@ -20,8 +20,6 @@ const ServiceInfo = ({ current_car }) => {
 
   const progressLeft = 1 - (left/four_months.getTime())
 
-  console.log(progressLeft)
-
   let days;
   let minutes;
   let seconds;
