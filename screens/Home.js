@@ -20,7 +20,7 @@ import { AuthenticatedUserContext } from "../navigation/AuthenticatedUserProvide
 import ServiceInfo from "../components/ServiceInfo";
 import { useSelector, useDispatch } from "react-redux";
 import { selectLastServiceDate } from "../slices/carSlice";
-import { getCars } from '../slices/carSlice'
+import { getCars } from "../slices/carSlice";
 
 const firestore = Firebase.firestore();
 
@@ -31,10 +31,9 @@ const Home = () => {
 
   const navigation = useNavigation();
   const { user } = useContext(AuthenticatedUserContext);
-  
-  const { current_car, cars } = useSelector(state => state.car)
-  const dispatch = useDispatch()
-  
+
+  const { current_car, cars } = useSelector((state) => state.car);
+  const dispatch = useDispatch();
 
   useEffect(() => {
     const subscriber = firestore
@@ -51,35 +50,34 @@ const Home = () => {
             key: documentSnapshot.id,
           });
         });
-        dispatch(getCars(garage))
+        dispatch(getCars(garage));
         setLoading(false);
       });
-
   }, []);
 
   useEffect(() => {
     const fetchuserData = async () => {
-      await firestore.collection("users").doc(user.uid).get()
-            .then(doc => setusersFullname(doc.data().name))
-            .catch(error => console.log(error))
-    }
-    
-    fetchuserData()
-  }, [user])
-  
+      await firestore
+        .collection("users")
+        .doc(user.uid)
+        .get()
+        .then((doc) => setusersFullname(doc.data().name))
+        .catch((error) => console.log(error));
+    };
+
+    fetchuserData();
+  }, [user]);
 
   const handleServiceButton = (route) => {
-    if(!current_car) return alert("Select a car to access these services")
-    
-    return navigation.navigate(route)
-  }
+    if (!current_car) return alert("Select a car to access these services");
 
-  
+    return navigation.navigate(route);
+  };
+
   return (
     <View style={tw`bg-white pt-10`}>
-       {/* scroll section with cards */}
+      {/* scroll section with cards */}
       <ScrollView>
-
         <View style={tw`bg-white`}>
           <View style={tw`flex-row justify-between px-3`}>
             <View>
@@ -89,34 +87,41 @@ const Home = () => {
               <Text>How's your car feeling today</Text>
             </View>
 
-            {cars.length > 0 ? 
-            <TouchableOpacity style={styles.selectCar} onPress={() => navigation.navigate('Garage')}>
-              <Text style={tw`text-white`} >Select car</Text>
-              <Icon name="sort-down" color={"white"} type="font-awesome" />
-            </TouchableOpacity>
-            :
-
-            <View>
-              <Text style={tw`font-semibold`}>No car(s) yet</Text>
-            </View>
-            }
+            {cars.length > 0 ? (
+              <TouchableOpacity
+                style={styles.selectCar}
+                onPress={() => navigation.navigate("Garage")}
+              >
+                <Text style={tw`text-white`}>Select car</Text>
+                <Icon name="sort-down" color={"white"} type="font-awesome" />
+              </TouchableOpacity>
+            ) : (
+              <View>
+                <Text style={tw`font-semibold`}>No car(s) yet</Text>
+              </View>
+            )}
           </View>
 
           {cars.length !== 0 ? (
             <View style={tw`px-4 mt-5 mb-3`}>
-              {
-                current_car ?
+              {current_car ? (
                 <View>
-                  <Text style={[tw`text-2xl font-semibold mb-5`, { color: "#2bced6" }]}>{current_car.Make} {current_car.Model}</Text>
-           
-                  <ServiceInfo
-                    current_car={current_car}
-                  />
-                </View> 
-                
-                :
-                <Text style={tw`text-xl text-gray-600 font-medium`}>Select a car from your garage</Text>
-              }
+                  <Text
+                    style={[
+                      tw`text-2xl font-semibold mb-5`,
+                      { color: "#2bced6" },
+                    ]}
+                  >
+                    {current_car.Make} {current_car.Model}
+                  </Text>
+
+                  <ServiceInfo current_car={current_car} />
+                </View>
+              ) : (
+                <Text style={tw`text-xl text-gray-600 font-medium`}>
+                  Select a car from your garage
+                </Text>
+              )}
             </View>
           ) : (
             <AddCar />
@@ -131,7 +136,7 @@ const Home = () => {
               <Text style={tw`ml-7 mt-5 text-center font-bold mb-5 text-lg`}>
                 Make a request
               </Text>
-              
+
               <TouchableOpacity
                 style={tw`bg-white flex-row ml-5 mr-5 rounded-xl py-10`}
                 onPress={() => handleServiceButton("Scan")}
@@ -185,6 +190,6 @@ const styles = StyleSheet.create({
     // paddingVertical: 5,
     flexDirection: "row",
     alignItems: "center",
-    borderRadius: 20
-  }
+    borderRadius: 20,
+  },
 });
