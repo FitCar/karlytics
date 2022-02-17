@@ -10,9 +10,6 @@ const Checkout = () => {
   const navigation = useNavigation()
   const grandTotal = useSelector(selectGrandTotal)
 
-  
-
-
   return (
     <View style={{flex: 1}}>
       <Paystack  

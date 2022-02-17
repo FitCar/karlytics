@@ -7,10 +7,13 @@ import {
   Text,
   TextInput,
   View,
+  Keyboard,
+  ScrollView,
+  Alert,
+  Pressable
 } from "react-native";
 import { Icon } from "react-native-elements";
 import tw from "tailwind-react-native-classnames";
-import uuid from "react-native-uuid";
 import DropDownPicker from "react-native-dropdown-picker";
 import { useNavigation } from "@react-navigation/native";
 import { useDispatch, useSelector } from "react-redux";
@@ -25,87 +28,47 @@ import { AuthenticatedUserContext } from "../navigation/AuthenticatedUserProvide
 import DateTimePicker from "@react-native-community/datetimepicker";
 import { add } from "date-fns";
 import { formatDistanceToNow } from 'date-fns'
+import { bodyData, car_years } from "../cardata";
 
 const firestore = Firebase.firestore();
 
 const CarRegisteration = () => {
   const { user } = useContext(AuthenticatedUserContext);
+  
   const make = useSelector(selectMake);
   const model = useSelector(selectModel);
   const dispatch = useDispatch();
   const garageId = user.uid;
 
-  const carRef = firestore
-    .collection("Garage")
-    .doc(garageId)
-    .collection("Garage");
-
   const navigation = useNavigation();
-  // let years = [];
-  // const year = () => {
-  //   let min = 1998;
-  //   let max = 2021;
+ 
+  const [year, setYear] = useState(car_years);
+  const [body, setBody] = useState(bodyData);
 
-  //   let x;
-  //   for (x = min; x <= max; x++) {
-  //     years.push(x);
-  //   }
-  // };
-
-  // year();
-
-  // console.log(years.length);
+  const [bodyValue, setBodyValue] = useState(null);
+  const [yearValue, setYearValue] = useState(null);
 
   const [yearOpen, setYearOpen] = useState(false);
   const [bodyOpen, setBodyOpen] = useState(false);
 
   const onYearOpen = useCallback(() => {
     setBodyOpen(false);
+    Keyboard.dismiss()
   }, []);
 
   const onBodyOpen = useCallback(() => {
     setYearOpen(false);
+    Keyboard.dismiss()
   }, []);
 
-  const [open, setOpen] = useState(false);
-  const [bodyValue, setBodyValue] = useState(null);
-  const [yearValue, setYearValue] = useState(null);
-  const [year, setYear] = useState([
-    { label: "1998", value: "1998" },
-    { label: "1999", value: "1999" },
-    { label: "2000", value: "2000" },
-    { label: "2001", value: "2001" },
-    { label: "2002", value: "2002" },
-    { label: "2003", value: "2003" },
-    { label: "2004", value: "2004" },
-    { label: "2005", value: "2005" },
-    { label: "2006", value: "2007" },
-    { label: "2008", value: "2008" },
-    { label: "2009", value: "2009" },
-    { label: "2010", value: "2010" },
-    { label: "2011", value: "2011" },
-    { label: "2012", value: "2012" },
-    { label: "2013", value: "2013" },
-    { label: "2014", value: "2014" },
-    { label: "2015", value: "2015" },
-    { label: "2016", value: "2016" },
-    { label: "2017", value: "2017" },
-    { label: "2018", value: "2018" },
-    { label: "2019", value: "2019" },
-    { label: "2020", value: "2020" },
-    { label: "2021", value: "2021" },
-  ]);
-
-  const [body, setBody] = useState([
-    { label: "Saloon", value: "Saloon" },
-    { label: "SUV", value: "SUV" },
-    { label: "Pick Up", value: "Pick Up" },
-  ]);
-
+  
   const [lastServiceDate, setLastServiceDate] = useState(new Date());
 
-  const [mode, setMode] = useState("date");
   const [show, setShow] = useState(false);
+  const [input, setinput] = useState({
+    license: "",
+    mileage: 0,
+  })
 
   const onChange = (event, selectedDate) => {
     const currentDate = selectedDate || lastServiceDate;
@@ -113,31 +76,49 @@ const CarRegisteration = () => {
     setLastServiceDate(currentDate);
   };
 
-  const showMode = (currentMode) => {
+  
+  const showDatepicker = () => {
+    Keyboard.dismiss()
     setShow(true);
-    setMode(currentMode);
   };
 
-  const showDatepicker = () => {
-    showMode("date");
-  };
+  const handleTextChange = (text, name) => {
+    if(name === 'license'){
+      return setinput({ ...input, license: text })
+    }else if(name === 'mileage'){
+      return setinput({ ...input, mileage: text })
+    }
+    else {
+      return
+    }
+  }
 
   const newLastServiceDate = lastServiceDate.toString();
   const nextDate = add(lastServiceDate, {months: 4});
-  console.log(nextDate);
-  const duration = formatDistanceToNow(nextDate)
-  console.log(duration)
-
+  
   const submit = () => {
+    const carRef = firestore
+    .collection("Garage")
+    .doc(garageId)
+    .collection("Garage");
+    
+    if(Number.parseInt(input.mileage) < 1000) return Alert.alert("invalid mileage")
+    if(!input.license) return Alert.alert("Enter a license for the car")
+    if(!yearValue) return Alert.alert("Select the year for the car")
+    if(!bodyValue) return Alert.alert("Select the type of body for the car")
+
     const data = {
       Make: make,
       Model: model,
+      License: input.license,
+      Mileage: input.mileage,
+      Year: yearValue,
+      BodyType: bodyValue,
       garageId,
       lastServiceDate: newLastServiceDate,
       nextServiceDate: nextDate.toDateString()
     };
-    // console.log(newLastServiceDate);
-    // dispatch(setLastServiceDate('Sat 23rd 2022'));
+    
     carRef.doc().set(data);
     dispatch(setNextDate(nextDate.toString()))
     navigation.navigate("Garage");
@@ -165,7 +146,8 @@ const CarRegisteration = () => {
   // getCarsFromApi();
 
   return (
-    <View>
+    <View style={tw`py-10 px-4`}>
+      
       <View style={tw`flex-row mt-5`}>
         <View style={tw`mb-8`}>
           <Text style={tw`font-bold text-lg text-black`}>
@@ -174,10 +156,12 @@ const CarRegisteration = () => {
           <Text>Register your car</Text>
         </View>
       </View>
+
       <KeyboardAvoidingView>
         <View>
-          <TextInput placeholder="licence"></TextInput>
-          <TextInput placeholder="Mileage"></TextInput>
+          <TextInput style={styles.input} autoFocus={true} value={input.license} onChangeText={(e) => handleTextChange(e, "license")} placeholder="licence" />
+          <TextInput keyboardType="numeric" maxLength={5} style={styles.input} value={input.mileage} onChangeText={(e) => handleTextChange(e, "mileage")} placeholder="Mileage per year" />
+          
           <DropDownPicker
             placeholder="select Year"
             zIndex={3000}
@@ -206,24 +190,24 @@ const CarRegisteration = () => {
             style={tw`mb-5`}
           />
 
-          <View style={tw`mt-28`}>
-            <Button onPress={showDatepicker} title="Last service date" />
+          <View>
+            <Button onPress={showDatepicker} title="Select last service date" />
           </View>
 
           {show && (
             <DateTimePicker
               testID="dateTimePicker"
               value={lastServiceDate}
-              mode={mode}
+              mode={"date"}
               is24Hour={true}
               display="default"
               onChange={onChange}
             />
           )}
 
-          <View style={tw`mt-36`}>
-            <Button title="submit" onPress={submit} />
-          </View>
+          <Pressable style={[tw`mt-8 px-3 rounded-lg flex-row justify-center mx-auto py-2 w-36`, { backgroundColor: "#2bced6" }]}  onPress={submit}>
+            <Text style={tw`text-white text-lg`}>submit</Text>
+          </Pressable>
         </View>
       </KeyboardAvoidingView>
     </View>
@@ -232,4 +216,14 @@ const CarRegisteration = () => {
 
 export default CarRegisteration;
 
-const styles = StyleSheet.create({});
+const styles = StyleSheet.create({
+  input: {
+    backgroundColor: "white",
+    borderWidth: 1,
+    marginBottom: 20,
+    paddingHorizontal: 10,
+    paddingVertical: 6,
+    borderRadius: 7,
+    fontSize: 20
+  }
+});
