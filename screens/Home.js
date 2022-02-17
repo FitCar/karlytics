@@ -25,7 +25,6 @@ import { selectLastServiceDate } from "../slices/carSlice";
 import { formatDistanceToNow } from "date-fns";
 import CarCard from "../components/CarCard";
 
-const auth = Firebase.auth();
 const firestore = Firebase.firestore();
 
 const Home = () => {
@@ -34,17 +33,11 @@ const Home = () => {
   const [loading, setLoading] = useState(true); // Set loading to true on component mount
   const [isVisible, setIsVisible] = useState(false)
   const lastServiceDate = useSelector(selectLastServiceDate);
+  const [usersFullname, setusersFullname] = useState(null);
 
   const navigation = useNavigation();
   const { user } = useContext(AuthenticatedUserContext);
-  const handleSignOut = async () => {
-    try {
-      await auth.signOut();
-    } catch (error) {
-      console.log(error);
-    }
-  };
-
+  
   useEffect(() => {
     const subscriber = firestore
       .collection("Garage")
@@ -66,13 +59,24 @@ const Home = () => {
       });
   }, []);
 
+    useEffect(() => {
+      const fetchuserData = async () => {
+        await firestore.collection("users").doc(user.uid).get()
+              .then(doc => setusersFullname(doc.data().name))
+              .catch(error => console.log(error))
+      }
+      
+      fetchuserData()
+    }, [])
+  
+
   const dt =
     garage.length !== 0 ? new Date(garage[3].nextServiceDate) : new Date();
   const lstDt =
     garage.length !== 0 ? new Date(garage[3].lastServiceDate) : new Date();
-  console.log(dt);
+  // console.log(dt);
   const duration = formatDistanceToNow(dt);
-  console.log(duration);
+  // console.log(duration);
 
   const now = new Date();
   const one_day = 1000 * 60 * 60 * 24;
@@ -98,11 +102,10 @@ const Home = () => {
 
   return (
     <View style={tw`bg-white`}>
-      <Modal
+      {/* <Modal
         animationType={"slide"}
         transparent={false}
         visible={isVisible}
-        
       >
         
         <FlatList
@@ -112,8 +115,9 @@ const Home = () => {
         )}
         keyExtractor={(item) => item.key}
       />
-      </Modal>
+      </Modal> */}
 
+      {/* section 1: navbar */}
       <View style={styles.header}>
         <View style={tw`mt-10 ml-5 flex-row`}>
           <Image
@@ -123,31 +127,30 @@ const Home = () => {
           <Text style={tw`text-2xl text-pry-1`}>Karlytics</Text>
         </View>
       </View>
-      <ScrollView>
-        <View style={tw`bg-white`}>
-          {/* <View style={tw`flex-row mt-10`}>
-          <IconButton
-            name="logout"
-            size={24}
-            color="#2bced6"
-            onPress={handleSignOut}
-          />
-          <Text style={tw`ml-5`}>Logout</Text>
-        </View> */}
 
-          <View style={tw`ml-5 mt-5`}>
-            <View style={tw`flex-row justify-between mr-7`}>
-              <View style={tw`mb-8`}>
+       {/* scroll section with cards */}
+      <ScrollView>
+
+        <View style={tw`bg-white mt-5`}>
+            <View style={tw`flex-row justify-between px-3`}>
+              <View>
                 <Text style={tw`font-bold text-lg text-black`}>
-                  Welcome {user.email}{" "}
+                  Welcome {usersFullname}{" "}
                 </Text>
                 <Text>How's your car feeling today</Text>
               </View>
+
+             {garage === [] ? 
               <TouchableOpacity>
                 <Text>Select car</Text>
                 <Icon name="sort-down" type="font-awesome" onPress={openModal} />
               </TouchableOpacity>
-            </View>
+              :
+
+              <View>
+                <Text style={tw`font-semibold`}>No car(s) yet</Text>
+              </View>
+              }
           </View>
 
           {garage.length !== 0 ? (
@@ -159,23 +162,6 @@ const Home = () => {
           ) : (
             <AddCar />
           )}
-          {/* <AddCar /> */}
-
-          <View
-          // style={styles.container}
-          >
-            {/* <StatusBar style="dark-content" /> */}
-            <View
-            // style={styles.row}
-            >
-              {/* <Text 
-              // style={styles.title}
-              >Welcome {user.email}!</Text> */}
-            </View>
-            {/* <Text 
-            // style={styles.text}
-            >Your UID is: {user.uid} </Text> */}
-          </View>
 
           <View style={tw`bg-gray-100  rounded-t-3xl`}>
             <View style={tw`mb-5`}>
