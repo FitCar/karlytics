@@ -8,7 +8,8 @@ const initialState = {
   basket: [],
   grandTotal: 0,
   lastServiceDate: "",
-  nextDate: ""
+  nextDate: "",
+  current_car: null
 };
 
 export const carSlice = createSlice({
@@ -47,11 +48,14 @@ export const carSlice = createSlice({
     },
     setNextDate: (state, action) => {
       state.nextDate = action.payload;
-    }
+    },
+    setCurrentCar: (state, action) => {
+      state.current_car = action.payload
+    } 
   },
 });
 
-export const { getCars, addCar, removeCar, addMake, addModel, setRequestId, addToBasket, removeFromBasket,  setGrandTotal, setLastServiceDate, setNextDate } = carSlice.actions;
+export const { getCars, addCar, removeCar, addMake, addModel, setRequestId, addToBasket, removeFromBasket,  setGrandTotal, setLastServiceDate, setNextDate, setCurrentCar } = carSlice.actions;
 
 export const selectCar = (state) => state.car.cars;
 export const selectMake = (state) => state.car.make;

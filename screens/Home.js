@@ -1,5 +1,4 @@
 import { useNavigation } from "@react-navigation/native";
-import { StatusBar } from "expo-status-bar";
 import React, { useContext, useEffect, useState } from "react";
 import {
   FlatList,
@@ -16,30 +15,26 @@ import tw from "tailwind-react-native-classnames";
 import AddCar from "../components/AddCar";
 import HealthCard from "../components/HealthCard";
 import ServiceButton from "../components/ServiceButton";
-import { IconButton } from "../components";
 import Firebase from "../config/firebase";
 import { AuthenticatedUserContext } from "../navigation/AuthenticatedUserProvider";
 import ServiceInfo from "../components/ServiceInfo";
 import { useSelector, useDispatch } from "react-redux";
 import { selectLastServiceDate } from "../slices/carSlice";
-import { formatDistanceToNow } from "date-fns";
-import CarCard from "../components/CarCard";
-import { getCars } from '../slices/carSlice'
+import { getCars } from "../slices/carSlice";
 
 const firestore = Firebase.firestore();
 
 const Home = () => {
-  const [garage, setGarage] = useState([]); // Initial empty array of users
-  const [selectedCar, setSelectedCar] = useState("");
   const [loading, setLoading] = useState(true); // Set loading to true on component mount
-  const [isVisible, setIsVisible] = useState(false)
   const lastServiceDate = useSelector(selectLastServiceDate);
   const [usersFullname, setusersFullname] = useState(null);
 
   const navigation = useNavigation();
   const { user } = useContext(AuthenticatedUserContext);
-  const dispatch = useDispatch()
-  
+
+  const { current_car, cars } = useSelector((state) => state.car);
+  const dispatch = useDispatch();
+
   useEffect(() => {
     const subscriber = firestore
       .collection("Garage")
@@ -55,111 +50,79 @@ const Home = () => {
             key: documentSnapshot.id,
           });
         });
-        console.log(garage);
-        setGarage(garage);
-        dispatch(getCars(garage))
+        dispatch(getCars(garage));
         setLoading(false);
       });
   }, []);
 
-    useEffect(() => {
-      const fetchuserData = async () => {
-        await firestore.collection("users").doc(user.uid).get()
-              .then(doc => setusersFullname(doc.data().name))
-              .catch(error => console.log(error))
-      }
-      
-      fetchuserData()
-    }, [user])
-  
+  useEffect(() => {
+    const fetchuserData = async () => {
+      await firestore
+        .collection("users")
+        .doc(user.uid)
+        .get()
+        .then((doc) => setusersFullname(doc.data().name))
+        .catch((error) => console.log(error));
+    };
 
-  const dt =
-    garage.length !== 0 ? new Date(garage[0].nextServiceDate) : new Date();
-  const lstDt =
-    garage.length !== 0 ? new Date(garage[0].lastServiceDate) : new Date();
-  // console.log(dt);
-  const duration = formatDistanceToNow(dt);
-  // console.log(duration);
+    fetchuserData();
+  }, [user]);
 
-  const now = new Date();
-  const one_day = 1000 * 60 * 60 * 24;
-  const totalDays = (Math.round(dt.getTime() - lstDt.getTime()) / one_day).toFixed(0);
-  
-  console.log(totalDays);
-  
-  const leftDays = (Math.round(dt.getTime() - new Date().getTime()) / one_day).toFixed(0);
-  console.log(leftDays);
+  const handleServiceButton = (route) => {
+    if (!current_car) return alert("Select a car to access these services");
 
-  const progressLeft = leftDays / totalDays;
-  console.log(progressLeft);
-
- const openModal = () => {
-    setIsVisible(true)
-  }
-
-  const closeModal = () => {
-    setIsVisible(false)
-  }
+    return navigation.navigate(route);
+  };
 
   return (
-    <View style={tw`bg-white`}>
-      <Modal
-        animationType={"slide"}
-        transparent={false}
-        visible={isVisible}
-      >
-        
-        <FlatList
-        data={garage}
-        renderItem={({ item }) => (
-          <CarCard make={item.Make} model={item.Model} onSelect={closeModal} />
-        )}
-        keyExtractor={(item) => item.key}
-      />
-      </Modal>
-
-      {/* section 1: navbar */}
-      <View style={styles.header}>
-        <View style={tw`mt-10 ml-5 flex-row`}>
-          <Image
-            source={require("../assets/Images/karlyticsLogo.png")}
-            style={tw`h-10 w-10`}
-          />
-          <Text style={tw`text-2xl text-pry-1`}>Karlytics</Text>
-        </View>
-      </View>
-
-       {/* scroll section with cards */}
+    <View style={tw`bg-white pt-10`}>
+      {/* scroll section with cards */}
       <ScrollView>
+        <View style={tw`bg-white`}>
+          <View style={tw`flex-row justify-between px-3`}>
+            <View>
+              <Text style={tw`font-bold text-lg text-black`}>
+                Welcome {usersFullname}{" "}
+              </Text>
+              <Text>How's your car feeling today</Text>
+            </View>
 
-        <View style={tw`bg-white mt-5`}>
-            <View style={tw`flex-row justify-between px-3`}>
-              <View>
-                <Text style={tw`font-bold text-lg text-black`}>
-                  Welcome {usersFullname}{" "}
-                </Text>
-                <Text>How's your car feeling today</Text>
-              </View>
-
-             {garage.length > 0 ? 
-              <TouchableOpacity>
-                <Text>Select car</Text>
-                <Icon name="sort-down" type="font-awesome" onPress={openModal} />
+            {cars.length > 0 ? (
+              <TouchableOpacity
+                style={styles.selectCar}
+                onPress={() => navigation.navigate("Garage")}
+              >
+                <Text style={tw`text-white`}>Select car</Text>
+                <Icon name="sort-down" color={"white"} type="font-awesome" />
               </TouchableOpacity>
-              :
-
+            ) : (
               <View>
                 <Text style={tw`font-semibold`}>No car(s) yet</Text>
               </View>
-              }
+            )}
           </View>
 
-          {garage.length !== 0 ? (
-            <ServiceInfo
-              serviceDate={garage[0].nextServiceDate}
-              duration={duration}
-              progressLeft={progressLeft}
-            />
+          {cars.length !== 0 ? (
+            <View style={tw`px-4 mt-5 mb-3`}>
+              {current_car ? (
+                <View>
+                  <Text
+                    style={[
+                      tw`text-2xl font-semibold mb-5`,
+                      { color: "#2bced6" },
+                    ]}
+                  >
+                    {current_car.Make} {current_car.Model}
+                  </Text>
+
+                  <ServiceInfo current_car={current_car} />
+                </View>
+              ) : (
+                <Text style={tw`text-xl text-gray-600 font-medium`}>
+                  Select a car from your garage
+                </Text>
+              )}
+            </View>
           ) : (
             <AddCar />
           )}
@@ -173,10 +136,10 @@ const Home = () => {
               <Text style={tw`ml-7 mt-5 text-center font-bold mb-5 text-lg`}>
                 Make a request
               </Text>
-              
+
               <TouchableOpacity
                 style={tw`bg-white flex-row ml-5 mr-5 rounded-xl py-10`}
-                onPress={() => navigation.navigate("Scan")}
+                onPress={() => handleServiceButton("Scan")}
               >
                 <Image
                   style={tw`ml-7`}
@@ -187,26 +150,27 @@ const Home = () => {
                 </Text>
               </TouchableOpacity>
             </View>
+
             <View style={tw`flex-row mb-24 flex-wrap`}>
               <ServiceButton
                 title="Repair"
                 image={require("../assets/icons/repair.png")}
-                onPress={() => navigation.navigate("Repairs")}
+                onPress={() => handleServiceButton("Repairs")}
               />
               <ServiceButton
                 title="Maintenance"
                 image={require("../assets/icons/maintain.png")}
-                onPress={() => navigation.navigate("Maintenance")}
+                onPress={() => handleServiceButton("Maintenance")}
               />
               <ServiceButton
                 title="Inspection"
                 image={require("../assets/icons/Inspect.png")}
-                onPress={() => navigation.navigate("Inspection")}
+                onPress={() => handleServiceButton("Inspection")}
               />
               <ServiceButton
                 title="Plans"
                 image={require("../assets/icons/wpf_renew-subscription.png")}
-                onPress={() => navigation.navigate("Plans")}
+                onPress={() => handleServiceButton("Plans")}
               />
             </View>
           </View>
@@ -220,30 +184,12 @@ const Home = () => {
 export default Home;
 
 const styles = StyleSheet.create({
-  // header: {
-  //   position: "absolute",
-  //   top: 0
-  // },
-  //   container: {
-  //     flex: 1,
-  //     backgroundColor: "#e93b81",
-  //     paddingTop: 50,
-  //     paddingHorizontal: 12,
-  //   },
-  //   row: {
-  //     flexDirection: "row",
-  //     justifyContent: "space-between",
-  //     alignItems: "center",
-  //     marginBottom: 24,
-  //   },
-  //   title: {
-  //     fontSize: 24,
-  //     fontWeight: "600",
-  //     color: "#fff",
-  //   },
-  //   text: {
-  //     fontSize: 16,
-  //     fontWeight: "normal",
-  //     color: "#fff",
-  //   },
+  selectCar: {
+    backgroundColor: "#2bced6",
+    paddingHorizontal: 10,
+    // paddingVertical: 5,
+    flexDirection: "row",
+    alignItems: "center",
+    borderRadius: 20,
+  },
 });
