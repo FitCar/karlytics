@@ -41,6 +41,9 @@ export const carSlice = createSlice({
     removeFromBasket: (state, action) => {
         state.basket = state.basket.filter((carPlan,index) => index+1 !== action.payload)
     },
+    resetBasket: (state, action) => {
+        state.basket = []
+    },
     setGrandTotal: (state, action) => {
       state.grandTotal = action.payload;
     },
@@ -59,7 +62,7 @@ export const carSlice = createSlice({
   },
 });
 
-export const { getCars, addCar, removeCar, addMake, addModel, setRequestId, addToBasket, removeFromBasket,  setGrandTotal, setLastServiceDate, setNextDate, setCurrentCar, getPlans } = carSlice.actions;
+export const { getCars, addCar, removeCar, addMake, addModel, setRequestId, addToBasket, removeFromBasket, resetBasket,  setGrandTotal, setLastServiceDate, setNextDate, setCurrentCar, getPlans } = carSlice.actions;
 
 export const selectCar = (state) => state.car.cars;
 export const selectMake = (state) => state.car.make;
