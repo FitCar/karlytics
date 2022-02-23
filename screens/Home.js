@@ -19,8 +19,10 @@ import Firebase from "../config/firebase";
 import { AuthenticatedUserContext } from "../navigation/AuthenticatedUserProvider";
 import ServiceInfo from "../components/ServiceInfo";
 import { useSelector, useDispatch } from "react-redux";
-import { selectLastServiceDate } from "../slices/carSlice";
+import { getPlans, selectLastServiceDate } from "../slices/carSlice";
 import { getCars } from "../slices/carSlice";
+import PlansForCar from "../components/PlansForCar";
+import { SnapshotViewIOSBase } from "react-native";
 
 const firestore = Firebase.firestore();
 
@@ -32,7 +34,7 @@ const Home = () => {
   const navigation = useNavigation();
   const { user } = useContext(AuthenticatedUserContext);
 
-  const { current_car, cars } = useSelector((state) => state.car);
+  const { current_car, cars, plans } = useSelector((state) => state.car);
   const dispatch = useDispatch();
 
   useEffect(() => {
@@ -67,6 +69,33 @@ const Home = () => {
 
     fetchuserData();
   }, [user]);
+
+  useEffect(() => {
+    const fetchPlans = async () =>{
+      if(!current_car) return 
+
+      let plan_arr = []
+
+      await firestore
+      .collection("Plans")
+      .doc(user.uid)
+      .collection("Plans")
+      .where('carId',  '==', current_car.key)
+      .get()
+      .then(res => {
+        res.forEach(plan => {
+          plan_arr = [...plan_arr, plan.data()]
+        })
+      })
+      .catch((error) => console.log(error));
+
+      return dispatch(getPlans(plan_arr))
+    }
+    fetchPlans()
+  }, [current_car])
+
+
+  console.log(plans)
 
   const handleServiceButton = (route) => {
     if (!current_car) return alert("Select a car to access these services");
@@ -128,6 +157,13 @@ const Home = () => {
           )}
 
           <View style={tw`bg-gray-100  rounded-t-3xl`}>
+            {
+              current_car && 
+              <View style={tw`bg-white mt-5 w-11/12 mx-auto p-3 rounded-lg`}>
+                <PlansForCar selectedCar={current_car} plans={plans}  />
+              </View>
+            }
+           
             <View style={tw`mb-5`}>
               <View>
                 <HealthCard />
