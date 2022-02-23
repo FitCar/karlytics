@@ -3,12 +3,11 @@ import { View, Text, Button } from 'react-native'
 import  { Paystack }  from 'react-native-paystack-webview';
 import { useNavigation } from "@react-navigation/native";
 import { useDispatch, useSelector } from "react-redux";
-import { selectGrandTotal } from "../slices/carSlice";
+import { resetBasket, selectGrandTotal } from "../slices/carSlice";
 import { AuthenticatedUserContext } from "../navigation/AuthenticatedUserProvider";
 import Firebase from '../config/firebase';
 
 const firestore = Firebase.firestore()
-
 
 const Checkout = () => {
   const navigation = useNavigation()
@@ -16,6 +15,7 @@ const Checkout = () => {
   const { basket } = useSelector(state => state.car)
 
   const { user } = useContext(AuthenticatedUserContext);
+  const dispatch = useDispatch()
 
   const handleSuccess = () =>{
     const plansRef = firestore.collection("Plans")
@@ -28,6 +28,7 @@ const Checkout = () => {
       await plansRef.doc().set({ carId: plan.key,  plan: plan.plan, garage_id: plan.garageId})
     })
 
+    dispatch(resetBasket())
     return navigation.navigate('Home')
   }
    
