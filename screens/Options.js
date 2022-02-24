@@ -1,9 +1,10 @@
 import React, { useContext } from "react";
-import { StyleSheet, Text, View } from "react-native";
+import { StyleSheet, Text, TouchableOpacity, View } from "react-native";
 import Firebase from "../config/firebase";
 import { AuthenticatedUserContext } from "../navigation/AuthenticatedUserProvider";
 import tw from "tailwind-react-native-classnames";
 import { IconButton } from "../components";
+import { useNavigation } from "@react-navigation/native";
 
 const auth = Firebase.auth();
 const firestore = Firebase.firestore();
@@ -18,21 +19,23 @@ const Options = () => {
     }
   };
 
+  const navigation = useNavigation()
 
   return (
-    <View style={tw`mt-20`}>
-      <Text style={tw`mb-5`}>Profile</Text>
-      <Text style={tw`mb-5`}>Help and Support</Text>
-      <Text style={tw`mb-5`}>Privacy policy</Text>
-      <View style={tw`flex-row mb-5`}>
+    <View style={tw`mt-16 px-3`}>
+      <Text style={tw`mb-3 font-semibold p-3 bg-white`}>Profile</Text>
+      <Text style={tw`mb-3 font-semibold p-3 bg-white`}>Help and Support</Text>
+      <Text style={tw`mb-3 font-semibold p-3 bg-white`} onPress={() => navigation.navigate('PrivacyPolicy')}>Privacy policy</Text>
+
+      <TouchableOpacity style={[tw`flex-row px-3 py-2 items-center rounded-lg w-32 bg-red-400`]}>
           <IconButton
             name="logout"
             size={24}
-            color="#2bced6"
+            color="white"
             onPress={handleSignOut}
           />
-          <Text style={tw`ml-5`}>Logout</Text>
-        </View>
+          <Text style={tw`ml-5 text-white`}>Logout</Text>
+        </TouchableOpacity>
     </View>
   );
 };
