@@ -108,7 +108,7 @@ const Home = () => {
       {/* scroll section with cards */}
       <ScrollView>
         <View style={tw`bg-white`}>
-          <View style={tw`flex-row justify-between px-3`}>
+          <View style={tw`flex-row justify-between px-3 mt-8`}>
             <View>
               <Text style={tw`font-bold text-lg text-black`}>
                 Welcome {usersFullname}{" "}
@@ -122,7 +122,7 @@ const Home = () => {
                 onPress={() => navigation.navigate("Garage")}
               >
                 <Text style={tw`text-white`}>Select car</Text>
-                <Icon name="sort-down" color={"white"} type="font-awesome" />
+                
               </TouchableOpacity>
             ) : (
               <View>
@@ -227,5 +227,6 @@ const styles = StyleSheet.create({
     flexDirection: "row",
     alignItems: "center",
     borderRadius: 20,
+    
   },
 });
