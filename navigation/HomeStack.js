@@ -1,6 +1,5 @@
 import React from 'react';
 import { createNativeStackNavigator } from '@react-navigation/native-stack';
-
 import Home from '../screens/Home';
 import Tabs from './Tabs';
 import Diagnostic from '../screens/Diagnostic';
@@ -20,6 +19,7 @@ import MaintenancePlan from '../screens/Plans/MaintenancePlan';
 import MembershipPlan from '../screens/Plans/MembershipPlan';
 import InsurancePlan from '../screens/Plans/InsurancePlan';
 import VehicleHealthPlan from '../screens/Plans/VehicleHealthPlan';
+import PrivacyPolicy from '../screens/PrivacyPolicy';
 
 const Stack = createNativeStackNavigator();
 
@@ -45,7 +45,7 @@ export default function HomeStack() {
             <Stack.Screen name="MembershipPlan" component={MembershipPlan} />
             <Stack.Screen name="InsurancePlan" component={InsurancePlan} />
             <Stack.Screen name="VehicleHealthPlan" component={VehicleHealthPlan} />
-            
+            <Stack.Screen name="PrivacyPolicy" component={PrivacyPolicy} />
     </Stack.Navigator>
    
   );
