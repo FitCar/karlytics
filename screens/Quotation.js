@@ -22,41 +22,36 @@ const firestore = Firebase.firestore();
 const Quotation = () => {
   const request = useSelector(selectRequest);
   const { user } = useContext(AuthenticatedUserContext);
-  const [quote, setQuote] = useState();
+  const [quote, setQuote] = useState([]);
   const navigation = useNavigation();
 
   const userId = user.uid;
 
   useEffect(() => {
-    const subscriber = firestore
+    const fetchQuotations = async () => {
+      const subscriber = await firestore
       .collection("Quotation")
       .doc(userId)
       .collection("Quotation")
       .doc(request)
       .get()
-      .then((doc) => {
-        if (doc.exists) {
-          console.log("Document data:", doc.data());
-          setQuote(doc.data());
-        } else {
-          // doc.data() will be undefined in this case
-          console.log("No such document!");
-        }
-      })
-      .catch((error) => {
-        console.log("Error getting document:", error);
-      });
+      
+      if (!subscriber.data()) return 
+
+      return setQuote(subscriber.data().quotes)
+    }
+
+    fetchQuotations()
   }, []);
 
-  console.log(quote);
 
   return (
     <View>
-      <View style={tw`flex-row justify-around mt-8`}>
+      <View style={tw`flex-row justify-around mt-10`}>
         <View style={tw`mb-8`}>
           <Text>Request ID: {request}</Text>
           <Text style={tw`font-bold text-lg text-black`}>Quotation</Text>
-          <Text>View your quotation below</Text>
+          {quote.length > 0 && <Text style={tw`text-gray-500`}>View your quotation below</Text>}
         </View>
         <TouchableOpacity style={tw`content-center flex-row`}>
           <Icon name="shopping-basket" type="font-awesome" />
@@ -68,8 +63,8 @@ const Quotation = () => {
         </TouchableOpacity>
       </View>
       <ScrollView style={tw`mb-28`}>
-        {quote ? (
-          quote.item.map((quotes) => {
+        {quote !== [] ? (
+          quote.map((quotes) => {
             return (
               <QuotationCard
                 partNumber={quotes.partNumber}
@@ -77,6 +72,7 @@ const Quotation = () => {
                 qty={quotes.qty}
                 unitPrice={quotes.unitPrice}
                 total={quotes.total}
+                id={quotes.index}
               />
             );
           })

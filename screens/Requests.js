@@ -16,7 +16,6 @@ const Requests = () => {
   const [loading, setLoading] = useState(true); // Set loading to true on component mount
   const [requests, setRequests] = useState([]); // Initial empty array of users
 
-  console.log(requests)
 
   useEffect(() => {
     const subscriber = firestore
@@ -30,22 +29,20 @@ const Requests = () => {
             key: documentSnapshot.id,
           });
         });
-        // console.log(requests);
         setRequests(request);
         setLoading(false);
       });
   },[]);
 
-  console.log(requests)
-
+  
   return (
-    <View style={tw`mb-24`}>
-      <View style={tw`ml-5 mt-5`}>
-        <View style={tw`mb-8`}>
+    
+    <View style={tw`flex-grow`}>
+        <View style={tw`mb-8 pt-10 px-3`}>
           <Text style={tw`font-bold text-lg text-black`}>Requests</Text>
           <Text>View your requests</Text>
         </View>
-      </View>
+
         <FlatList 
           data={requests}
           renderItem={({ item }) => (

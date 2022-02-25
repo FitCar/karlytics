@@ -55,7 +55,7 @@ const BasketCard = ({ description, qty, total, unitPrice, details, index }) => {
         key={index}
         onLongPress={() => setshowAlert(true)}
       >
-        <View style={tw`flex-row justify-start h-max items-center`}>
+        <View style={tw`flex-row justify-start items-center`}>
           <ChooseImageForPlan name={details.plan.Name} />
 
           <View style={tw`ml-5`}>
@@ -67,7 +67,7 @@ const BasketCard = ({ description, qty, total, unitPrice, details, index }) => {
             <Text>Make - {details.Make}</Text>
             <Text>Model - {details.Model}</Text>
             <Text style={tw`font-semibold mt-2`}>
-              Cost: {details.plan.price}
+              Total: {details.plan.price}
             </Text>
           </View>
         </View>
@@ -99,10 +99,10 @@ const BasketCard = ({ description, qty, total, unitPrice, details, index }) => {
         <Icon style={tw`flex-1 mr-10`} name="gas-pump" type="font-awesome-5" />
 
         <View>
-          <Text>{description}</Text>
+          <Text style={tw`font-semibold`}>{description}</Text>
           <Text>Quantity: {qty}</Text>
           <Text>Unit Price: {unitPrice}</Text>
-          <Text>Total: {total}</Text>
+          <Text style={tw`font-semibold`}>Total: {total}</Text>
         </View>
       </View>
       <AwesomeAlert
