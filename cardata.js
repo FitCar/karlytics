@@ -52,53 +52,53 @@ export const cars = [
 
 export const MaintenancePlanData = {
     Basic: {
-        price: 15000,
-        features: ['Engine oil replacement', 'Oil filter replacement', 'Air filter cleaning', 'Coolant top up', 'Wiper fluid replacement', 'Battery water top up', 'Heater spark plugs checking', 'Car wash', 'Interior vacuuming (Carpets & Seats)']
-    },
-
-    Standard: {
         price: 25000,
         features: ['Engine oil replacement', 'Oil filter replacement', 'Air filter cleaning', 'Coolant top up', 'Wiper fluid replacement', 'Battery water top up', 'Heater spark plugs checking', 'Car wash', 'Interior vacuuming (Carpets & Seats)']
     },
 
+    Standard: {
+        price: 30000,
+        features: ['Engine oil replacement', 'Oil filter replacement', 'Air filter cleaning', 'Coolant top up', 'Wiper fluid replacement', 'Battery water top up', 'Heater spark plugs checking', 'Car wash', 'Interior vacuuming (Carpets & Seats)', 'Scanning', 'Rear brake shoes service', 'Front brake pads service', ]
+    },
+
     Comprehensive: {
         price: 40000,
-        features: ['Engine oil replacement', 'Oil filter replacement', 'Air filter cleaning', 'Coolant top up', 'Wiper fluid replacement', 'Battery water top up', 'Heater spark plugs checking', 'Car wash', 'Interior vacuuming (Carpets & Seats)']
+        features: ['Engine oil replacement', 'Oil filter replacement', 'Air filter cleaning', 'Coolant top up', 'Wiper fluid replacement', 'Battery water top up', 'Heater spark plugs checking', 'Car wash', 'Interior vacuuming (Carpets & Seats)', 'Wheel balancing', 'Wheel alignment', 'Tyre rotation', 'Throttle body cleaning', 'gear oil top up']
     }
 }
 
 export const InsurancePlanData = {
     ThirdParty: {
         price: 10000,
-        features: ['Engine oil replacement', 'Oil filter replacement', 'Air filter cleaning', 'Coolant top up', 'Wiper fluid replacement']
+        features: ['Payment plan - Monthly, quarterly, bi-annual & per annum', 'Premium - Starting from 3% of vehicle value per annum', '3rd party bodily injury', '3rd party property damage (1 million naira limit)','Own accidental damage', 'Excess buy back', 'Theft', 'Fire damage', 'Medical refund (up to 100,000 naira limit)']
     },
 
     Comprehensive: {
         price: 16000,
-        features: ['Engine oil replacement', 'Oil filter replacement', 'Air filter cleaning', 'Coolant top up', 'Wiper fluid replacement', 'Battery water top up', 'Heater spark plugs checking', 'Car wash', 'Interior vacuuming (Carpets & Seats)']
+        features: ['Payment plan - Per annum only', 'Premium - Starting from 5,000 depending on the type of vehicle', '3rd party bodily injury', '3rd party property damage (1 million naira limit)']
     }
 }
 
 export const MembershipPlanData = {
     Gold: {
-        price: 30000,
-        features: ['Air filter cleaning', 'Coolant top up', 'Wiper fluid replacement']
+        price: 10000,
+        features: ['Discounts on all requests - 10%', 'Priority response', 'Points and rewards system', 'One free health checkup per year', 'One free detailed cleaning per quarter', 'One free wheel balancing and alignment per year']
     },
 
     Silver: {
-        price: 50000,
-        features: ['Engine oil replacement', 'Oil filter replacement', 'Air filter cleaning', 'Coolant top up', 'Wiper fluid replacement', 'Battery water top up', 'Heater spark plugs checking', 'Car wash', 'Interior vacuuming (Carpets & Seats)']
+        price: 6000,
+        features: ['Discounts on all requests - 5%', 'Priority response', 'Points and rewards system', 'One free health checkup per year']
     }
 }
 
 export const HealthPlan = {
     Basic: {
-        price: 12000,
-        features: ['Engine oil replacement', 'Oil filter replacement', 'Wiper fluid replacement', 'Battery water top up', 'Heater spark plugs checking', 'Car wash', 'Interior vacuuming (Carpets & Seats)']
+        price: 5000,
+        features: ['Scan', 'Detailed 20 point inspection', ]
     },
 
     Comprehensive: {
-        price: 20000,
-        features: ['Engine oil replacement', 'Oil filter replacement', 'Air filter cleaning', 'Coolant top up', 'Wiper fluid replacement', 'Battery water top up', 'Heater spark plugs checking', 'Car wash', 'Interior vacuuming (Carpets & Seats)']
+        price: 10000,
+        features: ['Scan', 'Detailed 120 point inspection', ]
     }   
 }
