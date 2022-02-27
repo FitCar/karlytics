@@ -94,9 +94,6 @@ const Home = () => {
     fetchPlans()
   }, [current_car])
 
-
-  console.log(plans)
-
   const handleServiceButton = (route) => {
     if (!current_car) return alert("Select a car to access these services");
 
@@ -104,7 +101,7 @@ const Home = () => {
   };
 
   return (
-    <View style={tw`bg-white pt-10`}>
+    <View style={tw`bg-white pt-16`}>
       {/* scroll section with cards */}
       <ScrollView>
         <View style={tw`bg-white`}>
