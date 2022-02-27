@@ -1,16 +1,13 @@
-import React, { useContext } from "react";
+import React from "react";
 import { StyleSheet, Text, TouchableOpacity, View } from "react-native";
 import Firebase from "../config/firebase";
-import { AuthenticatedUserContext } from "../navigation/AuthenticatedUserProvider";
 import tw from "tailwind-react-native-classnames";
 import { IconButton } from "../components";
 import { useNavigation } from "@react-navigation/native";
 
 const auth = Firebase.auth();
-const firestore = Firebase.firestore();
 
 const Options = () => {
-  const { user } = useContext(AuthenticatedUserContext);
   const handleSignOut = async () => {
     try {
       await auth.signOut();

@@ -1,5 +1,5 @@
 import React from 'react'
-import { useState } from 'react';
+import { useState, useContext } from 'react';
 import { FlatList, Image, Modal, StyleSheet, Text, TouchableOpacity, View, Alert } from 'react-native'
 import { useSelector, useDispatch } from 'react-redux';
 import tw from "tailwind-react-native-classnames";
@@ -7,15 +7,45 @@ import { MembershipPlanData } from '../../cardata'
 import CarItem from '../../components/CarItem';
 import { useNavigation } from "@react-navigation/native";
 import { addToBasket } from '../../slices/carSlice';
+import Firebase from '../../config/firebase'
+import { AuthenticatedUserContext } from "../../navigation/AuthenticatedUserProvider";
+import { useEffect } from 'react';
+
+const firestore = Firebase.firestore()
 
 function MembershipPlan() {
   const [modalVisible, setmodalVisible] = useState(false)
   const [plan, setplan] = useState(null)
   const [selectedCars, setselectedCars] = useState([])
+  const [usersPlans, setusersPlans] = useState([])
 
-  const { cars, basket } = useSelector(state => state.car)
+  const { cars, basket, current_car } = useSelector(state => state.car)
   const dispatch = useDispatch()
   const navigation = useNavigation()
+
+  const { user } = useContext(AuthenticatedUserContext);
+
+  useEffect(() => {
+    const fetchUsersPlans = async () =>{
+      let plansD = []
+
+      await firestore.
+      collection("Plans")
+      .doc(user.uid)
+      .collection("Plans")
+      .get()
+      .then((data) => {
+        data.forEach(item => {
+          return plansD.push(item.data())
+        })
+      }).catch(err => console.log(err))
+
+      setusersPlans(plansD)
+    }
+    
+    fetchUsersPlans()
+  }, [])
+  
 
   const addCommaToValue = (num) =>{
     let to_string = `${num}`
@@ -53,7 +83,6 @@ function MembershipPlan() {
        <Modal
         animationType="slide"
         visible={modalVisible}
-
       >
         <View style={tw`flex-grow py-10 px-5`}>
           <View style={tw`flex-row justify-between mb-10`}>
@@ -62,7 +91,7 @@ function MembershipPlan() {
               <Text style={tw`text-gray-600 font-medium`}>What Car are you selecting the {plan?.type} for?</Text>
             </View>
 
-            <TouchableOpacity style={tw`items center`} onPress={() => handleClose()}>
+            <TouchableOpacity style={tw`items-center`} onPress={() => handleClose()}>
               <Text style={tw`text-xl capitalize text-red-600`}>close</Text>
             </TouchableOpacity>
           </View>
@@ -70,7 +99,13 @@ function MembershipPlan() {
           <FlatList
             data={cars}
             renderItem={({ item }) => (
-              <CarItem car={item} selectedCars={selectedCars} setselectedCars={setselectedCars} />
+              <CarItem 
+                car={item} 
+                plan={plan}
+                usersPlans={usersPlans} 
+                selectedCars={selectedCars} 
+                setselectedCars={setselectedCars} 
+              />
             )}
             keyExtractor={(item) => item.key}
           />
