@@ -23,6 +23,7 @@ const CarCard = ({ car_details }) => {
     navigation.navigate("Home")
   } 
 
+
   return (
     <TouchableOpacity style={tw`bg-white items-center mt-10 rounded-3xl mx-10 py-5 pl-5 shadow-xl`} onPress={toggle}>
       <View style={tw`flex-row`}>
@@ -35,7 +36,6 @@ const CarCard = ({ car_details }) => {
         <View>
             <Text style={styles.mainInfo}>Make: {car_details.Make}</Text>
             <Text style={styles.mainInfo}>Model: {car_details.Model}</Text>
-            <Text style={styles.mainInfo}>Mileaege: xxxx</Text>
         </View>
       </View>
 
@@ -49,11 +49,11 @@ const CarCard = ({ car_details }) => {
         style={{ borderWidth: 0 }}
       >
         <View>
-          <Text>Next Maintainance (Date): xxxxxx</Text>
-          <Text>Next Maintainance (Distance): xxxxxx</Text>
+          <Text>Next Maintainance (Date): <Text style={tw`font-semibold`}>{car_details.nextServiceDate}</Text></Text>
+          {/* <Text>Next Maintainance (Distance): xxxxxx</Text>
           <Text>Pending Repairs: 3</Text>
           <Text>Papers: OK</Text>
-          <Text>Value: 15mNGN</Text>
+          <Text>Value: 15mNGN</Text> */}
         </View>
 
         <Button
