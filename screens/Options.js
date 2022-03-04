@@ -24,15 +24,17 @@ const Options = () => {
       <Text style={tw`mb-3 font-semibold p-3 bg-white`}>Help and Support</Text>
       <Text style={tw`mb-3 font-semibold p-3 bg-white`} onPress={() => navigation.navigate('PrivacyPolicy')}>Privacy policy</Text>
 
-      <TouchableOpacity style={[tw`flex-row px-3 py-2 items-center rounded-lg w-32 bg-red-400`]}>
+      <TouchableOpacity 
+        onPress={() => handleSignOut()}
+        style={[tw`flex-row px-3 py-2 items-center rounded-lg w-32 bg-red-400`]}
+      >
           <IconButton
             name="logout"
             size={24}
             color="white"
-            onPress={handleSignOut}
           />
           <Text style={tw`ml-5 text-white`}>Logout</Text>
-        </TouchableOpacity>
+      </TouchableOpacity>
     </View>
   );
 };
