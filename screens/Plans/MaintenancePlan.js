@@ -1,5 +1,5 @@
 import { useNavigation } from "@react-navigation/native";
-import React from "react";
+import React, { useContext, useEffect } from "react";
 import { useState } from "react";
 import { Alert, FlatList, Image, Modal, ScrollView, StyleSheet, Text, TouchableOpacity, View } from "react-native";
 import tw from "tailwind-react-native-classnames";
@@ -7,21 +7,52 @@ import { MaintenancePlanData } from '../../cardata'
 import { useSelector, useDispatch } from 'react-redux'
 import CarItem from "../../components/CarItem";
 import { addToBasket } from "../../slices/carSlice";
- 
+import { AuthenticatedUserContext } from "../../navigation/AuthenticatedUserProvider";
+import Firebase from "../../config/firebase";
+
+const firestore = Firebase.firestore() 
+
 function MaintenancePlan() {
 
   const navigation = useNavigation()
   const [modalVisible, setmodalVisible] = useState(false)
   const [plan, setplan] = useState(null)
   const [selectedCars, setselectedCars] = useState([])
+  const [usersPlans, setusersPlans] = useState([])
 
   const { cars, basket } = useSelector(state => state.car)
   const dispatch = useDispatch()
 
+  const { user } = useContext(AuthenticatedUserContext);
+
+  useEffect(() => {
+    const fetchUsersPlans = async () =>{
+      let plansD = []
+
+      await firestore.
+      collection("Plans")
+      .doc(user.uid)
+      .collection("Plans")
+      .get()
+      .then((data) => {
+        data.forEach(item => {
+          return plansD.push(item.data())
+        })
+      }).catch(err => console.log(err))
+
+      setusersPlans(plansD)
+    }
+    
+    fetchUsersPlans()
+  }, [])
+
+
   const addCommaToValue = (num) =>{
     let to_string = `${num}`
 
-    return to_string.substring(0, 2) + ',' + to_string.substring(2, to_string.length);
+    if(to_string.at.length > 4) return to_string.substring(0, 2) + ',' + to_string.substring(2, to_string.length);
+
+    return to_string.substring(0, 1) + ',' + to_string.substring(1, to_string.length);
   }
 
   const handleNext = (selectedPlan) =>{
@@ -62,7 +93,7 @@ function MaintenancePlan() {
               <Text style={tw`text-gray-600 font-medium`}>What Car are you selecting the {plan?.type} for?</Text>
             </View>
 
-            <TouchableOpacity style={tw`items center`} onPress={() => handleClose()}>
+            <TouchableOpacity style={tw`items-center`} onPress={() => handleClose()}>
               <Text style={tw`text-xl capitalize text-red-600`}>close</Text>
             </TouchableOpacity>
           </View>
@@ -70,7 +101,13 @@ function MaintenancePlan() {
           <FlatList
             data={cars}
             renderItem={({ item }) => (
-              <CarItem car={item} selectedCars={selectedCars} setselectedCars={setselectedCars} />
+              <CarItem  
+                car={item} 
+                plan={plan}
+                usersPlans={usersPlans} 
+                selectedCars={selectedCars} 
+                setselectedCars={setselectedCars}  
+              />
             )}
             keyExtractor={(item) => item.key}
           />

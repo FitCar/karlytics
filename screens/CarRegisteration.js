@@ -160,7 +160,7 @@ const CarRegisteration = () => {
       <KeyboardAvoidingView>
         <View>
           <TextInput style={styles.input} autoFocus={true} value={input.license} onChangeText={(e) => handleTextChange(e, "license")} placeholder="licence" />
-          <TextInput keyboardType="numeric" maxLength={5} style={styles.input} value={input.mileage} onChangeText={(e) => handleTextChange(e, "mileage")} placeholder="Mileage per year" />
+          <TextInput keyboardType="numeric" maxLength={8} style={styles.input} value={input.mileage} onChangeText={(e) => handleTextChange(e, "mileage")} placeholder="Mileage per year" />
           
           <DropDownPicker
             placeholder="select Year"
