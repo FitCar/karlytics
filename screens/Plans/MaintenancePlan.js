@@ -86,8 +86,8 @@ function MaintenancePlan() {
         visible={modalVisible}
 
       >
-        <View style={tw`flex-grow py-10 px-5`}>
-          <View style={tw`flex-row justify-between mb-10`}>
+        <View style={tw`flex-grow mb-10 mt-10 px-5`}>
+          <View style={tw`flex-row justify-between mb-5`}>
             <View>
               <Text style={tw`text-xl font-semibold`}>Select Car for {plan?.Name} Plan</Text>
               <Text style={tw`text-gray-600 font-medium`}>What Car are you selecting the {plan?.type} for?</Text>
@@ -98,19 +98,19 @@ function MaintenancePlan() {
             </TouchableOpacity>
           </View>
 
-          <FlatList
-            data={cars}
-            renderItem={({ item }) => (
-              <CarItem  
-                car={item} 
-                plan={plan}
-                usersPlans={usersPlans} 
-                selectedCars={selectedCars} 
-                setselectedCars={setselectedCars}  
-              />
-            )}
-            keyExtractor={(item) => item.key}
-          />
+          <ScrollView style={[tw`pb-8 mb-10`, { maxHeight: "80%" }]}>
+            {
+              cars.map(item => {
+               return <CarItem 
+                  car={item} 
+                  plan={plan}
+                  usersPlans={usersPlans} 
+                  selectedCars={selectedCars} 
+                  setselectedCars={setselectedCars}  
+                />
+              })
+            }
+          </ScrollView>
 
           {
             selectedCars.length > 0 &&
