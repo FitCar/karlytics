@@ -25,7 +25,7 @@ const CarCard = ({ car_details }) => {
 
 
   return (
-    <TouchableOpacity style={tw`bg-white items-center mt-10 rounded-3xl mx-10 py-5 pl-5 shadow-xl`} onPress={toggle}>
+    <TouchableOpacity key={car_details.key} style={tw`bg-white items-center mb-10 rounded-3xl mx-10 py-5 pl-5 shadow-xl`} onPress={toggle}>
       <View style={tw`flex-row`}>
         <View>
           <Image source={require("../assets/icons/garage-car.png")}
