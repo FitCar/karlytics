@@ -41,7 +41,7 @@ const Inspection = () => {
   };
 
   const showMode = (currentMode) => {
-    setShow(true);
+    setShow(!show);
     setMode(currentMode);
   };
 

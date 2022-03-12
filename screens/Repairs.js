@@ -41,7 +41,7 @@ const Repairs = () => {
   };
 
   const showMode = (currentMode) => {
-    setShow(true);
+    setShow(!show);
     setMode(currentMode);
   };
 
