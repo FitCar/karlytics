@@ -43,7 +43,7 @@ const Maintenance = () => {
   };
 
   const showMode = (currentMode) => {
-    setShow(true);
+    setShow(!show);
     setMode(currentMode);
   };
 
@@ -66,7 +66,7 @@ const Maintenance = () => {
     }
 
     if(!selectedLocation) {
-      seterror("Please choose loation for pickup")
+      seterror("Please choose location for pickup")
       return setshowAlert(true)
     }
 
@@ -118,6 +118,7 @@ const Maintenance = () => {
     setshowAlert(false)
   } 
 
+  console.log(show)
   return (
     <View style={tw`bg-white flex-grow py-8`}>
       <View style={tw`ml-5 mt-5`}>
@@ -182,12 +183,12 @@ const Maintenance = () => {
           }}
         />
 
-        <TouchableOpacity onPress={showDatepicker} style={tw`mb-5 w-5/6 border-2 mx-auto rounded-lg border-blue-300`}>
-          <Button title="Choose Date" />
+        <TouchableOpacity onPress={() => showDatepicker()} style={tw`mb-5 w-5/6 border-2 mx-auto rounded-lg border-blue-300 py-2`}>
+          <Text style={tw`text-blue-500 font-semibold text-center text-xl`}>Choose Date</Text>
         </TouchableOpacity>
 
-        <TouchableOpacity onPress={showTimepicker} style={tw`mb-5 w-5/6 border-2 mx-auto rounded-lg border-blue-300`}>
-          <Button title="Choose Time" />
+        <TouchableOpacity onPress={() => showTimepicker()} style={tw`mb-5 w-5/6 border-2 mx-auto rounded-lg border-blue-300 py-2`}>
+          <Text style={tw`text-blue-500 font-semibold text-center text-xl`}>Choose Time</Text>
         </TouchableOpacity>
 
         {show && (
