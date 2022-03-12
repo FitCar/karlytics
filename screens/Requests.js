@@ -37,14 +37,13 @@ const Requests = () => {
   
   return (
     
-    <View style={tw`flex-grow pb-10`}>
+    <View style={tw`flex-grow pb-36`}>
         <View style={tw`mb-8 pt-10 px-3`}>
           <Text style={tw`font-bold text-lg text-black`}>Requests</Text>
           <Text>View your requests</Text>
         </View>
 
         <FlatList
-          style={tw`pb-14 flex-grow`} 
           data={requests}
           renderItem={({ item }) => (
             <RequestCard car={item.Car} schedule={item.Schedule} location={item.Location} requestid={item.key} requestType={item.requestType} icon={item.requestIcon} status={item.status} />
