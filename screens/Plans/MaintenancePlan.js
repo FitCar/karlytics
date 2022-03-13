@@ -50,7 +50,7 @@ function MaintenancePlan() {
   const addCommaToValue = (num) =>{
     let to_string = `${num}`
 
-    if(to_string.at.length > 4) return to_string.substring(0, 2) + ',' + to_string.substring(2, to_string.length);
+    if(to_string.length > 4) return to_string.substring(0, 2) + ',' + to_string.substring(2, to_string.length);
 
     return to_string.substring(0, 1) + ',' + to_string.substring(1, to_string.length);
   }

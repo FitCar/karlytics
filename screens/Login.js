@@ -2,9 +2,10 @@ import { StatusBar } from 'expo-status-bar';
 import React from 'react';
 import { useState } from 'react';
 import { StyleSheet, Text, View, Button as RNButton } from 'react-native';
-
+import { Wave } from 'react-native-animated-spinkit'
 import { Button, InputField, ErrorMessage } from '../components';
 import Firebase from '../config/firebase';
+import tw from "tailwind-react-native-classnames";
 
 const auth = Firebase.auth();
 
@@ -14,6 +15,7 @@ export default function Login({ navigation }) {
   const [passwordVisibility, setPasswordVisibility] = useState(true);
   const [rightIcon, setRightIcon] = useState('eye');
   const [loginError, setLoginError] = useState('');
+  const [ loading, setloading ] = useState(false)
 
   const handlePasswordVisibility = () => {
     if (rightIcon === 'eye') {
@@ -26,13 +28,19 @@ export default function Login({ navigation }) {
   };
 
   const onLogin = async () => {
+    setloading(true)
+
     try {
       if (email !== '' && password !== '') {
         await auth.signInWithEmailAndPassword(email, password);
+      }else {
+        setLoginError("please enter all the fields")
       }
     } catch (error) {
       setLoginError(error.message);
     }
+
+    setloading(false)
   };
 
   return (
@@ -66,11 +74,22 @@ export default function Login({ navigation }) {
         handlePasswordVisibility={handlePasswordVisibility}
       />
       {loginError ? <ErrorMessage error={loginError} visible={true} /> : null}
-      <Button
-        onPress={onLogin}
-        title='Login'
-        containerStyle={styles.login}
-      />
+      
+      {
+        loading ?
+        <View style={tw`w-full items-center`}>
+          <Wave size={30} color="gray" />
+        </View>  
+
+        :
+
+        <Button
+          onPress={onLogin}
+          title='Login'
+          containerStyle={styles.login}
+        />
+      }
+      
       <RNButton
         onPress={() => navigation.navigate('Register')}
         title='Go to Signup'

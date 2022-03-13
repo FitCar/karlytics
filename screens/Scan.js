@@ -16,6 +16,7 @@ import DateTimePicker from "@react-native-community/datetimepicker";
 import { useNavigation } from "@react-navigation/native";
 import SelectDropdown from "react-native-select-dropdown";
 import { AuthenticatedUserContext } from "../navigation/AuthenticatedUserProvider";
+import AwesomeAlert from "react-native-awesome-alerts";
 
 const firestore = Firebase.firestore();
 
@@ -26,14 +27,15 @@ const Scan = () => {
   const [expanded, setExpanded] = useState(false);
   const [loading, setLoading] = useState(true); // Set loading to true on component mount
   const [garage, setGarage] = useState([]); // Initial empty array of users
-  const [selectedCar, setSelectedCar] = useState("");
-  const [selectedLocation, setSelectedLocation] = useState("");
+  const [selectedCar, setSelectedCar] = useState(null);
+  const [selectedLocation, setSelectedLocation] = useState(null);
+  const [error, seterror] = useState("")
 
   const [date, setDate] = useState(new Date());
   const [mode, setMode] = useState("date");
   const [show, setShow] = useState(false);
-  // console.log(date);
-
+  const [showAlert, setshowAlert] = useState(false)
+ 
   const onChange = (event, selectedDate) => {
     const currentDate = selectedDate || date;
     setShow(Platform.OS === "ios");
@@ -58,17 +60,20 @@ const Scan = () => {
   };
 
   const submit = () => {
-    // const requestId = user.userReducer.users.uid;
+    
+    if(!selectedCar) {
+      seterror("Please a select a car for scan")
+      return setshowAlert(true)
+    }
 
-    // const newvalue = value.toString(" ");
+    if(!selectedLocation) {
+      seterror("Please Choose location for car pickup")
+      return setshowAlert(true)
+    }
+
     const newdate = date.toString();
-
-    // const data = {
-    //   newdate,
-    //   newvalue,
-    //   requestId,
-    // };
     const requestId = user.uid
+
     const data = {
       requestIcon: "../assets/icons/maintain.png",
       requestType: "Scan",
@@ -79,16 +84,11 @@ const Scan = () => {
       status: "Pending"
     };
 
-    // const requestRef = firestore()
-    //   .collection("requests")
-    //   .doc(requestId)
-    //   .collection("requests");
-
     const requestRef = firestore.collection("Requests").doc(requestId).collection('Requests');;
 
     requestRef.doc().set(data);
 
-    // navigation.navigate("Requests");
+    navigation.navigate("Requests");
   };
 
   useEffect(() => {
@@ -109,8 +109,12 @@ const Scan = () => {
       });
   },[]);
 
+  const confirm = () =>{
+    return setshowAlert(false)
+  }
+
   return (
-    <View style={tw`bg-white`}>
+    <View style={tw`bg-white flex-grow py-5`}>
       <View style={tw`ml-5 mt-5`}>
         <View style={tw`mb-8`}>
           <Text style={tw`font-bold text-lg text-black`}>
@@ -120,25 +124,21 @@ const Scan = () => {
         </View>
       </View>
       <View>
-        {/* <CollapsibleView style={tw`mb-8`} title="select a car">
-          {garage.map((car) => {
-            return (
-              <TouchableOpacity
-                onPress={() => {
-                  setExpanded(!expanded);
-                }}
-              >
-                <Text>
-                  {car.Make}, {car.Model}
-                </Text>
-              </TouchableOpacity>
-            );
-          })}
 
-          {console.log(garage)}
-        </CollapsibleView> */}
+      <AwesomeAlert
+          show={showAlert}
+          title={"Failed to make request"}
+          message={error}
+          closeOnTouchOutside={true}
+          closeOnHardwareBackPress={false}
+          showConfirmButton={true}
+          confirmText="Try Again"
+          confirmButtonColor="red"
+          onConfirmPressed={() => confirm()}
+        />
+        
         <SelectDropdown
-          buttonStyle={tw`mb-5 self-center`}
+          buttonStyle={tw`mb-5 self-center bg-gray-200 rounded-lg w-5/6 shadow-lg`}
           data={garage}
           onSelect={(selectedItem, index) => {
             console.log(selectedItem.Make, index);
@@ -156,38 +156,9 @@ const Scan = () => {
             return item.Make + " " + item.Model;
           }}
         />
-        {/* <View
-          style={tw`mb-8 flex-row justify-around h-20 items-center shadow-md border-0`}
-        >
-          <TouchableOpacity>
-            <Image source={require("../assets/icons/tire.png")} />
-          </TouchableOpacity>
-          <TouchableOpacity>
-            <Image source={require("../assets/icons/engine.png")} />
-          </TouchableOpacity>
-          <TouchableOpacity>
-            <Image source={require("../assets/icons/ac.png")} />
-          </TouchableOpacity>
-          <TouchableOpacity>
-            <Image source={require("../assets/icons/battery.png")} />
-          </TouchableOpacity>
-          <TouchableOpacity>
-            <Image source={require("../assets/icons/brake.png")} />
-          </TouchableOpacity>
-        </View> */}
-        {/* <CollapsibleView style={tw`mb-8`} title="select location">
-          <TouchableOpacity>
-            <Text>On-site</Text>
-          </TouchableOpacity>
-          <TouchableOpacity>
-            <Text>Pick-up</Text>
-          </TouchableOpacity>
-          <TouchableOpacity>
-            <Text>Drop-off</Text>
-          </TouchableOpacity>
-        </CollapsibleView> */}
+       
         <SelectDropdown
-          buttonStyle={tw`mb-5 self-center`}
+          buttonStyle={tw`mb-5 self-center bg-gray-200 rounded-lg w-5/6 shadow-lg`}
           data={location}
           onSelect={(selectedItem, index) => {
             console.log(selectedItem, index);
@@ -206,13 +177,13 @@ const Scan = () => {
           }}
         />
 
-        <View style={tw`mb-5`}>
-          <Button onPress={showDatepicker} title="Choose Date" />
-        </View>
+        <TouchableOpacity onPress={showDatepicker} style={tw`mb-5 w-5/6 border-2 mx-auto rounded-lg border-blue-300`}>
+          <Button title="Choose Date" />
+        </TouchableOpacity>
 
-        <View style={tw`mb-5`}>
-          <Button onPress={showTimepicker} title="Choose Time" />
-        </View>
+        <TouchableOpacity onPress={showTimepicker} style={tw`mb-5 w-5/6 border-2 mx-auto rounded-lg border-blue-300`}>
+          <Button title="Choose Time" />
+        </TouchableOpacity>
 
         {show && (
           <DateTimePicker
@@ -225,13 +196,10 @@ const Scan = () => {
           />
         )}
       </View>
-      <Button
-        title="submit"
-        onPress={() => {
-          submit();
-          navigation.navigate("Requests");
-        }}
-      />
+
+      <TouchableOpacity style={[{ backgroundColor: "#2bced6" }, tw`mx-auto w-5/6 rounded-lg p-3 mt-3 shadow-lg`]} onPress={() => submit()}>
+        <Text style={tw`text-white text-center`}>Submit</Text>
+      </TouchableOpacity>
     </View>
   );
 };

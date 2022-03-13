@@ -2,6 +2,8 @@ import { StatusBar } from "expo-status-bar";
 import React, { useEffect } from "react";
 import { useState } from "react";
 import { StyleSheet, Text, View, Button as RNButton } from "react-native";
+import { Wave } from 'react-native-animated-spinkit'
+import tw from "tailwind-react-native-classnames";
 
 const { uuid } = require('uuidv4');
 
@@ -19,6 +21,7 @@ export default function Register({ navigation }) {
   const [rightIcon, setRightIcon] = useState("eye");
   const [signupError, setSignupError] = useState("");
   const [users, setUsers] = useState("");
+  const [ loading, setloading ] = useState(false)
 
   useEffect(() => {
     const subscriber = firestore
@@ -51,7 +54,8 @@ export default function Register({ navigation }) {
 
   const onHandleSignup = async () => {
     try {
-      if (email !== "" && password !== "") {
+      setloading(true)
+      if (email !== "" && password !== "" && name !== "") {
         await auth.createUserWithEmailAndPassword(email, password)
               .then((response) => {
             
@@ -71,10 +75,14 @@ export default function Register({ navigation }) {
               console.log(name);
               console.log(uid);
           });
+      }else {
+        setSignupError("Please enter all the fields")
       }
     } catch (error) {
       setSignupError(error.message);
     }
+
+    return setloading(false)
   };
 
   return (
@@ -120,16 +128,27 @@ export default function Register({ navigation }) {
         handlePasswordVisibility={handlePasswordVisibility}
       />
       {signupError ? <ErrorMessage error={signupError} visible={true} /> : null}
-      <Button
-        onPress={onHandleSignup}
-        backgroundColor="#2bced6"
-        title="Signup"
-        tileColor="#fff"
-        titleSize={20}
-        containerStyle={{
-          marginBottom: 24,
-        }}
-      />
+      
+      {
+        loading ? 
+        <View style={tw`w-full items-center`}>
+          <Wave size={30} color="gray" />
+        </View>  
+
+        :
+
+        <Button
+          onPress={onHandleSignup}
+          backgroundColor="#2bced6"
+          title="Signup"
+          tileColor="#fff"
+          titleSize={20}
+          containerStyle={{
+            marginBottom: 24,
+          }}
+        />
+      }
+      
       <RNButton
         onPress={() => navigation.navigate("Login")}
         title="Go to Login"
