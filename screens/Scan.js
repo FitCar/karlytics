@@ -4,7 +4,6 @@ import {
   Image,
   StyleSheet,
   Text,
-  TextInput,
   TouchableOpacity,
   View,
 } from "react-native";
@@ -55,10 +54,6 @@ const Scan = () => {
     showMode("time");
   };
 
-  const toggle = () => {
-    setExpanded(!expanded);
-  };
-
   const submit = () => {
     
     if(!selectedCar) {
@@ -103,7 +98,6 @@ const Scan = () => {
             key: documentSnapshot.id,
           });
         });
-        // console.log(garage);
         setGarage(garage);
         setLoading(false);
       });
@@ -123,8 +117,8 @@ const Scan = () => {
           <Text>Select a car</Text>
         </View>
       </View>
-      <View>
 
+      <View>
       <AwesomeAlert
           show={showAlert}
           title={"Failed to make request"}
