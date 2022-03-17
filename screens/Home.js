@@ -95,6 +95,7 @@ const Home = () => {
   }, [current_car])
 
   const handleServiceButton = (route) => {
+    if (cars.length === 0) return alert("Add car to your garage to access this feature");
     if (!current_car) return alert("Select a car to access these services");
 
     return navigation.navigate(route);
