@@ -67,11 +67,11 @@ function MaintenancePlan() {
 
   const addPlanToBasket = () =>{
     selectedCars.forEach(car => {
-      const filteredPlans = basket.filter(carPlan => carPlan.key === car.key && carPlan.plan.Name === plan.Name && carPlan.plan.type === plan.type)
+      const filteredPlans = basket.filter(carPlan => carPlan.key === car.key && carPlan.plan.Name === plan.Name)
       if(filteredPlans.length < 1){
         dispatch(addToBasket({ ...car, plan }))
       }else {
-        Alert.alert(`the ${plan.type} for ${plan.Name} plan is already added for your ${car.make} car`)
+        Alert.alert(`A ${plan.Name} plan is already active for your ${car.make} ${car.model} car`)
       }
       
     })
