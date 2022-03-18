@@ -65,11 +65,13 @@ const Home = () => {
         .get()
         .then((doc) => setusersFullname(doc.data().name))
         .catch((error) => console.log(error));
+
+       
     };
 
     fetchuserData();
   }, [user]);
-
+ 
   useEffect(() => {
     const fetchPlans = async () =>{
       if(!current_car) return 
@@ -81,6 +83,19 @@ const Home = () => {
       .doc(user.uid)
       .collection("Plans")
       .where('carId',  '==', current_car.key)
+      .get()
+      .then(res => {
+        res.forEach(plan => {
+          plan_arr = [...plan_arr, plan.data()]
+        })
+      })
+      .catch((error) => console.log(error));
+
+      await firestore
+      .collection("Plans")
+      .doc(user.uid)
+      .collection("Plans")
+      .where('Name',  '==', "Membership")
       .get()
       .then(res => {
         res.forEach(plan => {
@@ -158,6 +173,15 @@ const Home = () => {
             {
               current_car && 
               <View style={tw`bg-white mt-5 w-11/12 mx-auto p-3 rounded-lg`}>
+                <View style={tw`mb-5`}>
+                  <Text style={tw`text-xl font-semibold text-gray-500`}>Membership Plan</Text>
+                  {
+                    plans.filter(item => item.Name === "Membership").length > 0 &&
+
+                     plans.filter(item => item.Name === "Membership").map((mem, index) => (<Text key={index} style={[tw`font-semibold text-sm`, { color: '#2bced6' }]}>{mem.type} {mem.Name} ({mem.price})</Text>))
+                  }
+                </View>
+
                 <PlansForCar selectedCar={current_car} plans={plans}  />
               </View>
             }
