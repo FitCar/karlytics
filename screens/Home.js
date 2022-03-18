@@ -176,9 +176,11 @@ const Home = () => {
                 <View style={tw`mb-5`}>
                   <Text style={tw`text-xl font-semibold text-gray-500`}>Membership Plan</Text>
                   {
-                    plans.filter(item => item.Name === "Membership").length > 0 &&
+                    plans.filter(item => item.Name === "Membership").length > 0 ?
 
-                     plans.filter(item => item.Name === "Membership").map((mem, index) => (<Text key={index} style={[tw`font-semibold text-sm`, { color: '#2bced6' }]}>{mem.type} {mem.Name} ({mem.price})</Text>))
+                    plans.filter(item => item.Name === "Membership").map((mem, index) => (<Text key={index} style={[tw`font-semibold text-sm`, { color: '#2bced6' }]}>{mem.type} {mem.Name} ({mem.price})</Text>))
+                    :
+                    <Text style={tw`text-sm text-gray-400`}>You have no membership plan yet</Text>
                   }
                 </View>
 
