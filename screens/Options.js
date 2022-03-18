@@ -3,14 +3,21 @@ import { StyleSheet, Text, TouchableOpacity, View, Linking } from "react-native"
 import Firebase from "../config/firebase";
 import tw from "tailwind-react-native-classnames";
 import { IconButton } from "../components";
+import { useDispatch } from "react-redux";
 import { useNavigation } from "@react-navigation/native";
+import { setCurrentCar } from "../slices/carSlice";
 
 const auth = Firebase.auth();
 
 const Options = () => {
+  const dispatch = useDispatch();
+
+
   const handleSignOut = async () => {
     try {
-      await auth.signOut();
+      await auth.signOut().then(() => {
+        dispatch(setCurrentCar(null))
+      });
     } catch (error) {
       console.log(error);
     }
