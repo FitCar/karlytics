@@ -49,8 +49,6 @@ const BasketCard = ({ description, qty, total, unitPrice, details, index }) => {
     return setshowAlert(false);
   };
   
-  console.log(details)
-
   if(!details.plan && details?.Name) return (
   <TouchableOpacity
     style={tw`bg-white mx-4 rounded-xl mb-5 p-4 shadow-xl`}
