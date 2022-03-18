@@ -12,7 +12,6 @@ import {
 import { Icon } from "react-native-elements";
 import tw from "tailwind-react-native-classnames";
 import BasketCard from "../components/BasketCard";
-import DiagnosticCard from "../components/DiagnosticCard";
 import { useDispatch, useSelector } from "react-redux";
 import { selectBasket } from "../slices/carSlice";
 import { useNavigation } from "@react-navigation/native";
@@ -29,6 +28,8 @@ const Basket = () => {
  basket.map((item) => {
    if(item.plan){
     return y.push(Number(item.plan.price))
+   }else if (!item.plan && item.Name) {
+    return y.push(Number(item.price))
    }else {
     return y.push(Number(item.total))
    }
@@ -83,7 +84,7 @@ const Basket = () => {
 
       <ScrollView style={tw`flex-grow`}>
         {basket.map((item, index) => {
-          if(item.plan) return (
+          if(item.plan || item.Name) return (
             <BasketCard
               details={item}
               index={index+1}
