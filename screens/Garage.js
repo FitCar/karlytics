@@ -18,8 +18,6 @@ const Garage = () => {
   
   const { cars } = useSelector(state => state.car)
 
-  console.log(cars)
-
   return (
     <ScrollView style={tw`flex-grow mt-10 mb-5 pb-10`}>
       <View>
