@@ -22,10 +22,15 @@ const Checkout = () => {
               .doc(user.uid)
               .collection("Plans")
 
-    const plans_in_basket = basket.filter(item => "plan" in item)
-
+    const plans_in_basket = basket.filter(item => "plan" in item || "Name" in item)
+  
     plans_in_basket.forEach(async (plan) => {
-      await plansRef.doc().set({ carId: plan.key,  plan: plan.plan, garage_id: plan.garageId})
+      if(plan?.Name) {
+        await plansRef.doc().set(plan)
+      }else {
+        await plansRef.doc().set({ carId: plan.key,  plan: plan.plan, garage_id: plan.garageId})
+      }
+      
     })
 
     dispatch(resetBasket())
