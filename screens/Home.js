@@ -172,13 +172,13 @@ const Home = () => {
           <View style={tw`bg-gray-100  rounded-t-3xl`}>
             {
               current_car && 
-              <View style={tw`bg-white mt-5 w-11/12 mx-auto p-3 rounded-lg`}>
+              <View style={tw`bg-gray-100 mt-5 w-full mx-auto p-3 rounded-lg`}>
                 <View style={tw`mb-5`}>
-                  <Text style={tw`text-xl font-semibold text-gray-500`}>Membership Plan</Text>
+                  <Text style={tw`text-xl font-semibold text-gray-800`}>Membership Plan</Text>
                   {
                     plans.filter(item => item.Name === "Membership").length > 0 ?
 
-                    plans.filter(item => item.Name === "Membership").map((mem, index) => (<Text key={index} style={[tw`font-semibold text-sm`, { color: '#2bced6' }]}>{mem.type} {mem.Name} ({mem.price})</Text>))
+                    plans.filter(item => item.Name === "Membership").map((mem, index) => (<Text key={index} style={[tw`font-semibold text-sm text-gray-500`]}>{mem.type} {mem.Name}</Text>))
                     :
                     <Text style={tw`text-sm text-gray-400`}>You have no membership plan yet</Text>
                   }
