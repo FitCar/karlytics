@@ -42,6 +42,7 @@ const Basket = () => {
     if(to_string.length > 4 && to_string.length <= 5) return to_string.substring(0, 2) + ',' + to_string.substring(2, to_string.length);
     if(to_string.length > 5 && to_string.length <= 6) return to_string.substring(0, 3) + ',' + to_string.substring(3, to_string.length);
     if(to_string.length > 6 ) return to_string.substring(0, 1) + ',' + to_string.substring(1, 4)+','+to_string.substring(4, to_string.length);
+    if(to_string.length < 4) return to_string
 
     return to_string.substring(0, 1) + ',' + to_string.substring(1, to_string.length);
   }
@@ -59,7 +60,9 @@ const Basket = () => {
     }else {
       Alert.alert("Please add items to basket first")
     }
-  }
+  } 
+
+  console.log(basket)
 
   return (
     <View style={tw`flex-grow pt-10 pb-5`}>
@@ -94,13 +97,22 @@ const Basket = () => {
 
       <ScrollView style={[tw`flex-grow pb-5`, { maxHeight: "70%" }]}>
         {basket.map((item, index) => {
-          if(item.plan || item.Name) return (
+          if(item.plan) {
+            return (
+              <BasketCard
+                details={item}
+                index={index+1}
+              /> 
+            )
+          }
+
+          if(item.Name) return (
             <BasketCard
               details={item}
               index={index+1}
-            />
+            /> 
           )
-          
+
           return (
             <BasketCard
               description={item.description}
@@ -109,7 +121,8 @@ const Basket = () => {
               total={item.total}
               index={index+1}
             />
-          );
+          )
+
         })}
       </ScrollView>
       }
