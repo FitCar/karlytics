@@ -1,11 +1,8 @@
 import React, { useState } from "react";
 import {
-  FlatList,
-  Image,
   ScrollView,
   StyleSheet,
   Text,
-  TouchableOpacity,
   View,
 } from "react-native";
 import tw from "tailwind-react-native-classnames";
@@ -14,8 +11,6 @@ import CarCard from "../components/CarCard";
 import { useSelector } from "react-redux";
 
 const Garage = () => {
-  const [loading, setLoading] = useState(true); // Set loading to true on component mount
-  
   const { cars } = useSelector(state => state.car)
 
   return (
@@ -32,7 +27,11 @@ const Garage = () => {
       
       {
         cars.map(item => {
-          return <CarCard car_details={item} />
+          return (
+          <View key={item.key}>
+            <CarCard car_details={item} />
+          </View>
+          )
         })
       }
     </ScrollView>
