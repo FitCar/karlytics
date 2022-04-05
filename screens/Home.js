@@ -22,7 +22,6 @@ import { useSelector, useDispatch } from "react-redux";
 import { getPlans, selectLastServiceDate } from "../slices/carSlice";
 import { getCars } from "../slices/carSlice";
 import PlansForCar from "../components/PlansForCar";
-import { SnapshotViewIOSBase } from "react-native";
 
 const firestore = Firebase.firestore();
 
@@ -108,6 +107,7 @@ const Home = () => {
     }
     fetchPlans()
   }, [current_car])
+
 
   const handleServiceButton = (route) => {
     if (cars.length === 0) return alert("Add car to your garage to access this feature");
