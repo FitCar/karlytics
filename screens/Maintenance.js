@@ -52,7 +52,7 @@ const Maintenance = () => {
     }else {
       setdateText({
         ...dateText,
-        time: `${Number.parseInt(changeTime(currentDate.getUTCHours()))+1}: ${changeTime(currentDate.getUTCMinutes())}`
+        time: `${changeTime(currentDate.getUTCHours(), 'hours')}: ${changeTime(currentDate.getUTCMinutes())} `
       })
     }
   };
