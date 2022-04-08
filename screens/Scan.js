@@ -16,6 +16,7 @@ import { useNavigation } from "@react-navigation/native";
 import SelectDropdown from "react-native-select-dropdown";
 import { AuthenticatedUserContext } from "../navigation/AuthenticatedUserProvider";
 import AwesomeAlert from "react-native-awesome-alerts";
+import { changeTime } from "../cardata";
 
 const firestore = Firebase.firestore();
 
@@ -34,11 +35,28 @@ const Scan = () => {
   const [mode, setMode] = useState("date");
   const [show, setShow] = useState(false);
   const [showAlert, setshowAlert] = useState(false)
+  const [dateText, setdateText] = useState({
+    date: "Choose Date",
+    time: "Choose Time"
+  })
  
-  const onChange = (event, selectedDate) => {
-    const currentDate = selectedDate || date;
+  const onChange = (selectedDate, dateTime) => {
+    const currentDate = dateTime || date;
     setShow(Platform.OS === "ios");
     setDate(currentDate);
+
+    if(mode === 'date') {
+      setdateText({
+        ...dateText,
+        date: currentDate.toLocaleDateString()
+      })
+    }else {
+      setdateText({
+        ...dateText,
+        time: `${Number.parseInt(changeTime(currentDate.getUTCHours()))+1}: ${changeTime(currentDate.getUTCMinutes())} `
+      })
+    }
+
   };
 
   const showMode = (currentMode) => {
@@ -172,11 +190,11 @@ const Scan = () => {
         />
 
         <TouchableOpacity onPress={() => showDatepicker()} style={tw`mb-5 w-5/6 border-2 mx-auto rounded-lg border-blue-300 py-2`}>
-          <Text style={tw`text-blue-500 font-semibold text-center text-xl`}>Choose Date</Text>
+          <Text style={tw`text-blue-500 font-semibold text-center text-xl`}>{dateText.date}</Text>
         </TouchableOpacity>
 
         <TouchableOpacity onPress={() => showTimepicker()} style={tw`mb-5 w-5/6 border-2 mx-auto rounded-lg border-blue-300 py-2`}>
-          <Text style={tw`text-blue-500 font-semibold text-center text-xl`}>Choose Time</Text>
+          <Text style={tw`text-blue-500 font-semibold text-center text-xl`}>{dateText.time}</Text>
         </TouchableOpacity>
 
         {show && (

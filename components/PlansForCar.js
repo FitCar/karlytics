@@ -11,7 +11,7 @@ const ChooseImageForPlan = ({ name }) => {
       />
     );
 
-  if (name === "Insurnce")
+  if (name === "Insurance")
     return (
       <Image
         source={require("../assets/icons/insurance.png")}

@@ -62,8 +62,6 @@ const Basket = () => {
     }
   } 
 
-  console.log(basket)
-
   return (
     <View style={tw`flex-grow pt-10 pb-5`}>
       <View style={tw`flex-row justify-around mb-8`}>
