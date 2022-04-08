@@ -131,7 +131,7 @@ const Inspection = () => {
   }
 
   return (
-    <View style={tw`bg-white`}>
+    <View style={tw`bg-white flex-grow`}>
       <View style={tw`ml-5 mt-8`}>
         <View style={tw`mb-8`}>
           <Text style={tw`font-bold text-lg text-black`}>
