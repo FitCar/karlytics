@@ -44,9 +44,8 @@ const PlansForCar = ({ selectedCar, plans }) => {
         <View style={[tw`flex-row items-center`, { flexWrap: "wrap" }]}>
         {
             plans.filter(plan => plan.carId === selectedCar.key).map((plan, index) => (
-                <View key={index} style={tw`w-20 h-20 bg-white items-center shadow-lg m-2 rounded-lg`}>
+                <View key={index} style={tw`w-20 h-20 bg-white items-center justify-center shadow-lg m-2 rounded-lg`}>
                     <ChooseImageForPlan name={plan.plan.Name} />
-                    <Text style={[tw`mr-1 ml-1 text-xs font-semibold text-center`, { color: '#2bced6' }]}>{plan.plan.Name} plan</Text>
                 </View>
             ))
         }
