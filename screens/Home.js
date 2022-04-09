@@ -167,7 +167,7 @@ const Home = () => {
 
           {cars.length > 0 ? (
               <TouchableOpacity
-                style={[styles.selectCar, tw`ml-3`]}
+                style={[styles.selectCar, tw`mx-auto`]}
                 onPress={() => navigation.navigate("Garage")}
               >
                 <Text style={tw`text-white text-xl text-center`}>Select car</Text>
@@ -259,8 +259,8 @@ const styles = StyleSheet.create({
     flexDirection: "row",
     justifyContent: "center",
     borderRadius: 20,
-    marginBottom: 10,
-    width: 100,
+    marginBottom: 20,
+    width: "80%",
     paddingVertical: 5
   },
 
