@@ -1,7 +1,6 @@
 import { useNavigation } from "@react-navigation/native";
 import React, { useContext, useEffect, useState } from "react";
 import {
-  FlatList,
   Image,
   Modal,
   ScrollView,
@@ -10,7 +9,6 @@ import {
   TouchableOpacity,
   View,
 } from "react-native";
-import { Icon } from "react-native-elements";
 import tw from "tailwind-react-native-classnames";
 import AddCar from "../components/AddCar";
 import HealthCard from "../components/HealthCard";
@@ -33,7 +31,7 @@ const Home = () => {
   const navigation = useNavigation();
   const { user } = useContext(AuthenticatedUserContext);
 
-  const { current_car, cars, plans } = useSelector((state) => state.car);
+  const { current_car, cars, plans, basket } = useSelector((state) => state.car);
   const dispatch = useDispatch();
 
   useEffect(() => {
@@ -129,19 +127,16 @@ const Home = () => {
               <Text>How's your car feeling today</Text>
             </View>
 
-            {cars.length > 0 ? (
-              <TouchableOpacity
-                style={styles.selectCar}
-                onPress={() => navigation.navigate("Garage")}
-              >
-                <Text style={tw`text-white`}>Select car</Text>
-                <Icon name="sort-down" color={"white"} type="font-awesome" />
-              </TouchableOpacity>
-            ) : (
-              <View>
-                <Text style={tw`font-semibold`}>No car(s) yet</Text>
+            <TouchableOpacity style={tw`flex-row relative`} onPress={() => navigation.navigate("Basket")}>
+              <View style={styles.basket}>
+                <Text style={{ color: "white" }}>{basket.length}</Text>
               </View>
-            )}
+             
+              <Image
+                source={require("../assets/icons/shopping-cart.png")}
+                style={{ resizeMode: "contain", height: 40 }}
+              />
+            </TouchableOpacity>
           </View>
 
           {cars.length !== 0 ? (
@@ -164,10 +159,24 @@ const Home = () => {
                   Select a car from your garage
                 </Text>
               )}
+
             </View>
           ) : (
             <AddCar />
           )}
+
+          {cars.length > 0 ? (
+              <TouchableOpacity
+                style={[styles.selectCar, tw`ml-3`]}
+                onPress={() => navigation.navigate("Garage")}
+              >
+                <Text style={tw`text-white text-xl text-center`}>Select car</Text>
+              </TouchableOpacity>
+            ) : (
+              <View style={tw`w-full items-center justify-center`}>
+                <Text style={tw`font-semibold mb-5 text-gray-400`}>No car(s) yet</Text>
+              </View>
+            )}
 
           <View style={tw`bg-gray-100  rounded-t-3xl`}>
             {
@@ -247,9 +256,23 @@ const styles = StyleSheet.create({
   selectCar: {
     backgroundColor: "#2bced6",
     paddingHorizontal: 10,
-    // paddingVertical: 5,
     flexDirection: "row",
-    alignItems: "center",
+    justifyContent: "center",
     borderRadius: 20,
+    marginBottom: 10,
+    width: 100,
+    paddingVertical: 5
   },
+
+  basket: {   
+    position: "absolute",
+    alignItems: "center",
+    justifyContent: "center",
+    backgroundColor: "#2bced6",
+    height: 16,
+    width: 16,
+    zIndex: 2,
+    left: -3,
+    borderRadius: 999
+  }
 });
