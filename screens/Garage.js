@@ -26,6 +26,13 @@ const Garage = () => {
       </View>
       
       {
+        cars.length === 0 ?
+        <View style={tw`flex-grow justify-center items-center`}>
+          <Text style={tw`text-lg font-semibold`}>You have no cars in your garage yet</Text>
+        </View>
+        
+        :
+
         cars.map(item => {
           return (
           <View key={item.key}>
@@ -33,6 +40,7 @@ const Garage = () => {
           </View>
           )
         })
+
       }
     </ScrollView>
   );
