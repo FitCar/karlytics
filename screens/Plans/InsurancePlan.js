@@ -85,10 +85,9 @@ function InsurancePlan() {
       <Modal
         animationType="slide"
         visible={modalVisible}
-
       >
-        <View style={tw`flex-grow py-10 px-5`}>
-          <View style={tw`flex-row justify-between mb-10`}>
+        <View style={tw`mb-10 mt-10 pb-10 px-5`}>
+          <View style={tw`flex-row justify-between mb-5`}>
             <View>
               <Text style={tw`text-xl font-semibold`}>Select Car for {plan?.Name} Plan</Text>
               <Text style={tw`text-gray-600 font-medium`}>What Car are you selecting the {plan?.type} for?</Text>
@@ -99,24 +98,25 @@ function InsurancePlan() {
             </TouchableOpacity>
           </View>
 
-          <FlatList
-            data={cars}
-            renderItem={({ item }) => (
-              <CarItem 
-                car={item} 
-                plan={plan}
-                usersPlans={usersPlans} 
-                selectedCars={selectedCars} 
-                setselectedCars={setselectedCars}  
-              />
-            )}
-            keyExtractor={(item) => item.key}
-          />
+          <ScrollView style={[tw`pb-8 mb-10`, { maxHeight: "80%" }]}>
+            {
+              cars.map(item => {
+               return <CarItem 
+                  car={item} 
+                  plan={plan}
+                  usersPlans={usersPlans} 
+                  selectedCars={selectedCars} 
+                  setselectedCars={setselectedCars}  
+                />
+              })
+            }
+          </ScrollView>
 
+          
           {
             selectedCars.length > 0 &&
             <TouchableOpacity 
-              style={[tw`w-10/12 mx-auto p-3 rounded-md shadow-md`, { backgroundColor: "#2bced6" }]}
+              style={[tw`w-10/12 mt-5 mb-10 mx-auto p-3 rounded-md shadow-md`, { backgroundColor: "#2bced6" }]}
               onPress={() => addPlanToBasket()}
             >
               <Text style={tw`text-center`}>Add the <Text style={tw`font-semibold`}>{plan?.Name} {plan.type}</Text> to basket- Total: <Text style={tw`text-lg font-semibold`}>{addCommaToValue(plan?.price*(selectedCars.length))}</Text></Text>

@@ -1,24 +1,20 @@
-import { Picker } from "@react-native-community/picker";
 import React, { useCallback, useContext, useState } from "react";
 import {
-  Button,
   KeyboardAvoidingView,
   StyleSheet,
   Text,
   TextInput,
   View,
   Keyboard,
-  ScrollView,
+  TouchableOpacity,
   Alert,
   Pressable
 } from "react-native";
-import { Icon } from "react-native-elements";
 import tw from "tailwind-react-native-classnames";
 import DropDownPicker from "react-native-dropdown-picker";
 import { useNavigation } from "@react-navigation/native";
 import { useDispatch, useSelector } from "react-redux";
 import {
-  setLastServiceDate,
   setNextDate,
   selectMake,
   selectModel,
@@ -27,8 +23,8 @@ import Firebase from "../config/firebase";
 import { AuthenticatedUserContext } from "../navigation/AuthenticatedUserProvider";
 import DateTimePicker from "@react-native-community/datetimepicker";
 import { add } from "date-fns";
-import { formatDistanceToNow } from 'date-fns'
 import { bodyData, car_years } from "../cardata";
+
 
 const firestore = Firebase.firestore();
 
@@ -190,9 +186,9 @@ const CarRegisteration = () => {
             style={tw`mb-5`}
           />
 
-          <View>
-            <Button onPress={showDatepicker} title="Select last service date" />
-          </View>
+          <TouchableOpacity onPress={() => showDatepicker()} style={tw`mb-5 w-5/6 border-2 mx-auto rounded-lg border-blue-300 py-2`}>
+            <Text style={tw`text-blue-500 font-semibold text-center text-xl`}>Select last service date</Text>
+          </TouchableOpacity>
 
           {show && (
             <DateTimePicker

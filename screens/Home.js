@@ -1,7 +1,6 @@
 import { useNavigation } from "@react-navigation/native";
 import React, { useContext, useEffect, useState } from "react";
 import {
-  FlatList,
   Image,
   Modal,
   ScrollView,
@@ -10,7 +9,6 @@ import {
   TouchableOpacity,
   View,
 } from "react-native";
-import { Icon } from "react-native-elements";
 import tw from "tailwind-react-native-classnames";
 import AddCar from "../components/AddCar";
 import HealthCard from "../components/HealthCard";
@@ -22,7 +20,6 @@ import { useSelector, useDispatch } from "react-redux";
 import { getPlans, selectLastServiceDate } from "../slices/carSlice";
 import { getCars } from "../slices/carSlice";
 import PlansForCar from "../components/PlansForCar";
-import { SnapshotViewIOSBase } from "react-native";
 
 const firestore = Firebase.firestore();
 
@@ -34,7 +31,7 @@ const Home = () => {
   const navigation = useNavigation();
   const { user } = useContext(AuthenticatedUserContext);
 
-  const { current_car, cars, plans } = useSelector((state) => state.car);
+  const { current_car, cars, plans, basket } = useSelector((state) => state.car);
   const dispatch = useDispatch();
 
   useEffect(() => {
@@ -65,11 +62,13 @@ const Home = () => {
         .get()
         .then((doc) => setusersFullname(doc.data().name))
         .catch((error) => console.log(error));
+
+       
     };
 
     fetchuserData();
   }, [user]);
-
+ 
   useEffect(() => {
     const fetchPlans = async () =>{
       if(!current_car) return 
@@ -89,12 +88,27 @@ const Home = () => {
       })
       .catch((error) => console.log(error));
 
+      await firestore
+      .collection("Plans")
+      .doc(user.uid)
+      .collection("Plans")
+      .where('Name',  '==', "Membership")
+      .get()
+      .then(res => {
+        res.forEach(plan => {
+          plan_arr = [...plan_arr, plan.data()]
+        })
+      })
+      .catch((error) => console.log(error));
+
       return dispatch(getPlans(plan_arr))
     }
     fetchPlans()
   }, [current_car])
 
+
   const handleServiceButton = (route) => {
+    if (cars.length === 0) return alert("Add car to your garage to access this feature");
     if (!current_car) return alert("Select a car to access these services");
 
     return navigation.navigate(route);
@@ -113,19 +127,16 @@ const Home = () => {
               <Text>How's your car feeling today</Text>
             </View>
 
-            {cars.length > 0 ? (
-              <TouchableOpacity
-                style={styles.selectCar}
-                onPress={() => navigation.navigate("Garage")}
-              >
-                <Text style={tw`text-white`}>Select car</Text>
-                <Icon name="sort-down" color={"white"} type="font-awesome" />
-              </TouchableOpacity>
-            ) : (
-              <View>
-                <Text style={tw`font-semibold`}>No car(s) yet</Text>
+            <TouchableOpacity style={tw`flex-row relative`} onPress={() => navigation.navigate("Basket")}>
+              <View style={styles.basket}>
+                <Text style={{ color: "white" }}>{basket.length}</Text>
               </View>
-            )}
+             
+              <Image
+                source={require("../assets/icons/shopping-cart.png")}
+                style={{ resizeMode: "contain", height: 40 }}
+              />
+            </TouchableOpacity>
           </View>
 
           {cars.length !== 0 ? (
@@ -148,15 +159,40 @@ const Home = () => {
                   Select a car from your garage
                 </Text>
               )}
+
             </View>
           ) : (
             <AddCar />
           )}
 
+          {cars.length > 0 ? (
+              <TouchableOpacity
+                style={[styles.selectCar, tw`mx-auto`]}
+                onPress={() => navigation.navigate("Garage")}
+              >
+                <Text style={tw`text-white text-xl text-center`}>Select car</Text>
+              </TouchableOpacity>
+            ) : (
+              <View style={tw`w-full items-center justify-center`}>
+                <Text style={tw`font-semibold mb-5 text-gray-400`}>No car(s) yet</Text>
+              </View>
+            )}
+
           <View style={tw`bg-gray-100  rounded-t-3xl`}>
             {
               current_car && 
-              <View style={tw`bg-white mt-5 w-11/12 mx-auto p-3 rounded-lg`}>
+              <View style={tw`bg-gray-100 mt-5 w-full mx-auto p-3 rounded-lg`}>
+                <View style={tw`mb-5`}>
+                  <Text style={tw`text-xl font-semibold text-gray-800`}>Membership Plan</Text>
+                  {
+                    plans.filter(item => item.Name === "Membership").length > 0 ?
+
+                    plans.filter(item => item.Name === "Membership").map((mem, index) => (<Text key={index} style={[tw`font-semibold text-sm text-gray-500`]}>{mem.type} {mem.Name}</Text>))
+                    :
+                    <Text style={tw`text-sm text-gray-400`}>You have no membership plan yet</Text>
+                  }
+                </View>
+
                 <PlansForCar selectedCar={current_car} plans={plans}  />
               </View>
             }
@@ -220,9 +256,23 @@ const styles = StyleSheet.create({
   selectCar: {
     backgroundColor: "#2bced6",
     paddingHorizontal: 10,
-    // paddingVertical: 5,
     flexDirection: "row",
-    alignItems: "center",
+    justifyContent: "center",
     borderRadius: 20,
+    marginBottom: 20,
+    width: "80%",
+    paddingVertical: 5
   },
+
+  basket: {   
+    position: "absolute",
+    alignItems: "center",
+    justifyContent: "center",
+    backgroundColor: "#2bced6",
+    height: 16,
+    width: 16,
+    zIndex: 2,
+    left: -3,
+    borderRadius: 999
+  }
 });

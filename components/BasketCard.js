@@ -37,6 +37,7 @@ const ChooseImageForPlan = ({ name }) => {
       style={{ resizeMode: "contain", height: 40 }}
     />
   );
+
 };
 
 const BasketCard = ({ description, qty, total, unitPrice, details, index }) => {
@@ -48,35 +49,35 @@ const BasketCard = ({ description, qty, total, unitPrice, details, index }) => {
     return setshowAlert(false);
   };
 
-  if (details)
-    return (
+  if(details !== undefined) {
+    if(!details.plan && details?.Name) return (
       <TouchableOpacity
         style={tw`bg-white mx-4 rounded-xl mb-5 p-4 shadow-xl`}
         key={index}
         onLongPress={() => setshowAlert(true)}
       >
+      
         <View style={tw`flex-row justify-start items-center`}>
-          <ChooseImageForPlan name={details.plan.Name} />
-
+          <ChooseImageForPlan name="Membership" />
+    
           <View style={tw`ml-5`}>
             <Text style={tw`mb-2`}>
-              <Text style={tw`font-semibold`}>{details.plan.type}</Text> package
-              for <Text style={tw`font-semibold`}>{details.plan.Name}</Text>{" "}
+              <Text style={tw`font-semibold`}>{details.type}</Text> package
+              for <Text style={tw`font-semibold`}>{details.Name}</Text>{" "}
               plan
             </Text>
-            <Text>Make - {details.Make}</Text>
-            <Text>Model - {details.Model}</Text>
+    
             <Text style={tw`font-semibold mt-2`}>
-              Total: {details.plan.price}
+              Total: {details.price}
             </Text>
           </View>
         </View>
-
+    
         {/* renders the alert that is shown before item is removed from basket */}
         <AwesomeAlert
           show={showAlert}
           title={"remove from basket?"}
-          message={`Are you sure you want to remove ${details.plan.Name} for your ${details.Make}`}
+          message={`Are you sure you want to remove ${details.Name} plan from basket`}
           closeOnTouchOutside={true}
           closeOnHardwareBackPress={false}
           showCancelButton={true}
@@ -87,8 +88,52 @@ const BasketCard = ({ description, qty, total, unitPrice, details, index }) => {
           onCancelPressed={() => setshowAlert(false)}
           onConfirmPressed={() => confirmRemove()}
         />
-      </TouchableOpacity>
+    </TouchableOpacity>
     );
+    
+      if (details.plan)
+        return (
+          <TouchableOpacity
+            style={tw`bg-white mx-4 rounded-xl mb-5 p-4 shadow-xl`}
+            key={index}
+            onLongPress={() => setshowAlert(true)}
+          >
+            <View style={tw`flex-row justify-start items-center`}>
+              <ChooseImageForPlan name={details.plan.Name} />
+    
+              <View style={tw`ml-5`}>
+                <Text style={tw`mb-2`}>
+                  <Text style={tw`font-semibold`}>{details.plan.type}</Text> package
+                  for <Text style={tw`font-semibold`}>{details.plan.Name}</Text>{" "}
+                  plan
+                </Text>
+                <Text>Make - {details.Make}</Text>
+                <Text>Model - {details.Model}</Text>
+                <Text style={tw`font-semibold mt-2`}>
+                  Total: {details.plan.price}
+                </Text>
+              </View>
+            </View>
+    
+            {/* renders the alert that is shown before item is removed from basket */}
+            <AwesomeAlert
+              show={showAlert}
+              title={"remove from basket?"}
+              message={`Are you sure you want to remove ${details.plan.Name} for your ${details.Make}`}
+              closeOnTouchOutside={true}
+              closeOnHardwareBackPress={false}
+              showCancelButton={true}
+              showConfirmButton={true}
+              cancelText="No, cancel"
+              confirmText="Yes, delete it"
+              confirmButtonColor="#DD6B55"
+              onCancelPressed={() => setshowAlert(false)}
+              onConfirmPressed={() => confirmRemove()}
+            />
+          </TouchableOpacity>
+      );    
+  }
+  
   return (
     <TouchableOpacity
       style={tw`bg-white mx-4 rounded-xl mb-5 p-4 shadow-xl`}

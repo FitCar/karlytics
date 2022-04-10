@@ -12,7 +12,6 @@ import {
 import { Icon } from "react-native-elements";
 import tw from "tailwind-react-native-classnames";
 import BasketCard from "../components/BasketCard";
-import DiagnosticCard from "../components/DiagnosticCard";
 import { useDispatch, useSelector } from "react-redux";
 import { selectBasket } from "../slices/carSlice";
 import { useNavigation } from "@react-navigation/native";
@@ -29,11 +28,24 @@ const Basket = () => {
  basket.map((item) => {
    if(item.plan){
     return y.push(Number(item.plan.price))
+   }else if (!item.plan && item.Name) {
+    return y.push(Number(item.price))
    }else {
     return y.push(Number(item.total))
    }
     
   })
+
+  const addCommaToValue = (num) =>{
+    let to_string = `${num}`
+
+    if(to_string.length > 4 && to_string.length <= 5) return to_string.substring(0, 2) + ',' + to_string.substring(2, to_string.length);
+    if(to_string.length > 5 && to_string.length <= 6) return to_string.substring(0, 3) + ',' + to_string.substring(3, to_string.length);
+    if(to_string.length > 6 ) return to_string.substring(0, 1) + ',' + to_string.substring(1, 4)+','+to_string.substring(4, to_string.length);
+    if(to_string.length < 4) return to_string
+
+    return to_string.substring(0, 1) + ',' + to_string.substring(1, to_string.length);
+  }
 
   const sum = y.reduce((partial_sum, a) => partial_sum + a, 0);
   
@@ -48,7 +60,7 @@ const Basket = () => {
     }else {
       Alert.alert("Please add items to basket first")
     }
-  }
+  } 
 
   return (
     <View style={tw`flex-grow pt-10 pb-5`}>
@@ -81,15 +93,24 @@ const Basket = () => {
 
         :
 
-      <ScrollView style={tw`flex-grow`}>
+      <ScrollView style={[tw`flex-grow pb-5`, { maxHeight: "70%" }]}>
         {basket.map((item, index) => {
-          if(item.plan) return (
+          if(item.plan) {
+            return (
+              <BasketCard
+                details={item}
+                index={index+1}
+              /> 
+            )
+          }
+
+          if(item.Name) return (
             <BasketCard
               details={item}
               index={index+1}
-            />
+            /> 
           )
-          
+
           return (
             <BasketCard
               description={item.description}
@@ -98,19 +119,21 @@ const Basket = () => {
               total={item.total}
               index={index+1}
             />
-          );
+          )
+
         })}
       </ScrollView>
       }
-
+      
       {
         basket.length > 0 &&
-        <View style={tw`items-center`}>
-          <Text style={tw`text-lg`}>Sub-total: <Text style={tw`font-semibold`}>{sum}</Text> </Text>
-          <Text style={tw`text-lg`}>Labour: <Text style={tw`font-semibold`}>{labour}</Text></Text>
-          <Text style={tw`text-lg`}>7.5% VAT: <Text style={tw`font-semibold`}>{vat.toFixed(2)}</Text></Text>
-          <Text style={tw`text-xl`}>Grand Total: <Text style={tw`font-semibold`}>{Number.parseInt(grandTotal)}</Text> </Text>
+        <View style={tw`items-center mt-5`}>
+          <Text style={tw`text-lg`}>Sub-total: <Text style={tw`font-semibold`}>{addCommaToValue(sum)}</Text> </Text>
+          <Text style={tw`text-lg`}>Labour: <Text style={tw`font-semibold`}>{addCommaToValue(labour)}</Text></Text>
+          <Text style={tw`text-lg`}>7.5% VAT: <Text style={tw`font-semibold`}>{addCommaToValue(Number.parseInt(vat))}</Text></Text>
+          <Text style={tw`text-2xl`}>Grand Total: <Text style={tw`font-semibold`}>{addCommaToValue(Number.parseInt(grandTotal))}</Text> </Text>
       </View>}
+
     </View>
   );
 };

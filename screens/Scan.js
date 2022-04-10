@@ -4,7 +4,6 @@ import {
   Image,
   StyleSheet,
   Text,
-  TextInput,
   TouchableOpacity,
   View,
 } from "react-native";
@@ -17,6 +16,7 @@ import { useNavigation } from "@react-navigation/native";
 import SelectDropdown from "react-native-select-dropdown";
 import { AuthenticatedUserContext } from "../navigation/AuthenticatedUserProvider";
 import AwesomeAlert from "react-native-awesome-alerts";
+import { changeTime } from "../cardata";
 
 const firestore = Firebase.firestore();
 
@@ -35,15 +35,32 @@ const Scan = () => {
   const [mode, setMode] = useState("date");
   const [show, setShow] = useState(false);
   const [showAlert, setshowAlert] = useState(false)
+  const [dateText, setdateText] = useState({
+    date: "Choose Date",
+    time: "Choose Time"
+  })
  
-  const onChange = (event, selectedDate) => {
-    const currentDate = selectedDate || date;
+  const onChange = (selectedDate, dateTime) => {
+    const currentDate = dateTime || date;
     setShow(Platform.OS === "ios");
     setDate(currentDate);
+
+    if(mode === 'date') {
+      setdateText({
+        ...dateText,
+        date: currentDate.toLocaleDateString()
+      })
+    }else {
+      setdateText({
+        ...dateText,
+        time: `${changeTime(currentDate.getUTCHours(), 'hours')}: ${changeTime(currentDate.getUTCMinutes())} `
+      })
+    }
+
   };
 
   const showMode = (currentMode) => {
-    setShow(true);
+    setShow(!show);
     setMode(currentMode);
   };
 
@@ -53,10 +70,6 @@ const Scan = () => {
 
   const showTimepicker = () => {
     showMode("time");
-  };
-
-  const toggle = () => {
-    setExpanded(!expanded);
   };
 
   const submit = () => {
@@ -103,7 +116,6 @@ const Scan = () => {
             key: documentSnapshot.id,
           });
         });
-        // console.log(garage);
         setGarage(garage);
         setLoading(false);
       });
@@ -123,8 +135,8 @@ const Scan = () => {
           <Text>Select a car</Text>
         </View>
       </View>
-      <View>
 
+      <View>
       <AwesomeAlert
           show={showAlert}
           title={"Failed to make request"}
@@ -177,12 +189,12 @@ const Scan = () => {
           }}
         />
 
-        <TouchableOpacity onPress={showDatepicker} style={tw`mb-5 w-5/6 border-2 mx-auto rounded-lg border-blue-300`}>
-          <Button title="Choose Date" />
+        <TouchableOpacity onPress={() => showDatepicker()} style={tw`mb-5 w-5/6 border-2 mx-auto rounded-lg border-blue-300 py-2`}>
+          <Text style={tw`text-blue-500 font-semibold text-center text-xl`}>{dateText.date}</Text>
         </TouchableOpacity>
 
-        <TouchableOpacity onPress={showTimepicker} style={tw`mb-5 w-5/6 border-2 mx-auto rounded-lg border-blue-300`}>
-          <Button title="Choose Time" />
+        <TouchableOpacity onPress={() => showTimepicker()} style={tw`mb-5 w-5/6 border-2 mx-auto rounded-lg border-blue-300 py-2`}>
+          <Text style={tw`text-blue-500 font-semibold text-center text-xl`}>{dateText.time}</Text>
         </TouchableOpacity>
 
         {show && (

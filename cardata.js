@@ -102,3 +102,16 @@ export const HealthPlan = {
         features: ['Scan', 'Detailed 120 point inspection', ]
     }   
 }
+
+export const changeTime = (value, type = 'mins') => {
+    const valueToInt = Number.parseInt(value)
+
+    if(value === "Choose Date" || value === 'Choose Time') return value
+
+    if(type === 'hours' && valueToInt === 23) return `00`
+    if(type === 'hours' && valueToInt !== 23) return `${valueToInt+1}`
+
+    if (Number.parseInt(value) < 10) return `0${value}`
+
+    return value
+}

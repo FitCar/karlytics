@@ -1,10 +1,9 @@
 import React from 'react'
 import { useState, useContext } from 'react';
-import { FlatList, Image, Modal, StyleSheet, Text, TouchableOpacity, View, Alert } from 'react-native'
+import { ScrollView, Image, StyleSheet, Text, TouchableOpacity, View, Alert } from 'react-native'
 import { useSelector, useDispatch } from 'react-redux';
 import tw from "tailwind-react-native-classnames";
 import { MembershipPlanData } from '../../cardata'
-import CarItem from '../../components/CarItem';
 import { useNavigation } from "@react-navigation/native";
 import { addToBasket } from '../../slices/carSlice';
 import Firebase from '../../config/firebase'
@@ -14,12 +13,11 @@ import { useEffect } from 'react';
 const firestore = Firebase.firestore()
 
 function MembershipPlan() {
-  const [modalVisible, setmodalVisible] = useState(false)
+  
   const [plan, setplan] = useState(null)
-  const [selectedCars, setselectedCars] = useState([])
   const [usersPlans, setusersPlans] = useState([])
 
-  const { cars, basket, current_car } = useSelector(state => state.car)
+  const { basket } = useSelector(state => state.car)
   const dispatch = useDispatch()
   const navigation = useNavigation()
 
@@ -56,76 +54,24 @@ function MembershipPlan() {
   }
 
   const handleNext = (selectedPlan) =>{
-    setmodalVisible(true)
-    setplan(selectedPlan)
+    return setplan(selectedPlan)
   } 
 
-  const handleClose = () =>{
-    setmodalVisible(false)
-    setselectedCars([])
-  }
-
   const addPlanToBasket = () =>{
-    selectedCars.forEach(car => {
-      const filteredPlans = basket.filter(carPlan => carPlan.key === car.key && carPlan.plan.Name === plan.Name && carPlan.plan.type === plan.type)
-      if(filteredPlans.length < 1){
-        dispatch(addToBasket({ ...car, plan }))
+    
+      const filteredPlans = basket.filter(carPlan => carPlan?.Name === plan.Name && carPlan?.type === plan.type)
+
+      if(filteredPlans.length === 0 ){
+        dispatch(addToBasket(plan))
       }else {
-        Alert.alert(`the ${plan.type} for ${plan.Name} plan is already added for your ${car.make} car`)
+        Alert.alert(`This plan is already in basket`)
       }
-      
-    })
-    navigation.navigate("Basket")
-    return handleClose()
+    
+    return  navigation.navigate("Basket")
   }
-  
+
   return (
-    <View style={tw`mt-10 px-5`}>
-       {/* modal */}
-       <Modal
-        animationType="slide"
-        visible={modalVisible}
-      >
-        <View style={tw`flex-grow py-10 px-5`}>
-          <View style={tw`flex-row justify-between mb-10`}>
-            <View>
-              <Text style={tw`text-xl font-semibold`}>Select Car for {plan?.Name} Plan</Text>
-              <Text style={tw`text-gray-600 font-medium`}>What Car are you selecting the {plan?.type} for?</Text>
-            </View>
-
-            <TouchableOpacity style={tw`items-center`} onPress={() => handleClose()}>
-              <Text style={tw`text-xl capitalize text-red-600`}>close</Text>
-            </TouchableOpacity>
-          </View>
-
-          <FlatList
-            data={cars}
-            renderItem={({ item }) => (
-              <CarItem 
-                car={item} 
-                plan={plan}
-                usersPlans={usersPlans} 
-                selectedCars={selectedCars} 
-                setselectedCars={setselectedCars} 
-              />
-            )}
-            keyExtractor={(item) => item.key}
-          />
-
-          {
-            selectedCars.length > 0 &&
-            <TouchableOpacity 
-              style={[tw`w-10/12 mx-auto p-3 rounded-md shadow-md`, { backgroundColor: "#2bced6" }]}
-              onPress={() => addPlanToBasket()}
-            >
-              <Text style={tw`text-center`}>Add the <Text style={tw`font-semibold`}>{plan?.Name} {plan.type}</Text> to basket- Total: <Text style={tw`text-lg font-semibold`}>{addCommaToValue(plan?.price*(selectedCars.length))}</Text></Text>
-            </TouchableOpacity>
-          }
-        </View>
-        
-      </Modal>
-
-      {/* end of modal */}
+    <ScrollView style={tw`mt-10 px-5`}>
       <Text style={tw`text-xl font-semibold`}>Membership Plan</Text>
       
       <View style={tw`flex-row mb-6 mt-5 items-center`}>
@@ -156,7 +102,7 @@ function MembershipPlan() {
 
             <TouchableOpacity
               style={[tw`border-0 rounded-3xl  w-32 p-2 mt-5 mb-5`, styles.pryColor]}
-              onPress={() => handleNext({Name: 'Membership', type: 'Gold', price: MembershipPlanData.Gold.price})}
+              onPress={() => handleNext({Name: 'Membership', type: 'Gold', price: MembershipPlanData.Gold.price })}
             >
               <Text style={tw`text-white text-center`}>Select and Pay <Text>{addCommaToValue(MembershipPlanData.Gold.price)}</Text></Text>
             </TouchableOpacity>
@@ -174,14 +120,25 @@ function MembershipPlan() {
 
             <TouchableOpacity
               style={[tw`border-0 rounded-3xl  w-32 p-2 mt-5 mb-5`, styles.pryColor]}
-              onPress={() => handleNext({Name: 'Membership', type: 'Silver', price: MembershipPlanData.Silver.price})}
+              onPress={() => handleNext({Name: 'Membership', type: 'Silver', price: MembershipPlanData.Silver.price })}
             >
               <Text style={tw`text-white text-center`}>Select and Pay <Text>{addCommaToValue(MembershipPlanData.Silver.price)}</Text></Text>
             </TouchableOpacity>
           </View>
+
+          {
+            plan && 
+            <TouchableOpacity 
+              style={[tw`w-10/12 mx-auto p-3 rounded-md shadow-md my-8`, { backgroundColor: "#2bced6" }]}
+              onPress={() => addPlanToBasket()}
+            >
+            <Text style={tw`text-center`}>Add the <Text style={tw`font-semibold`}>{plan?.Name} {plan.type}</Text> to basket- Total: <Text style={tw`text-lg font-semibold`}>{addCommaToValue(plan?.price)}</Text></Text>
+          </TouchableOpacity>
+          }
+         
         </View>
 
-    </View>
+    </ScrollView>
   )
 }
 

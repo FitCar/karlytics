@@ -16,7 +16,7 @@ const screen_data = [
     {
         id: 2,
         source: require('../assets/OnBoardIcons/maintain-your-car.png'),
-        title: 'Subscirbe to a plan',
+        title: 'Subscribe to a plan',
         info: 'Subscribe to one of our plans and never have to worry about your car again'  
     },
 

@@ -97,19 +97,19 @@ function VehicleHealthPlan() {
             </TouchableOpacity>
           </View>
 
-          <FlatList
-            data={cars}
-            renderItem={({ item }) => (
-              <CarItem 
-                car={item} 
-                plan={plan}
-                usersPlans={usersPlans} 
-                selectedCars={selectedCars} 
-                setselectedCars={setselectedCars}
-              />
-            )}
-            keyExtractor={(item) => item.key}
-          />
+          <ScrollView style={[tw`pb-8 mb-10`, { maxHeight: "80%" }]}>
+            {
+              cars.map(item => {
+               return <CarItem 
+                  car={item} 
+                  plan={plan}
+                  usersPlans={usersPlans} 
+                  selectedCars={selectedCars} 
+                  setselectedCars={setselectedCars}  
+                />
+              })
+            }
+          </ScrollView>
 
           {
             selectedCars.length > 0 &&
