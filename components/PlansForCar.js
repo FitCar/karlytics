@@ -1,8 +1,9 @@
-import { StyleSheet, Text, View, Image } from 'react-native'
+import { StyleSheet, Text, View, Image, TouchableOpacity } from 'react-native'
 import React from 'react'
 import tw from "tailwind-react-native-classnames";
+import { useNavigation } from '@react-navigation/native';
 
-const ChooseImageForPlan = ({ name }) => {
+export const ChooseImageForPlan = ({ name }) => {
   if (name === "Membership")
     return (
       <Image
@@ -36,7 +37,15 @@ const ChooseImageForPlan = ({ name }) => {
 
 };
 
+
+
 const PlansForCar = ({ selectedCar, plans }) => {
+
+  const navigation = useNavigation()
+
+  const changeRoute = (detail) =>{
+    navigation.navigate("PlanDetails", { name: detail.plan.Name, type: detail.plan.type, plan: detail, car: `${selectedCar.Make} ${selectedCar.Model}` })
+  }
 
   return (
     <View>
@@ -44,9 +53,9 @@ const PlansForCar = ({ selectedCar, plans }) => {
         <View style={[tw`flex-row items-center`, { flexWrap: "wrap" }]}>
         {
             plans.filter(plan => plan.carId === selectedCar.key).map((plan, index) => (
-                <View key={index} style={tw`w-20 h-20 bg-white items-center justify-center shadow-lg m-2 rounded-lg`}>
+                <TouchableOpacity onPress={() => changeRoute(plan)} key={index} style={tw`w-20 h-20 bg-white items-center justify-center shadow-lg m-2 rounded-full`}>
                     <ChooseImageForPlan name={plan.plan.Name} />
-                </View>
+                </TouchableOpacity>
             ))
         }
         </View>

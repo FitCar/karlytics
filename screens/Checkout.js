@@ -6,6 +6,7 @@ import { useDispatch, useSelector } from "react-redux";
 import { resetBasket, selectGrandTotal } from "../slices/carSlice";
 import { AuthenticatedUserContext } from "../navigation/AuthenticatedUserProvider";
 import Firebase from '../config/firebase';
+import firebase from 'firebase';
 
 const firestore = Firebase.firestore()
 
@@ -26,9 +27,9 @@ const Checkout = () => {
   
     plans_in_basket.forEach(async (plan) => {
       if(plan?.Name) {
-        await plansRef.doc().set(plan)
+        await plansRef.doc().set({...plan, createdAt: firebase.firestore.FieldValue.serverTimestamp()})
       }else {
-        await plansRef.doc().set({ carId: plan.key,  plan: plan.plan, garage_id: plan.garageId})
+        await plansRef.doc().set({ carId: plan.key,  plan: plan.plan, garage_id: plan.garageId, createdAt: firebase.firestore.FieldValue.serverTimestamp() })
       }
       
     })
