@@ -20,6 +20,7 @@ import { useSelector, useDispatch } from "react-redux";
 import { getPlans, selectLastServiceDate } from "../slices/carSlice";
 import { getCars } from "../slices/carSlice";
 import PlansForCar from "../components/PlansForCar";
+import { BottomSheet } from "react-native-elements";
 
 const firestore = Firebase.firestore();
 
@@ -106,6 +107,7 @@ const Home = () => {
     fetchPlans()
   }, [current_car])
 
+  console.log(plans)
 
   const handleServiceButton = (route) => {
     if (cars.length === 0) return alert("Add car to your garage to access this feature");
@@ -170,7 +172,7 @@ const Home = () => {
                 style={[styles.selectCar, tw`mx-auto`]}
                 onPress={() => navigation.navigate("Garage")}
               >
-                <Text style={tw`text-white text-xl text-center`}>Select car</Text>
+                <Text style={tw`text-white text-xl text-center`}>{current_car ? "Change Car" : "Select Car"}</Text>
               </TouchableOpacity>
             ) : (
               <View style={tw`w-full items-center justify-center`}>
@@ -243,7 +245,7 @@ const Home = () => {
               />
             </View>
           </View>
-          {/* <View style={tw``}></View> */}
+
         </View>
       </ScrollView>
     </View>
