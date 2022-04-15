@@ -17,11 +17,10 @@ import Firebase from "../config/firebase";
 import { AuthenticatedUserContext } from "../navigation/AuthenticatedUserProvider";
 import ServiceInfo from "../components/ServiceInfo";
 import { useSelector, useDispatch } from "react-redux";
-import { getPlans, selectLastServiceDate } from "../slices/carSlice";
+import { getPlans } from "../slices/carSlice";
 import { getCars } from "../slices/carSlice";
 import PlansForCar from "../components/PlansForCar";
-import { Icon } from "react-native-elements";
-
+import firebase from 'firebase'
 
 const firestore = Firebase.firestore();
 
@@ -121,29 +120,9 @@ const Home = () => {
     return false
   }
 
-
-  console.log(router.params)
-
   return (
     <View style={tw`bg-white pt-16`}> 
       <ScrollView>
-        <Modal
-          transparent={true}
-          visible={showAlert}
-        >
-          <View style={tw`mt-10 bg-green-400 mx-auto w-11/12 p-3 rounded-lg`}>
-            <TouchableOpacity style={tw`w-full items-end`} onPress={() => setshowAlert(false)}>
-              <Icon name="close" type="font-awesome" color='white' size={20} />
-            </TouchableOpacity>
-           
-            <View style={tw`w-full items-center`}>
-              <Icon name="check-circle-o" color='white' type="font-awesome" />
-              <Text style={tw`text-white font-semibold`}>{router.params?.alert}</Text>
-            </View>
-          </View>
-          
-        </Modal>
-
         <View style={tw`bg-white ${checkModal() && 'opacity-40'}`}>
           <View style={tw`flex-row justify-between px-3`}>
             <View>
@@ -275,6 +254,23 @@ const Home = () => {
     </View>
   );
 };
+
+{/* <Modal
+  transparent={true}
+  visible={showAlert}
+>
+  <View style={tw`mt-10 bg-green-400 mx-auto w-11/12 p-3 rounded-lg`}>
+    <TouchableOpacity style={tw`w-full items-end`} onPress={() => setshowAlert(false)}>
+      <Icon name="close" type="font-awesome" color='white' size={20} />
+    </TouchableOpacity>
+    
+    <View style={tw`w-full items-center`}>
+      <Icon name="check-circle-o" color='white' type="font-awesome" />
+      <Text style={tw`text-white font-semibold`}>{router.params?.alert}</Text>
+    </View>
+  </View>
+  
+</Modal> */}
 
 export default Home;
 
