@@ -15,6 +15,13 @@ const CarCard = ({ car_details }) => {
     navigation.navigate("Home")
   } 
 
+  const checkServiceDate = () => {
+    if(new Date(car_details.nextServiceDate).getTime() > new Date(Date.now()).getTime()){
+      return true
+    }else {
+      return false
+    }
+  }
 
   return (
     <TouchableOpacity style={tw`bg-white items-center mb-8 rounded-3xl mx-10 py-5 pl-5 shadow-xl`} onPress={() => handleSelectCar()}>
@@ -28,11 +35,17 @@ const CarCard = ({ car_details }) => {
         <View>
             <Text style={styles.mainInfo}>Make: {car_details.Make}</Text>
             <Text style={styles.mainInfo}>Model: {car_details.Model}</Text>
+            <Text style={styles.mainInfo}>License: {car_details.License || "xxxx"}</Text>
         </View>
       </View>
 
-      <Text>Next Maintainance (Date): <Text style={tw`font-semibold`}>{car_details.nextServiceDate}</Text></Text>
-      
+      {
+        checkServiceDate() ?
+        <Text>Next Maintainance (Date): <Text style={tw`font-semibold`}>{car_details.nextServiceDate}</Text></Text>
+        :
+        <Text style={tw`text-red-500`}>Due for Servicing</Text>
+      }
+
     </TouchableOpacity>
   );
 };
