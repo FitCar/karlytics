@@ -50,55 +50,90 @@ export const cars = [
     { model: "Jaguar", index: '15' },
   ]
 
+  const findLabourAndVat = (price) =>{
+    const labour = price * 0.2
+    const vat = (price + labour) * 0.075
+    const grandTotal = price + labour + vat
+
+    return { labour, vat, grandTotal }
+  }
+
 export const MaintenancePlanData = {
     Basic: {
-        price: 25000,
+        cost: 25000,
+        price: findLabourAndVat(25000).grandTotal,
+        vat: findLabourAndVat(25000).vat,
+        labour: findLabourAndVat(25000).labour,
         features: ['Engine oil replacement', 'Oil filter replacement', 'Air filter cleaning', 'Coolant top up', 'Wiper fluid replacement', 'Battery water top up', 'Heater spark plugs checking', 'Car wash', 'Interior vacuuming (Carpets & Seats)']
     },
 
     Standard: {
-        price: 30000,
+        cost: 30000,
+        price: findLabourAndVat(30000).grandTotal,
+        vat: findLabourAndVat(30000).vat,
+        labour: findLabourAndVat(30000).labour,
         features: ['Engine oil replacement', 'Oil filter replacement', 'Air filter cleaning', 'Coolant top up', 'Wiper fluid replacement', 'Battery water top up', 'Heater spark plugs checking', 'Car wash', 'Interior vacuuming (Carpets & Seats)', 'Scanning', 'Rear brake shoes service', 'Front brake pads service', ]
     },
 
     Comprehensive: {
-        price: 40000,
+        cost: 40000,
+        price: findLabourAndVat(40000).grandTotal,
+        vat: findLabourAndVat(40000).vat,
+        labour: findLabourAndVat(40000).labour,
         features: ['Engine oil replacement', 'Oil filter replacement', 'Air filter cleaning', 'Coolant top up', 'Wiper fluid replacement', 'Battery water top up', 'Heater spark plugs checking', 'Car wash', 'Interior vacuuming (Carpets & Seats)', 'Wheel balancing', 'Wheel alignment', 'Tyre rotation', 'Throttle body cleaning', 'gear oil top up']
     }
 }
 
 export const InsurancePlanData = {
     ThirdParty: {
-        price: 10000,
+        cost: 10000,
+        price: findLabourAndVat(10000).grandTotal,
+        vat: findLabourAndVat(10000).vat,
+        labour: findLabourAndVat(10000).labour,
         features: ['Payment plan - Monthly, quarterly, bi-annual & per annum', 'Premium - Starting from 3% of vehicle value per annum', '3rd party bodily injury', '3rd party property damage (1 million naira limit)','Own accidental damage', 'Excess buy back', 'Theft', 'Fire damage', 'Medical refund (up to 100,000 naira limit)']
     },
 
     Comprehensive: {
-        price: 16000,
+        cost: 16000,
+        price: findLabourAndVat(16000).grandTotal,
+        vat: findLabourAndVat(16000).vat,
+        labour: findLabourAndVat(16000).labour,
         features: ['Payment plan - Per annum only', 'Premium - Starting from 5,000 depending on the type of vehicle', '3rd party bodily injury', '3rd party property damage (1 million naira limit)']
     }
 }
 
 export const MembershipPlanData = {
     Gold: {
-        price: 10000,
+        cost: 10000,
+        price: findLabourAndVat(10000).grandTotal,
+        vat: findLabourAndVat(10000).vat,
+        labour: findLabourAndVat(10000).labour,
         features: ['Discounts on all requests - 10%', 'Priority response', 'Points and rewards system', 'One free health checkup per year', 'One free detailed cleaning per quarter', 'One free wheel balancing and alignment per year']
     },
 
     Silver: {
-        price: 6000,
+        cost: 6000,
+        price: findLabourAndVat(6000).grandTotal,
+        vat: findLabourAndVat(6000).vat,
+        labour: findLabourAndVat(6000).labour,
         features: ['Discounts on all requests - 5%', 'Priority response', 'Points and rewards system', 'One free health checkup per year']
     }
 }
 
 export const HealthPlan = {
     Basic: {
-        price: 5000,
+        cost: 5000,
+        price: findLabourAndVat(5000).grandTotal,
+        vat: findLabourAndVat(5000).vat,
+        labour: findLabourAndVat(5000).labour,
         features: ['Scan', 'Detailed 20 point inspection', ]
     },
 
     Comprehensive: {
-        price: 10000,
+        cost: 10000,
+        price: findLabourAndVat(10000).grandTotal,
+        vat: findLabourAndVat(10000).vat,
+        labour: findLabourAndVat(10000).labour,
         features: ['Scan', 'Detailed 120 point inspection', ]
     }   
 }

@@ -49,9 +49,7 @@ const Basket = () => {
 
   const sum = y.reduce((partial_sum, a) => partial_sum + a, 0);
   
-  const labour = sum * 0.2
-  const vat = (sum + labour) * 0.075
-  const grandTotal = sum + labour + vat
+  const grandTotal = sum 
   
   const SendToCheckout = () => {
     if(basket.length > 0) {
@@ -93,7 +91,7 @@ const Basket = () => {
 
         :
 
-      <ScrollView style={[tw`flex-grow pb-5`, { maxHeight: "70%" }]}>
+      <ScrollView style={[tw`flex-grow pb-5`, { maxHeight: "80%" }]}>
         {basket.map((item, index) => {
           if(item.plan) {
             return (
@@ -128,11 +126,9 @@ const Basket = () => {
       {
         basket.length > 0 &&
         <View style={tw`items-center mt-5`}>
-          <Text style={tw`text-lg`}>Sub-total: <Text style={tw`font-semibold`}>{addCommaToValue(sum)}</Text> </Text>
-          <Text style={tw`text-lg`}>Labour: <Text style={tw`font-semibold`}>{addCommaToValue(labour)}</Text></Text>
-          <Text style={tw`text-lg`}>7.5% VAT: <Text style={tw`font-semibold`}>{addCommaToValue(Number.parseInt(vat))}</Text></Text>
           <Text style={tw`text-2xl`}>Grand Total: <Text style={tw`font-semibold`}>{addCommaToValue(Number.parseInt(grandTotal))}</Text> </Text>
-      </View>}
+        </View>
+      }
 
     </View>
   );
