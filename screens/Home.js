@@ -1,4 +1,4 @@
-import { useNavigation } from "@react-navigation/native";
+import { useNavigation, useRoute } from "@react-navigation/native";
 import React, { useContext, useEffect, useState } from "react";
 import {
   Image,
@@ -20,16 +20,18 @@ import { useSelector, useDispatch } from "react-redux";
 import { getPlans, selectLastServiceDate } from "../slices/carSlice";
 import { getCars } from "../slices/carSlice";
 import PlansForCar from "../components/PlansForCar";
-import { BottomSheet } from "react-native-elements";
+import { Icon } from "react-native-elements";
+
 
 const firestore = Firebase.firestore();
 
 const Home = () => {
   const [loading, setLoading] = useState(true); // Set loading to true on component mount
-  const lastServiceDate = useSelector(selectLastServiceDate);
   const [usersFullname, setusersFullname] = useState(null);
+  const [showAlert, setshowAlert] = useState(false)
 
   const navigation = useNavigation();
+  const router = useRoute()
   const { user } = useContext(AuthenticatedUserContext);
 
   const { current_car, cars, plans, basket } = useSelector((state) => state.car);
@@ -100,14 +102,12 @@ const Home = () => {
           plan_arr = [...plan_arr, plan.data()]
         })
       })
-      .catch((error) => console.log(error));
+      .catch((error) => console.log(error))
 
       return dispatch(getPlans(plan_arr))
     }
     fetchPlans()
-  }, [current_car])
-
-  console.log(plans)
+  }, [])
 
   const handleServiceButton = (route) => {
     if (cars.length === 0) return alert("Add car to your garage to access this feature");
@@ -116,11 +116,35 @@ const Home = () => {
     return navigation.navigate(route);
   };
 
+  const checkModal = () => {
+    if(router.params?.alert) return true
+    return false
+  }
+
+
+  console.log(router.params)
+
   return (
-    <View style={tw`bg-white pt-16`}>
-      {/* scroll section with cards */}
+    <View style={tw`bg-white pt-16`}> 
       <ScrollView>
-        <View style={tw`bg-white`}>
+        <Modal
+          transparent={true}
+          visible={showAlert}
+        >
+          <View style={tw`mt-10 bg-green-400 mx-auto w-11/12 p-3 rounded-lg`}>
+            <TouchableOpacity style={tw`w-full items-end`} onPress={() => setshowAlert(false)}>
+              <Icon name="close" type="font-awesome" color='white' size={20} />
+            </TouchableOpacity>
+           
+            <View style={tw`w-full items-center`}>
+              <Icon name="check-circle-o" color='white' type="font-awesome" />
+              <Text style={tw`text-white font-semibold`}>{router.params?.alert}</Text>
+            </View>
+          </View>
+          
+        </Modal>
+
+        <View style={tw`bg-white ${checkModal() && 'opacity-40'}`}>
           <View style={tw`flex-row justify-between px-3`}>
             <View>
               <Text style={tw`font-bold text-lg text-black`}>

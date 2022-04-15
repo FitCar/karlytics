@@ -1,6 +1,5 @@
 import React from 'react';
 import { createNativeStackNavigator } from '@react-navigation/native-stack';
-import Home from '../screens/Home';
 import Tabs from './Tabs';
 import Diagnostic from '../screens/Diagnostic';
 import Quotation from '../screens/Quotation';
