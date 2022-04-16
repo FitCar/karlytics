@@ -144,14 +144,21 @@ function MaintenancePlan() {
 
       <View style={tw`items-center`}>
         <View style={[styles.plan, tw`shadow-lg`]}>
-          <Text style={styles.planHeader}>Basic <Text style={tw`text-xl`}>{addCommaToValue(MaintenancePlanData.Basic.price)}</Text></Text>
+          <Text style={styles.planHeader}>Basic <Text style={tw`text-xl`}>{addCommaToValue(MaintenancePlanData.Basic.cost)}</Text></Text>
 
-          {
-            MaintenancePlanData.Basic.features.map((feature, index) => (
-              <Text key={index+1}>- {feature}</Text>
-            ))
-          }
-
+          <View>
+            {
+              MaintenancePlanData.Basic.features.map((feature, index) => (
+                <Text key={index+1}>- {feature}</Text>
+              ))
+            }
+          </View>
+          
+          <View style={tw`mt-4`}>
+              <Text style={tw`font-semibold`}>Labour: {addCommaToValue(MaintenancePlanData.Basic.labour)}</Text>
+              <Text style={tw`font-semibold`}>VAT: {addCommaToValue(MaintenancePlanData.Basic.vat)}</Text>
+          </View>
+          
           <TouchableOpacity
             style={[tw`border-0 rounded-3xl  w-32 p-2 mt-5 mb-5`, styles.pryColor]}
             onPress={() => handleNext({Name: 'Maintenance', type: 'Basic', price: MaintenancePlanData.Basic.price})}
@@ -161,12 +168,20 @@ function MaintenancePlan() {
         </View>
 
         <View style={[styles.plan, tw`shadow-lg`]}>
-          <Text style={styles.planHeader}>Standard <Text>{addCommaToValue(MaintenancePlanData.Standard.price)}</Text></Text>
-          {
-            MaintenancePlanData.Standard.features.map((feature, index) => (
-              <Text key={index+1}>- {feature}</Text>
-            ))
-          }
+          <Text style={styles.planHeader}>Standard <Text>{addCommaToValue(MaintenancePlanData.Standard.cost)}</Text></Text>
+          
+          <View>
+            {
+              MaintenancePlanData.Standard.features.map((feature, index) => (
+                <Text key={index+1}>- {feature}</Text>
+              ))
+            }
+          </View>
+
+          <View style={tw`mt-4`}>
+            <Text style={tw`font-semibold`}>Labour: {addCommaToValue(MaintenancePlanData.Standard.labour)}</Text>
+            <Text style={tw`font-semibold`}>VAT: {addCommaToValue(MaintenancePlanData.Standard.vat)}</Text>
+          </View>
 
           <TouchableOpacity 
             style={[tw`border-0 text-white text-center rounded-3xl  w-32 p-2 mt-5 mb-5`, styles.pryColor]}
@@ -177,13 +192,20 @@ function MaintenancePlan() {
         </View>
 
         <View style={[styles.plan, tw`shadow-lg`]}>
-          <Text style={styles.planHeader}>Comprehensive <Text style={tw`text-xl`}>{addCommaToValue(MaintenancePlanData.Comprehensive.price)}</Text></Text>
+          <Text style={styles.planHeader}>Comprehensive <Text style={tw`text-xl`}>{addCommaToValue(MaintenancePlanData.Comprehensive.cost)}</Text></Text>
           
-          {
-            MaintenancePlanData.Comprehensive.features.map((feature, index) => (
-              <Text key={index+1}>- {feature}</Text>
-            )
-          )}
+          <View>
+            {
+              MaintenancePlanData.Comprehensive.features.map((feature, index) => (
+                <Text key={index+1}>- {feature}</Text>
+              )
+            )}
+          </View>
+
+          <View style={tw`mt-4`}>
+              <Text style={tw`font-semibold`}>Labour: {addCommaToValue(MaintenancePlanData.Comprehensive.labour)}</Text>
+              <Text style={tw`font-semibold`}>VAT: {addCommaToValue(MaintenancePlanData.Comprehensive.vat)}</Text>
+          </View>
 
           <TouchableOpacity 
             style={[tw`border-0 text-white text-center rounded-3xl  w-32 p-2 mt-5 mb-5`, styles.pryColor]}

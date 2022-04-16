@@ -4,7 +4,7 @@ import { Image, View, Text } from 'react-native'
 import { CheckBox } from 'react-native-elements'
 import tw from 'tailwind-react-native-classnames'
 
-function CarItem({ car, setselectedCars, selectedCars, usersPlans, plan }) {
+function CarItem({ car, setselectedCars, selectedCars, usersPlans, plan, key }) {
 
     const [isChecked, setisChecked] = useState(false)
     const [isDisabled, setisDisabled] = useState(false)
@@ -34,7 +34,7 @@ function CarItem({ car, setselectedCars, selectedCars, usersPlans, plan }) {
     }
   
     return (
-      <View style={tw`flex-row items-center bg-gray-100 rounded-lg shadow-md mb-5 p-3`}> 
+      <View key={car.key} style={tw`flex-row items-center bg-gray-100 rounded-lg shadow-md mb-5 p-3`}> 
          <CheckBox
           disabled={isDisabled}
           checkedIcon="dot-circle-o"

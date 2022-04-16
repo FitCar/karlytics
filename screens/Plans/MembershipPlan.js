@@ -92,13 +92,20 @@ function MembershipPlan() {
       <View style={tw`items-center`}>
           {/* Gold plan */}
           <View style={[styles.plan, tw`shadow-lg`]}>
-            <Text style={styles.planHeader}>Gold <Text style={tw`text-xl`}>{addCommaToValue(MembershipPlanData.Gold.price)}</Text></Text>
+            <Text style={styles.planHeader}>Gold <Text style={tw`text-xl`}>{addCommaToValue(MembershipPlanData.Gold.cost)}</Text></Text>
 
-            {
-              MembershipPlanData.Gold.features.map((feature, index) => (
-                <Text key={index+1}>- {feature}</Text>
-              ))
-            }
+            <View>
+              {
+                MembershipPlanData.Gold.features.map((feature, index) => (
+                  <Text key={index+1}>- {feature}</Text>
+                ))
+              }
+            </View>
+            
+            <View style={tw`mt-4`}>
+              <Text style={tw`font-semibold`}>Labour: {addCommaToValue(MembershipPlanData.Gold.labour)}</Text>
+              <Text style={tw`font-semibold`}>VAT: {MembershipPlanData.Gold.vat}</Text>
+            </View>
 
             <TouchableOpacity
               style={[tw`border-0 rounded-3xl  w-32 p-2 mt-5 mb-5`, styles.pryColor]}
@@ -110,13 +117,20 @@ function MembershipPlan() {
         
           {/* Silver plan */}
           <View style={[styles.plan, tw`shadow-lg`]}>
-            <Text style={styles.planHeader}>Silver <Text style={tw`text-xl`}>{addCommaToValue(MembershipPlanData.Silver.price)}</Text></Text>
+            <Text style={styles.planHeader}>Silver <Text style={tw`text-xl`}>{addCommaToValue(MembershipPlanData.Silver.cost)}</Text></Text>
 
-            {
-              MembershipPlanData.Silver.features.map((feature, index) => (
-                <Text key={index+1}>- {feature}</Text>
-              ))
-            }
+            <View>
+              {
+                MembershipPlanData.Silver.features.map((feature, index) => (
+                  <Text key={index+1}>- {feature}</Text>
+                ))
+              }
+            </View>
+            
+            <View style={tw`mt-4`}>
+              <Text style={tw`font-semibold`}>Labour: {addCommaToValue(MembershipPlanData.Silver.labour)}</Text>
+              <Text style={tw`font-semibold`}>VAT: {MembershipPlanData.Silver.vat}</Text>
+            </View>
 
             <TouchableOpacity
               style={[tw`border-0 rounded-3xl  w-32 p-2 mt-5 mb-5`, styles.pryColor]}

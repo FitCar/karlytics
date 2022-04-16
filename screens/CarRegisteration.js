@@ -40,6 +40,7 @@ const CarRegisteration = () => {
  
   const [year, setYear] = useState(car_years);
   const [body, setBody] = useState(bodyData);
+  const [dateText, setdateText] = useState("Select Last Service Date")
 
   const [bodyValue, setBodyValue] = useState(null);
   const [yearValue, setYearValue] = useState(null);
@@ -70,6 +71,8 @@ const CarRegisteration = () => {
     const currentDate = selectedDate || lastServiceDate;
     setShow(Platform.OS === "ios");
     setLastServiceDate(currentDate);
+
+    setdateText(currentDate.toLocaleDateString())
   };
 
   
@@ -120,27 +123,6 @@ const CarRegisteration = () => {
     navigation.navigate("Garage");
   };
 
-  //   fetch('https://parseapi.back4app.com/classes/Carmodels_Car_Model_List?limit=10', {
-  //   method: 'GET',
-  //   headers: {
-  //     'X-Parse-Application-Id': 't3cWozBdXMX3exSGkjFlvEpYti00or4LIBZYf4D4',
-  //     'X-Parse-REST-API-Key': 'Cy3jDfA0BZBS2HpHfbsFijyYUNWmJ4HAIbwr8lHW',
-  //   },
-  //   body: JSON.stringify({
-  //     firstParam: 'yourValue'
-  //   })
-  // });
-
-  // const getCarsFromApi = async () => {
-  //   const response = await fetch(
-  //     'https://www.carqueryapi.com/api/0.3/?callback=?&cmd=getMakes&year=2000&sold_in_us=1'
-  //   );
-  //   const data = await response; // Here you have the data that you need
-  //   console.log(data);
-  // }
-
-  // getCarsFromApi();
-
   return (
     <View style={tw`py-10 px-4`}>
       
@@ -187,7 +169,7 @@ const CarRegisteration = () => {
           />
 
           <TouchableOpacity onPress={() => showDatepicker()} style={tw`mb-5 w-5/6 border-2 mx-auto rounded-lg border-blue-300 py-2`}>
-            <Text style={tw`text-blue-500 font-semibold text-center text-xl`}>Select last service date</Text>
+            <Text style={tw`text-blue-500 font-semibold text-center text-xl`}>{dateText}</Text>
           </TouchableOpacity>
 
           {show && (
@@ -198,6 +180,7 @@ const CarRegisteration = () => {
               is24Hour={true}
               display="default"
               onChange={onChange}
+              maximumDate={new Date(Date.now())}
             />
           )}
 
