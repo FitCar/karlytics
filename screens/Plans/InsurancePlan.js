@@ -148,7 +148,7 @@ function InsurancePlan() {
         <View style={tw`items-center`}>
           {/* 3rd party plan */}
           <View style={[styles.plan, tw`shadow-lg`]}>
-            <Text style={styles.planHeader}>3rd Party <Text style={tw`text-xl`}>{addCommaToValue(InsurancePlanData.ThirdParty.cost)}</Text></Text>
+            <Text style={styles.planHeader}>3rd Party </Text>
 
             <View>
               {
@@ -158,10 +158,7 @@ function InsurancePlan() {
               }
             </View>
 
-            <View style={tw`mt-4`}>
-              <Text style={tw`font-semibold`}>Labour: {addCommaToValue(InsurancePlanData.ThirdParty.labour)}</Text>
-              <Text style={tw`font-semibold`}>VAT: {InsurancePlanData.ThirdParty.vat}</Text>
-            </View>
+            
 
             <TouchableOpacity
               style={[tw`border-0 rounded-3xl  w-32 p-2 mt-5 mb-5`, styles.pryColor]}
@@ -173,7 +170,7 @@ function InsurancePlan() {
         
           {/* comprehensive plan */}
           <View style={[styles.plan, tw`shadow-lg`]}>
-            <Text style={styles.planHeader}>Comprehensive <Text style={tw`text-xl`}>{addCommaToValue(InsurancePlanData.Comprehensive.cost)}</Text></Text>
+            <Text style={styles.planHeader}>Comprehensive </Text>
 
             <View>
               {
@@ -183,10 +180,7 @@ function InsurancePlan() {
               }
             </View>
 
-            <View style={tw`mt-4`}>
-              <Text style={tw`font-semibold`}>Labour: {addCommaToValue(InsurancePlanData.Comprehensive.labour)}</Text>
-              <Text style={tw`font-semibold`}>VAT: {addCommaToValue(InsurancePlanData.Comprehensive.vat)}</Text>
-            </View>
+            
 
             <TouchableOpacity
               style={[tw`border-0 rounded-3xl  w-32 p-2 mt-5 mb-5`, styles.pryColor]}
