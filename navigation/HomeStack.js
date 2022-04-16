@@ -19,6 +19,7 @@ import InsurancePlan from '../screens/Plans/InsurancePlan';
 import VehicleHealthPlan from '../screens/Plans/VehicleHealthPlan';
 import PrivacyPolicy from '../screens/PrivacyPolicy';
 import PlanDetails from '../screens/PlanDetails';
+import Shop from '../screens/Shop';
 
 const Stack = createNativeStackNavigator();
 
@@ -46,6 +47,7 @@ export default function HomeStack() {
             <Stack.Screen name="VehicleHealthPlan" component={VehicleHealthPlan} />
             <Stack.Screen name="PrivacyPolicy" component={PrivacyPolicy} />
             <Stack.Screen name="PlanDetails" component={PlanDetails} />
+            <Stack.Screen name="Shop" component={Shop} />
     </Stack.Navigator>
    
   );

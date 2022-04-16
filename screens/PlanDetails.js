@@ -45,10 +45,10 @@ const PlanDetails = () => {
                 <Text style={tw`text-lg`}>{endDate.toLocaleDateString()}</Text>
             </View>
             
-            <View style={tw`w-full  mb-5 flex-row justify-between px-3 rounded-lg mx-auto bg-white py-2`}>
+            {/* <View style={tw`w-full  mb-5 flex-row justify-between px-3 rounded-lg mx-auto bg-white py-2`}>
                 <Text style={tw`text-lg text-gray-400`}>Price: </Text>
                 <Text style={tw`text-lg`}>{addCommaToValue(route.params.plan.plan.price)}</Text>
-            </View>
+            </View> */}
         </View>
 
     </View>

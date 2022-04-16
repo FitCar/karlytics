@@ -211,21 +211,10 @@ const Home = () => {
                 Make a request
               </Text>
 
-              <TouchableOpacity
-                style={tw`bg-white flex-row ml-5 mr-5 rounded-xl py-10`}
-                onPress={() => handleServiceButton("Scan")}
-              >
-                <Image
-                  style={tw`ml-7`}
-                  source={require("../assets/icons/scan.png")}
-                />
-                <Text style={tw`ml-7 mt-2`}>
-                  Request a scan to view health report
-                </Text>
-              </TouchableOpacity>
+              
             </View>
 
-            <View style={tw`flex-row mb-24 flex-wrap`}>
+            <View style={tw`flex-row mb-24 flex-wrap items-center justify-center`}>
               <ServiceButton
                 title="Repair"
                 image={require("../assets/icons/repair.png")}
@@ -245,6 +234,16 @@ const Home = () => {
                 title="Plans"
                 image={require("../assets/icons/wpf_renew-subscription.png")}
                 onPress={() => handleServiceButton("Plans")}
+              />
+               <ServiceButton
+                title="Buy parts"
+                image={require("../assets/icons/shop.png")}
+                onPress={() => handleServiceButton("Shop")}
+              />
+               <ServiceButton
+                title="Scan your car"
+                image={require("../assets/icons/scan.png")}
+                onPress={() => handleServiceButton("Scan")}
               />
             </View>
           </View>
