@@ -138,7 +138,7 @@ const Home = () => {
       const res = await img.json();
       return res;
     };
-    fetchImage().then((images) => setImage(images.images[0].thumbnailLink));
+    fetchImage().then((images) => setImage(images.images[0].thumbnailLink)).catch(err => console.log(err.message));
     setLoading(false);
   }, [current_car]);
 
