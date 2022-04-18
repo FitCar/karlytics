@@ -11,20 +11,30 @@ import {
 import { Dimensions } from "react-native";
 import tw from "tailwind-react-native-classnames";
 
-const HealthCard = () => {
+const HealthCard = ({image}) => {
   const chartConfig = {
     backgroundGradientFrom: "#ffffff",
-    backgroundGradientFromOpacity: 0,
+    backgroundGradientFromOpacity: 1,
     backgroundGradientTo: "#ffffff",
     backgroundGradientToOpacity: 0,
-    color: (opacity = 1) => `rgba(16, 156, 241, ${opacity})`,
+    color: (opacity = 1) => `rgba(${color}, ${opacity})`,
     strokeWidth: 2, // optional, default 3
     useShadowColorFromDataset: false, // optional
   };
 
+  const health = 0.6;
+
+  let color = "";
+
+  if (health < 0.7) {
+    color = "220,20,60";
+  } else {
+    color = "80, 200, 120";
+  }
+
   const data = {
     labels: ["Car Health"], // optional
-    data: [0.8],
+    data: [health],
   };
 
   const screenWidth = Dimensions.get("window").width;
@@ -46,11 +56,21 @@ const HealthCard = () => {
           hideLegend={true}
           style={tw`-ml-24`}
         />
-        <View style={tw`-ml-28 mt-16`}>
-          <Image source={require("../assets/icons/garage-car.png")} />
+        <View style={tw`-ml-28 mt-8 mb-5`}>
+          <View>
+          <Image
+            style={styles.logo}
+            source={{
+              uri:
+                `${image}`,
+            }}
+          />
+          </View>
+          <View>
           <Text>Distance travelled: 23km</Text>
           <Text>Faults: 0</Text>
           <Text>Status: Very good</Text>
+          </View>
         </View>
       </View>
     </View>
@@ -59,4 +79,11 @@ const HealthCard = () => {
 
 export default HealthCard;
 
-const styles = StyleSheet.create({});
+const styles = StyleSheet.create({
+  logo: {
+    width: 190,
+    height:90,
+    marginBottom: 15,
+   
+  }
+});

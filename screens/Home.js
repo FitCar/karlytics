@@ -20,20 +20,24 @@ import { useSelector, useDispatch } from "react-redux";
 import { getPlans } from "../slices/carSlice";
 import { getCars } from "../slices/carSlice";
 import PlansForCar from "../components/PlansForCar";
-import firebase from 'firebase'
+import firebase from "firebase";
+import Constants from 'expo-constants';
 
 const firestore = Firebase.firestore();
 
 const Home = () => {
   const [loading, setLoading] = useState(true); // Set loading to true on component mount
   const [usersFullname, setusersFullname] = useState(null);
-  const [showAlert, setshowAlert] = useState(false)
+  const [showAlert, setshowAlert] = useState(false);
+  const [image, setImage] = useState();
 
   const navigation = useNavigation();
-  const router = useRoute()
+  const router = useRoute();
   const { user } = useContext(AuthenticatedUserContext);
 
-  const { current_car, cars, plans, basket } = useSelector((state) => state.car);
+  const { current_car, cars, plans, basket } = useSelector(
+    (state) => state.car
+  );
   const dispatch = useDispatch();
 
   useEffect(() => {
@@ -52,7 +56,7 @@ const Home = () => {
           });
         });
         dispatch(getCars(garage));
-        setLoading(false);
+        // setLoading(false);
       });
   }, []);
 
@@ -64,66 +68,87 @@ const Home = () => {
         .get()
         .then((doc) => setusersFullname(doc.data().name))
         .catch((error) => console.log(error));
-
-       
     };
 
     fetchuserData();
   }, [user]);
- 
+
   useEffect(() => {
-    const fetchPlans = async () =>{
-      if(!current_car) return 
+    const fetchPlans = async () => {
+      if (!current_car) return;
 
-      let plan_arr = []
-
-      await firestore
-      .collection("Plans")
-      .doc(user.uid)
-      .collection("Plans")
-      .where('carId',  '==', current_car.key)
-      .get()
-      .then(res => {
-        res.forEach(plan => {
-          plan_arr = [...plan_arr, plan.data()]
-        })
-      })
-      .catch((error) => console.log(error));
+      let plan_arr = [];
 
       await firestore
-      .collection("Plans")
-      .doc(user.uid)
-      .collection("Plans")
-      .where('Name',  '==', "Membership")
-      .get()
-      .then(res => {
-        res.forEach(plan => {
-          plan_arr = [...plan_arr, plan.data()]
+        .collection("Plans")
+        .doc(user.uid)
+        .collection("Plans")
+        .where("carId", "==", current_car.key)
+        .get()
+        .then((res) => {
+          res.forEach((plan) => {
+            plan_arr = [...plan_arr, plan.data()];
+          });
         })
-      })
-      .catch((error) => console.log(error))
+        .catch((error) => console.log(error));
 
-      return dispatch(getPlans(plan_arr))
-    }
-    fetchPlans()
-  }, [])
+      await firestore
+        .collection("Plans")
+        .doc(user.uid)
+        .collection("Plans")
+        .where("Name", "==", "Membership")
+        .get()
+        .then((res) => {
+          res.forEach((plan) => {
+            plan_arr = [...plan_arr, plan.data()];
+          });
+        })
+        .catch((error) => console.log(error));
+
+      return dispatch(getPlans(plan_arr));
+    };
+    fetchPlans();
+  }, []);
 
   const handleServiceButton = (route) => {
-    if (cars.length === 0) return alert("Add car to your garage to access this feature");
+    if (cars.length === 0)
+      return alert("Add car to your garage to access this feature");
     if (!current_car) return alert("Select a car to access these services");
 
     return navigation.navigate(route);
   };
 
   const checkModal = () => {
-    if(router.params?.alert) return true
-    return false
-  }
+    if (router.params?.alert) return true;
+    return false;
+  };
+
+  const apikey = Constants.manifest.extra.carApi
+
+  
+
+  useEffect(() => {
+    const fetchImage = async () => {
+      const img = await fetch(
+        `http://api.carsxe.com/images?key=${apikey}&make=${current_car.Make}&model=${current_car.Model}&year=${current_car.Year}&transparent=true`,
+        {
+          method: "GET",
+        }
+      );
+      const res = await img.json();
+      return res;
+    };
+    fetchImage().then((images) => setImage(images.images[0].thumbnailLink));
+    setLoading(false);
+  }, [current_car]);
+
+  console.log(image)
+  console.log(current_car)
 
   return (
-    <View style={tw`bg-white pt-16`}> 
+    <View style={tw`bg-white pt-16`}>
       <ScrollView>
-        <View style={tw`bg-white ${checkModal() && 'opacity-40'}`}>
+        <View style={tw`bg-white ${checkModal() && "opacity-40"}`}>
           <View style={tw`flex-row justify-between px-3`}>
             <View>
               <Text style={tw`font-bold text-lg text-black`}>
@@ -132,11 +157,14 @@ const Home = () => {
               <Text>How's your car feeling today</Text>
             </View>
 
-            <TouchableOpacity style={tw`flex-row relative`} onPress={() => navigation.navigate("Basket")}>
+            <TouchableOpacity
+              style={tw`flex-row relative`}
+              onPress={() => navigation.navigate("Basket")}
+            >
               <View style={styles.basket}>
                 <Text style={{ color: "white" }}>{basket.length}</Text>
               </View>
-             
+
               <Image
                 source={require("../assets/icons/shopping-cart.png")}
                 style={{ resizeMode: "contain", height: 40 }}
@@ -164,57 +192,75 @@ const Home = () => {
                   Select a car from your garage
                 </Text>
               )}
-
             </View>
           ) : (
             <AddCar />
           )}
 
           {cars.length > 0 ? (
-              <TouchableOpacity
-                style={[styles.selectCar, tw`mx-auto`]}
-                onPress={() => navigation.navigate("Garage")}
-              >
-                <Text style={tw`text-white text-xl text-center`}>{current_car ? "Change Car" : "Select Car"}</Text>
-              </TouchableOpacity>
-            ) : (
-              <View style={tw`w-full items-center justify-center`}>
-                <Text style={tw`font-semibold mb-5 text-gray-400`}>No car(s) yet</Text>
+            <TouchableOpacity
+              style={[styles.selectCar, tw`mx-auto`]}
+              onPress={() => navigation.navigate("Garage")}
+            >
+              <Text style={tw`text-white text-xl text-center`}>
+                {current_car ? "Change Car" : "Select Car"}
+              </Text>
+            </TouchableOpacity>
+          ) : (
+            <View style={tw`w-full items-center justify-center`}>
+              <Text style={tw`font-semibold mb-5 text-gray-400`}>
+                No car(s) yet
+              </Text>
+            </View>
+          )}
+
+          <View style={tw`bg-gray-100  rounded-t-3xl`}>
+            {current_car && (
+              <View style={tw`bg-gray-100 mt-5 w-full mx-auto p-3 rounded-lg`}>
+                <View style={tw`mb-5`}>
+                  <Text style={tw`text-xl font-semibold text-gray-800`}>
+                    Membership Plan
+                  </Text>
+                  {plans.filter((item) => item.Name === "Membership").length >
+                  0 ? (
+                    plans
+                      .filter((item) => item.Name === "Membership")
+                      .map((mem, index) => (
+                        <Text
+                          key={index}
+                          style={[tw`font-semibold text-sm text-gray-500`]}
+                        >
+                          {mem.type} {mem.Name}
+                        </Text>
+                      ))
+                  ) : (
+                    <Text style={tw`text-sm text-gray-400`}>
+                      You have no membership plan yet
+                    </Text>
+                  )}
+                </View>
+
+                <PlansForCar selectedCar={current_car} plans={plans} />
               </View>
             )}
 
-          <View style={tw`bg-gray-100  rounded-t-3xl`}>
-            {
-              current_car && 
-              <View style={tw`bg-gray-100 mt-5 w-full mx-auto p-3 rounded-lg`}>
-                <View style={tw`mb-5`}>
-                  <Text style={tw`text-xl font-semibold text-gray-800`}>Membership Plan</Text>
-                  {
-                    plans.filter(item => item.Name === "Membership").length > 0 ?
-
-                    plans.filter(item => item.Name === "Membership").map((mem, index) => (<Text key={index} style={[tw`font-semibold text-sm text-gray-500`]}>{mem.type} {mem.Name}</Text>))
-                    :
-                    <Text style={tw`text-sm text-gray-400`}>You have no membership plan yet</Text>
-                  }
-                </View>
-
-                <PlansForCar selectedCar={current_car} plans={plans}  />
-              </View>
-            }
-           
             <View style={tw`mb-5`}>
               <View>
-                <HealthCard />
+                {loading ? (
+                  <Text>Loading</Text>
+                ) : (
+                  <HealthCard image={image} />
+                )}
               </View>
 
               <Text style={tw`ml-7 mt-5 text-center font-bold mb-5 text-lg`}>
                 Make a request
               </Text>
-
-              
             </View>
 
-            <View style={tw`flex-row mb-24 flex-wrap items-center justify-center`}>
+            <View
+              style={tw`flex-row mb-24 flex-wrap items-center justify-center`}
+            >
               <ServiceButton
                 title="Repair"
                 image={require("../assets/icons/repair.png")}
@@ -235,26 +281,26 @@ const Home = () => {
                 image={require("../assets/icons/wpf_renew-subscription.png")}
                 onPress={() => handleServiceButton("Plans")}
               />
-               <ServiceButton
+              <ServiceButton
                 title="Buy parts"
                 image={require("../assets/icons/shop.png")}
                 onPress={() => handleServiceButton("Shop")}
               />
-               <ServiceButton
+              <ServiceButton
                 title="Scan your car"
                 image={require("../assets/icons/scan.png")}
                 onPress={() => handleServiceButton("Scan")}
               />
             </View>
           </View>
-
         </View>
       </ScrollView>
     </View>
   );
 };
 
-{/* <Modal
+{
+  /* <Modal
   transparent={true}
   visible={showAlert}
 >
@@ -269,7 +315,8 @@ const Home = () => {
     </View>
   </View>
   
-</Modal> */}
+</Modal> */
+}
 
 export default Home;
 
@@ -282,10 +329,10 @@ const styles = StyleSheet.create({
     borderRadius: 20,
     marginBottom: 20,
     width: "80%",
-    paddingVertical: 5
+    paddingVertical: 5,
   },
 
-  basket: {   
+  basket: {
     position: "absolute",
     alignItems: "center",
     justifyContent: "center",
@@ -294,6 +341,6 @@ const styles = StyleSheet.create({
     width: 16,
     zIndex: 2,
     left: -3,
-    borderRadius: 999
-  }
+    borderRadius: 999,
+  },
 });
