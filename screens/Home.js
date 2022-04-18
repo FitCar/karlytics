@@ -142,9 +142,6 @@ const Home = () => {
     setLoading(false);
   }, [current_car]);
 
-  console.log(image)
-  console.log(current_car)
-
   return (
     <View style={tw`bg-white pt-16`}>
       <ScrollView>
