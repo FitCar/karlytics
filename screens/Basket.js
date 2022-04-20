@@ -116,6 +116,7 @@ const Basket = () => {
               unitPrice={item.unitPrice}
               total={item.total}
               index={index+1}
+              basketId={item.basketId}
             />
           )
 

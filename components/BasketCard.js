@@ -44,7 +44,7 @@ const ChooseImageForPlan = ({ name }) => {
 
 };
 
-const BasketCard = ({ description, qty, total, unitPrice, details, index }) => {
+const BasketCard = ({ description, qty, total, unitPrice, details, index, basketId }) => {
   const [showAlert, setshowAlert] = useState(false);
   const dispatch = useDispatch();
 
@@ -58,6 +58,17 @@ const BasketCard = ({ description, qty, total, unitPrice, details, index }) => {
       .doc(user.uid)
       .collection("Basket")
       .where('basketId','==', details.basketId)
+      
+      .get().then(querySnapshot =>{
+        querySnapshot.forEach(doc => {
+          doc.ref.delete();
+        });
+      });
+    }else{
+      firestore.collection("Basket")
+      .doc(user.uid)
+      .collection("Basket")
+      .where('basketId','==', basketId)
       
       .get().then(querySnapshot =>{
         querySnapshot.forEach(doc => {
