@@ -62,6 +62,15 @@ function MembershipPlan() {
       const filteredPlans = basket.filter(carPlan => carPlan?.Name === plan.Name && carPlan?.type === plan.type)
 
       if(filteredPlans.length === 0 ){
+        firestore.collection("Basket")
+        .doc(user.uid)
+        .collection("Basket")
+        .add(plan)
+        .then(doc => {
+          doc.set({
+            basketId: doc.id
+          }, {merge: true})
+        })
         dispatch(addToBasket(plan))
       }else {
         Alert.alert(`This plan is already in basket`)
