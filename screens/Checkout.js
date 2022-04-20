@@ -6,8 +6,6 @@ import { useDispatch, useSelector } from "react-redux";
 import { resetBasket, selectGrandTotal } from "../slices/carSlice";
 import { AuthenticatedUserContext } from "../navigation/AuthenticatedUserProvider";
 import Firebase from '../config/firebase';
-import firebase from 'firebase';
-import tw from "tailwind-react-native-classnames";
 
 const firestore = Firebase.firestore()
 
@@ -17,7 +15,6 @@ const Checkout = () => {
   const { basket } = useSelector(state => state.car)
 
   const { user } = useContext(AuthenticatedUserContext);
-  const paystackWebViewRef = useRef(); 
   const dispatch = useDispatch()
 
   const handleSuccess = () =>{
@@ -37,6 +34,16 @@ const Checkout = () => {
     })
 
     dispatch(resetBasket())
+
+    firestore.collection("Basket")
+      .doc(user.uid)
+      .collection("Basket")
+      .get().then(querySnapshot =>{
+        querySnapshot.forEach(doc => {
+          doc.ref.delete();
+        });
+    });
+
     return navigation.push('Tabs', { alert: `Payment was successful` })
   }
    
@@ -51,7 +58,7 @@ const Checkout = () => {
         onCancel={() => navigation.push('Basket')}
         onSuccess={() => handleSuccess()}
         autoStart={true}
-      />
+      />  
     </View>
   )
 }
