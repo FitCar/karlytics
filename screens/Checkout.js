@@ -6,6 +6,7 @@ import { useDispatch, useSelector } from "react-redux";
 import { resetBasket, selectGrandTotal } from "../slices/carSlice";
 import { AuthenticatedUserContext } from "../navigation/AuthenticatedUserProvider";
 import Firebase from '../config/firebase';
+import firebase from 'firebase';
 
 const firestore = Firebase.firestore()
 
