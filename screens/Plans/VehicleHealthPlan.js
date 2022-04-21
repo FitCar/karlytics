@@ -146,7 +146,7 @@ function VehicleHealthPlan() {
       <View style={tw`items-center`}>
         {/* Basic plan */}
         <View style={[styles.plan, tw`shadow-lg`]}>
-          <Text style={styles.planHeader}>Basic <Text style={tw`text-xl`}>{addCommaToValue(HealthPlan.Basic.cost)}</Text></Text>
+          <Text style={styles.planHeader}>Basic </Text>
 
           <View>
             {
@@ -156,10 +156,7 @@ function VehicleHealthPlan() {
             }
           </View>
 
-          <View style={tw`mt-4`}>
-            <Text style={tw`font-semibold`}>Labour: {addCommaToValue(HealthPlan.Basic.labour)}</Text>
-            <Text style={tw`font-semibold`}>VAT: {HealthPlan.Basic.vat}</Text>
-          </View>
+         
          
           <TouchableOpacity
             style={[tw`border-0 rounded-3xl  w-32 p-2 mt-5 mb-5`, styles.pryColor]}
@@ -171,7 +168,7 @@ function VehicleHealthPlan() {
 
         {/* comprehensive plan */}
         <View style={[styles.plan, tw`shadow-lg`]}>
-          <Text style={styles.planHeader}>Comprehensive <Text style={tw`text-xl`}>{addCommaToValue(HealthPlan.Comprehensive.cost)}</Text></Text>
+          <Text style={styles.planHeader}>Comprehensive </Text>
           
           <View>
             {
@@ -181,10 +178,7 @@ function VehicleHealthPlan() {
             )}
           </View>
 
-          <View style={tw`mt-4`}>
-            <Text style={tw`font-semibold`}>Labour: {addCommaToValue(HealthPlan.Comprehensive.labour)}</Text>
-            <Text style={tw`font-semibold`}>VAT: {HealthPlan.Comprehensive.vat}</Text>
-          </View>
+        
 
           <TouchableOpacity 
             style={[tw`border-0 text-white text-center rounded-3xl  w-32 p-2 mt-5 mb-5`, styles.pryColor]}

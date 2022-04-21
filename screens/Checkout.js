@@ -44,9 +44,9 @@ const Checkout = () => {
   return (
     <View>
       <Paystack  
-        paystackKey="pk_test_0adc58258fd0cb5fc19574e4e371ab721109d35d"
+        paystackKey="pk_live_26c8107f9df96b58fcb07716ae7916b5393bf3b4"
         amount={grandTotal}
-        billingEmail="paystackwebview@something.com"
+        billingEmail={user.email}
         activityIndicatorColor="green"
         onCancel={() => navigation.push('Basket')}
         onSuccess={() => handleSuccess()}

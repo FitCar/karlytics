@@ -1,13 +1,12 @@
 import React from "react";
 import { Image } from "react-native";
 import { StyleSheet, Text, TouchableOpacity, View } from "react-native";
-import { Icon } from "react-native-elements";
 import tw from "tailwind-react-native-classnames";
 
 const ServiceButton = ({title, onPress, image}) => {
   return (
     <TouchableOpacity
-      style={tw` w-1/4 h-20 ml-5 rounded-xl bg-white justify-center items-center mb-5`}
+      style={tw`w-1/4 h-20 rounded-lg shadow-lg bg-white justify-center items-center m-3`}
       onPress={onPress}
     >
       <Image source={image} />
