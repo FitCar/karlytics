@@ -1,8 +1,9 @@
 import React from "react";
-import { StyleSheet, Text, View } from "react-native";
+import { StyleSheet, Text, View, TouchableOpacity } from "react-native";
 import tw from "tailwind-react-native-classnames";
 import { ProgressBar } from 'react-native-paper'
 import { formatDistanceToNow } from "date-fns";
+import { ScheduleNotification } from '../notificationsConfig'
 
 const ServiceInfo = ({ current_car }) => {
 
@@ -64,7 +65,9 @@ const ServiceInfo = ({ current_car }) => {
         <ProgressBar progress={progressLeft} color={progressLeft > 1 ? "red" : "#2bced6"} />
       </View>
       
-      <Text style={tw`ml-72 font-bold mb-5`}>Set Reminder</Text>
+      <TouchableOpacity onPress={() => ScheduleNotification()}>
+        <Text style={tw`ml-72 font-bold mb-5`}>Set Reminder</Text>
+      </TouchableOpacity>
     </View>
   );
 };
