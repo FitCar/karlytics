@@ -18,11 +18,11 @@ import { AuthenticatedUserContext } from "../navigation/AuthenticatedUserProvide
 import ServiceInfo from "../components/ServiceInfo";
 import { useSelector, useDispatch } from "react-redux";
 import { getPlans } from "../slices/carSlice";
-import { getCars } from "../slices/carSlice";
+import { getCars, fetchBasketItems } from "../slices/carSlice";
 import PlansForCar from "../components/PlansForCar";
-import firebase from "firebase";
 import Constants from 'expo-constants';
 
+const apikey = Constants.manifest.extra.carApi
 const firestore = Firebase.firestore();
 
 const Home = () => {
@@ -70,7 +70,7 @@ const Home = () => {
         .catch((error) => console.log(error));
     };
 
-    fetchuserData();
+    fetchuserData()
   }, [user]);
 
   useEffect(() => {
@@ -107,8 +107,22 @@ const Home = () => {
 
       return dispatch(getPlans(plan_arr));
     };
+
     fetchPlans();
   }, []);
+
+  useEffect(() => {
+    const fetchBasket = () =>{
+      firestore.collection("Basket")
+      .doc(user.uid)
+      .collection("Basket")
+      .onSnapshot(snapshot => {
+        dispatch(fetchBasketItems(snapshot.docs?.map(doc => doc.data())))
+      })
+  }
+
+  fetchBasket()
+  }, [])
 
   const handleServiceButton = (route) => {
     if (cars.length === 0)
@@ -122,10 +136,6 @@ const Home = () => {
     if (router.params?.alert) return true;
     return false;
   };
-
-  const apikey = Constants.manifest.extra.carApi
-
-  
 
   useEffect(() => {
     const fetchImage = async () => {

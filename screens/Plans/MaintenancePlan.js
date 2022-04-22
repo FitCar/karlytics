@@ -69,7 +69,18 @@ function MaintenancePlan() {
     selectedCars.forEach(car => {
       const filteredPlans = basket.filter(carPlan => carPlan.key === car.key && carPlan.plan.Name === plan.Name)
       if(filteredPlans.length < 1){
+        firestore.collection("Basket")
+        .doc(user.uid)
+        .collection("Basket")
+        .add({ ...car, plan })
+        .then(doc => {
+          doc.set({
+            basketId: doc.id
+          }, {merge: true})
+        })
+
         dispatch(addToBasket({ ...car, plan }))
+
       }else {
         Alert.alert(`A ${plan.Name} plan is already active for your ${car.make} ${car.model} car`)
       }

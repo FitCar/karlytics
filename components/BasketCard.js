@@ -1,10 +1,14 @@
-import React, { useState } from "react";
+import React, { useState, useContext } from "react";
 import { StyleSheet, Text, TouchableOpacity, View, Image } from "react-native";
 import { Icon } from "react-native-elements";
 import tw from "tailwind-react-native-classnames";
 import AwesomeAlert from "react-native-awesome-alerts";
 import { removeFromBasket } from "../slices/carSlice";
 import { useDispatch } from "react-redux";
+import Firebase from "../config/firebase";
+import { AuthenticatedUserContext } from "../navigation/AuthenticatedUserProvider";
+
+const firestore = Firebase.firestore();
 
 const ChooseImageForPlan = ({ name }) => {
   if (name === "Membership")
@@ -40,12 +44,39 @@ const ChooseImageForPlan = ({ name }) => {
 
 };
 
-const BasketCard = ({ description, qty, total, unitPrice, details, index }) => {
+const BasketCard = ({ description, qty, total, unitPrice, details, index, basketId }) => {
   const [showAlert, setshowAlert] = useState(false);
   const dispatch = useDispatch();
 
+  const { user } = useContext(AuthenticatedUserContext);
+
   const confirmRemove = () => {
     dispatch(removeFromBasket(index));
+
+    if(details){
+      firestore.collection("Basket")
+      .doc(user.uid)
+      .collection("Basket")
+      .where('basketId','==', details.basketId)
+      
+      .get().then(querySnapshot =>{
+        querySnapshot.forEach(doc => {
+          doc.ref.delete();
+        });
+      });
+    }else{
+      firestore.collection("Basket")
+      .doc(user.uid)
+      .collection("Basket")
+      .where('basketId','==', basketId)
+      
+      .get().then(querySnapshot =>{
+        querySnapshot.forEach(doc => {
+          doc.ref.delete();
+        });
+      });
+    }
+    
     return setshowAlert(false);
   };
 
