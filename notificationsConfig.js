@@ -42,17 +42,25 @@ export const getPermission = async (userId) => {
         return
   }
 
-export const ScheduleNotification = async () => {
-    // await Notifications.scheduleNotificationAsync({
-    //     content: {
-    //     title: "Title",
-    //     body: "body",
-    //     data: { data: "stufff" }
-    //     },
-    //     trigger: {
-    //         hour: 0,
-    //         minute: 0,
-    //         second: 20,
-    //     }
-    // });
+export const ScheduleNotification = async (date, car) => {
+  const choosenDate = new Date(date)
+  const today = new Date(Date.now())
+  const left = choosenDate.getTime() - today.getTime()
+  const hours_left = left/(3600*1000)
+  const minutes_left = (left%(3600*1000))/(60*1000)
+  
+  if(minutes_left < 2 && hours_left < 1) return Alert.alert("Time schedule is to close")
+
+    return await Notifications.scheduleNotificationAsync({
+      content: {
+        title: "Karlytics",
+        body: `${car} is almost due for servicing`,
+        data: { data: "stufff" }
+      },
+
+      trigger: {
+        seconds: Math.floor(left/1000)
+      }
+    });
+  
 }
