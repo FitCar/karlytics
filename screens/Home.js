@@ -1,5 +1,5 @@
 import { useNavigation, useRoute } from "@react-navigation/native";
-import React, { useContext, useEffect, useRef, useState } from "react";
+import React, { useContext, useEffect, useState } from "react";
 import {
   Image,
   Modal,
@@ -28,9 +28,8 @@ const apikey = Constants.manifest.extra.carApi
 const firestore = Firebase.firestore();
 
 const Home = () => {
-  const [loading, setLoading] = useState(true); // Set loading to true on component mount
+  const [loading, setLoading] = useState(false); // Set loading to true on component mount
   const [usersFullname, setusersFullname] = useState(null);
-  const [showAlert, setshowAlert] = useState(false);
   const [image, setImage] = useState();
 
   const navigation = useNavigation();
@@ -45,7 +44,19 @@ const Home = () => {
   const dispatch = useDispatch();
 
   useEffect(() => {
-    const subscriber = firestore
+    let mounted = true
+
+    const fetchuserData = async () => {
+      await firestore
+        .collection("users")
+        .doc(user.uid)
+        .get()
+        .then((doc) => setusersFullname(doc.data().name))
+        .catch((error) => console.log(error));
+    };
+    
+    const fetchGarage = async () => {
+      await firestore
       .collection("Garage")
       .doc(user.uid)
       .collection("Garage")
@@ -62,6 +73,13 @@ const Home = () => {
         dispatch(getCars(garage));
         // setLoading(false);
       });
+    }
+    if(mounted){
+      fetchGarage()
+      fetchuserData()
+    }
+
+    return () => { mounted = false }
   }, []);
 
   useEffect(() => {
@@ -79,19 +97,6 @@ const Home = () => {
     });
   }, [])
   
-  useEffect(() => {
-    const fetchuserData = async () => {
-      await firestore
-        .collection("users")
-        .doc(user.uid)
-        .get()
-        .then((doc) => setusersFullname(doc.data().name))
-        .catch((error) => console.log(error));
-    };
-
-    fetchuserData()
-  }, [user]);
-
   useEffect(() => {
     const fetchPlans = async () => {
       if (!current_car) return;
