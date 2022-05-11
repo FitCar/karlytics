@@ -1,6 +1,7 @@
 import { useNavigation, useRoute } from "@react-navigation/native";
 import React, { useContext, useEffect, useState } from "react";
 import {
+  ActivityIndicator,
   Image,
   Modal,
   ScrollView,
@@ -28,7 +29,7 @@ const apikey = Constants.manifest.extra.carApi
 const firestore = Firebase.firestore();
 
 const Home = () => {
-  const [loading, setLoading] = useState(false); // Set loading to true on component mount
+  const [loading, setLoading] = useState(true); // Set loading to true on component mount
   const [usersFullname, setusersFullname] = useState(null);
   const [image, setImage] = useState();
 
@@ -71,7 +72,7 @@ const Home = () => {
           });
         });
         dispatch(getCars(garage));
-        // setLoading(false);
+        setLoading(false);
       });
     }
     if(mounted){
@@ -167,7 +168,7 @@ const Home = () => {
     return false;
   };
 
-  useEffect(() => {
+  // useEffect(() => {
     // let mounted = true
     // const fetchImage = async () => {
     //   const img = await fetch(
@@ -188,7 +189,15 @@ const Home = () => {
     // setLoading(false);
 
     // return () => { mounted = false }
-  }, [current_car]);
+  // }, [current_car]);
+
+  if (loading) {
+    return (
+      <View style={{ flex: 1, justifyContent: 'center', alignItems: 'center' }}>
+        <ActivityIndicator size='large' color={"#2bced6"} />
+      </View>
+    );
+  }
 
   return (
     <View style={tw`bg-white pt-16 flex-grow`}>
@@ -344,24 +353,6 @@ const Home = () => {
   );
 };
 
-{
-  /* <Modal
-  transparent={true}
-  visible={showAlert}
->
-  <View style={tw`mt-10 bg-green-400 mx-auto w-11/12 p-3 rounded-lg`}>
-    <TouchableOpacity style={tw`w-full items-end`} onPress={() => setshowAlert(false)}>
-      <Icon name="close" type="font-awesome" color='white' size={20} />
-    </TouchableOpacity>
-    
-    <View style={tw`w-full items-center`}>
-      <Icon name="check-circle-o" color='white' type="font-awesome" />
-      <Text style={tw`text-white font-semibold`}>{router.params?.alert}</Text>
-    </View>
-  </View>
-  
-</Modal> */
-}
 
 export default Home;
 

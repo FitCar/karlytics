@@ -12,7 +12,7 @@ const auth = Firebase.auth();
 
 export default function RootNavigator() {
   const { user, setUser } = useContext(AuthenticatedUserContext);
-  const [isLoading, setIsLoading] = useState(false);
+  const [isLoading, setIsLoading] = useState(true);
   const state = useSelector(state => state.car)
 
   useEffect(() => {
@@ -34,7 +34,7 @@ export default function RootNavigator() {
   if (isLoading) {
     return (
       <View style={{ flex: 1, justifyContent: 'center', alignItems: 'center' }}>
-        <ActivityIndicator size='large' />
+        <ActivityIndicator size='large' color={"#2bced6"} />
       </View>
     );
   }
