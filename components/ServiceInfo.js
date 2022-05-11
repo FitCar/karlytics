@@ -1,8 +1,10 @@
 import React from "react";
-import { StyleSheet, Text, View } from "react-native";
+import { StyleSheet, Text, View, TouchableOpacity } from "react-native";
 import tw from "tailwind-react-native-classnames";
 import { ProgressBar } from 'react-native-paper'
 import { formatDistanceToNow } from "date-fns";
+import { Icon } from "react-native-elements";
+import { useNavigation } from "@react-navigation/native";
 
 const ServiceInfo = ({ current_car }) => {
 
@@ -41,6 +43,11 @@ const ServiceInfo = ({ current_car }) => {
     }
   }, 1000);
 
+  const navigation = useNavigation()
+
+  const makeSchedule = () => {
+    navigation.navigate("Schedule", { current_car })
+  }
 
   return (
     <View>
@@ -53,7 +60,7 @@ const ServiceInfo = ({ current_car }) => {
           <Text style={tw`font-semibold text-gray-600`}>Due by {current_car?.nextServiceDate}</Text>
           <Text style={tw`font-semibold text-gray-600`}>{duration} left</Text>
         </View>
-
+        
         : 
 
         <Text style={tw`font-medium text-red-500 text-sm mb-2`}>Due For Servicing</Text>
@@ -64,7 +71,10 @@ const ServiceInfo = ({ current_car }) => {
         <ProgressBar progress={progressLeft} color={progressLeft > 1 ? "red" : "#2bced6"} />
       </View>
       
-      <Text style={tw`ml-72 font-bold mb-5`}>Set Reminder</Text>
+      <TouchableOpacity style={tw`p-3 flex-row justify-center shadow-md bg-gray-200 rounded-lg mx-auto my-3`} onPress={() => makeSchedule()}>
+        <Text style={tw`font-bold text-gray-500 text-xs`}>Set Reminder</Text>
+        <Icon name="bell" size={12} color="#737f8a" type="font-awesome" />
+      </TouchableOpacity>
     </View>
   );
 };

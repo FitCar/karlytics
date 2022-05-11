@@ -20,6 +20,7 @@ import VehicleHealthPlan from '../screens/Plans/VehicleHealthPlan';
 import PrivacyPolicy from '../screens/PrivacyPolicy';
 import PlanDetails from '../screens/PlanDetails';
 import Shop from '../screens/Shop';
+import ScheduleReminder from '../screens/ScheduleReminder';
 
 const Stack = createNativeStackNavigator();
 
@@ -48,6 +49,7 @@ export default function HomeStack() {
             <Stack.Screen name="PrivacyPolicy" component={PrivacyPolicy} />
             <Stack.Screen name="PlanDetails" component={PlanDetails} />
             <Stack.Screen name="Shop" component={Shop} />
+            <Stack.Screen name="Schedule" component={ScheduleReminder} />
     </Stack.Navigator>
    
   );

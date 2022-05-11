@@ -1,5 +1,5 @@
 import { useNavigation, useRoute } from "@react-navigation/native";
-import React, { useContext, useEffect, useState } from "react";
+import React, { useContext, useEffect, useRef, useState } from "react";
 import {
   Image,
   Modal,
@@ -21,6 +21,8 @@ import { getPlans } from "../slices/carSlice";
 import { getCars, fetchBasketItems } from "../slices/carSlice";
 import PlansForCar from "../components/PlansForCar";
 import Constants from 'expo-constants';
+import * as Notifications from 'expo-notifications'
+import { getPermission } from "../notificationsConfig";
 
 const apikey = Constants.manifest.extra.carApi
 const firestore = Firebase.firestore();
@@ -35,6 +37,8 @@ const Home = () => {
   const router = useRoute();
   const { user } = useContext(AuthenticatedUserContext);
 
+  const [notification, setNotification] = useState(null);
+ 
   const { current_car, cars, plans, basket } = useSelector(
     (state) => state.car
   );
@@ -60,6 +64,21 @@ const Home = () => {
       });
   }, []);
 
+  useEffect(() => {
+    getPermission(user.uid)
+    
+    Notifications.addNotificationReceivedListener(notification => {
+      //when notification comes in
+      setNotification(notification);
+    });
+
+    Notifications.addNotificationResponseReceivedListener(response => {
+      //when the notification is clicked
+      // console.log(response)
+      // navigation.navigate("Garage")
+    });
+  }, [])
+  
   useEffect(() => {
     const fetchuserData = async () => {
       await firestore
