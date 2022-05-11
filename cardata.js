@@ -33,21 +33,21 @@ export const bodyData = [
 ]
 
 export const cars = [
-    { model: "Toyota", index: '1' },
-    { model: "Honda", index: '2' },
-    { model: "Mercedes-Benz", index: '3' },
-    { model: "Range Rover", index: '4' },
-    { model: "Hyundai", index: '5' },
-    { model: "Kia", index: '6' },
-    { model: "BMW", index: '7' },
-    { model: "Lexus", index: '8' },
-    { model: "Ford", index: '9' },
-    { model: "Mitsubushi", index: '10' },
-    { model: "Audi", index: '11' },
-    { model: "Volkswagen", index: '12' },
-    { model: "Land Rover", index: '13' },
-    { model: "Nissan", index: '14' },
-    { model: "Jaguar", index: '15' },
+    { model: "Toyota", index: '1', img: require('./assets/carLogos/Toyota-Logo.png') },
+    { model: "Honda", index: '2', img: require('./assets/carLogos/Honda-Logo.png') },
+    { model: "Mercedes-Benz", index: '3', img: require('./assets/carLogos/Mercedes-Logo.png') },
+    { model: "Range Rover", index: '4', img: require('./assets/carLogos/Range-rover-logo.png') },
+    { model: "Hyundai", index: '5', img: require('./assets/carLogos/Hyundai-Logo.png') },
+    { model: "Kia", index: '6', img: require('./assets/carLogos/Kia-logo.png') },
+    { model: "BMW", index: '7', img: require('./assets/carLogos/bmw-logo.png') },
+    { model: "Lexus", index: '8', img: require('./assets/carLogos/Lexus-logo.png') },
+    { model: "Ford", index: '9', img: require('./assets/carLogos/ford-logo.png') },
+    { model: "Mitsubushi", index: '10', img: require('./assets/carLogos/Mitsubishi-logo.png') },
+    { model: "Audi", index: '11', img: require('./assets/carLogos/Audi-logo.png') },
+    { model: "Volkswagen", index: '12', img: require('./assets/carLogos/Volkswagen-logo.png') },
+    { model: "Land Rover", index: '13', img: require('./assets/carLogos/Land-rover-logo.png') },
+    { model: "Nissan", index: '14', img: require('./assets/carLogos/Nissan-logo.png') },
+    { model: "Jaguar", index: '15', img: require('./assets/carLogos/Jaguar-logo.png') },
   ]
 
   const findLabourAndVat = (price) =>{

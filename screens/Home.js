@@ -98,6 +98,8 @@ const Home = () => {
   }, [])
   
   useEffect(() => {
+    let mounted = true
+
     const fetchPlans = async () => {
       if (!current_car) return;
 
@@ -132,7 +134,11 @@ const Home = () => {
       return dispatch(getPlans(plan_arr));
     };
 
-    fetchPlans();
+    if(mounted) {
+      fetchPlans();
+    }
+
+    return () => { mounted = false }
   }, []);
 
   useEffect(() => {
@@ -162,18 +168,26 @@ const Home = () => {
   };
 
   useEffect(() => {
-    const fetchImage = async () => {
-      const img = await fetch(
-        `http://api.carsxe.com/images?key=${apikey}&make=${current_car.Make}&model=${current_car.Model}&year=${current_car.Year}&transparent=true`,
-        {
-          method: "GET",
-        }
-      );
-      const res = await img.json();
-      return res;
-    };
-    fetchImage().then((images) => setImage(images.images[0].thumbnailLink)).catch(err => console.log(err.message));
-    setLoading(false);
+    // let mounted = true
+    // const fetchImage = async () => {
+    //   const img = await fetch(
+    //     `http://api.carsxe.com/images?key=${apikey}&make=${current_car.Make}&model=${current_car.Model}&year=${current_car.Year}&transparent=true`,
+    //     {
+    //       method: "GET",
+    //     }
+    //   );
+    //   const res = await img.json();
+    //   return res;
+    // };
+    
+    // fetchImage().then((images) => {
+    //   if(mounted){
+    //     setImage(images.images[0].thumbnailLink)
+    //   }
+    // }).catch(err => { return err })
+    // setLoading(false);
+
+    // return () => { mounted = false }
   }, [current_car]);
 
   return (
