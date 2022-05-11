@@ -191,7 +191,7 @@ const Home = () => {
   }, [current_car]);
 
   return (
-    <View style={tw`bg-white pt-16`}>
+    <View style={tw`bg-white pt-16 flex-grow`}>
       <ScrollView>
         <View style={tw`bg-white ${checkModal() && "opacity-40"}`}>
           <View style={tw`flex-row justify-between px-3`}>
@@ -289,7 +289,7 @@ const Home = () => {
               </View>
             )}
 
-            <View style={tw`mb-5`}>
+            <View style={tw`mb-5 flex-grow`}>
               <View>
                 {loading ? (
                   <Text>Loading</Text>
