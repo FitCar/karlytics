@@ -51,17 +51,17 @@ const Quotation = () => {
 
 
   return (
-    <View>
+    <View style={tw`flex-grow`}>
       <View style={tw`flex-row justify-around mt-10`}>
         <View style={tw`mb-8`}>
           <Text>Request ID: {request}</Text>
           <Text style={tw`font-bold text-lg text-black`}>Quotation</Text>
           {quote.length > 0 && <Text style={tw`text-gray-500`}>View your quotation below</Text>}
         </View>
-        <TouchableOpacity style={tw`content-center flex-row`}>
+
+        <TouchableOpacity style={tw`content-center flex-row`} onPress={() => navigation.navigate("Basket")}>
           <Icon name="shopping-basket" type="font-awesome" />
           <Icon
-            onPress={() => navigation.navigate("Basket")}
             name="chevron-right"
             type="font-awesome"
           />
@@ -75,7 +75,7 @@ const Quotation = () => {
         
         : 
         
-        <ScrollView style={tw`mb-28 h-72`}>
+        <ScrollView style={[tw`mb-20 flex-grow`, { maxHeight: 500 }]}>
             {
               quote.length === 0 ? 
               
