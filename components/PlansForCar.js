@@ -2,6 +2,7 @@ import { StyleSheet, Text, View, Image, TouchableOpacity } from 'react-native'
 import React from 'react'
 import tw from "tailwind-react-native-classnames";
 import { useNavigation } from '@react-navigation/native';
+import { useSelector } from 'react-redux';
 
 export const ChooseImageForPlan = ({ name }) => {
   if (name === "Membership")
@@ -39,9 +40,12 @@ export const ChooseImageForPlan = ({ name }) => {
 
 
 
-const PlansForCar = ({ selectedCar, plans }) => {
+const PlansForCar = ({ selectedCar }) => {
 
   const navigation = useNavigation()
+  const { plans } = useSelector(
+    (state) => state.car
+  );
 
   const changeRoute = (detail) =>{
     navigation.navigate("PlanDetails", { name: detail.plan.Name, type: detail.plan.type, plan: detail, car: `${selectedCar.Make} ${selectedCar.Model}` })

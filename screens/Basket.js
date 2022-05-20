@@ -98,6 +98,7 @@ const Basket = () => {
               <BasketCard
                 details={item}
                 index={index+1}
+                key={index+1}
               /> 
             )
           }
@@ -106,6 +107,7 @@ const Basket = () => {
             <BasketCard
               details={item}
               index={index+1}
+              key={index+1}
             /> 
           )
 
@@ -116,6 +118,7 @@ const Basket = () => {
               unitPrice={item.unitPrice}
               total={item.total}
               index={index+1}
+              key={index+1}
               basketId={item.basketId}
             />
           )

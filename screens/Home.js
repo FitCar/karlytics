@@ -114,7 +114,7 @@ const Home = () => {
         .get()
         .then((res) => {
           res.forEach((plan) => {
-            plan_arr = [...plan_arr, plan.data()];
+            plan_arr = [...plan_arr, { ...plan.data(), createdAt: plan.data().createdAt.seconds }];
           });
         })
         .catch((error) => console.log(error));
@@ -127,7 +127,7 @@ const Home = () => {
         .get()
         .then((res) => {
           res.forEach((plan) => {
-            plan_arr = [...plan_arr, plan.data()];
+            plan_arr = [...plan_arr, { ...plan.data(), createdAt: plan.data().createdAt.seconds }];
           });
         })
         .catch((error) => console.log(error));
@@ -135,12 +135,11 @@ const Home = () => {
       return dispatch(getPlans(plan_arr));
     };
 
-    if(mounted) {
-      fetchPlans();
-    }
+  
+    fetchPlans()
 
     return () => { mounted = false }
-  }, []);
+  }, [current_car]);
 
   useEffect(() => {
     const fetchBasket = () =>{
