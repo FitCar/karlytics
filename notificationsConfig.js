@@ -64,3 +64,17 @@ export const ScheduleNotification = async (date, car) => {
     });
   
 }
+
+export const SchedulePlanNotification = async (plan) => {
+  return await Notifications.scheduleNotificationAsync({
+    content: {
+      title: "Karlytics",
+      body: `Your ${plan?.Name ? `${plan.type} ${plan.Name}` : `${plan.plan.type} ${plan.plan.Name}`} has expired`,
+      data: { data: plan }
+    },
+
+    trigger: {
+      seconds: Math.floor(31556800)
+    }
+  });
+}

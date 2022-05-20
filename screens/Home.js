@@ -36,8 +36,6 @@ const Home = () => {
   const navigation = useNavigation();
   const router = useRoute();
   const { user } = useContext(AuthenticatedUserContext);
-
-  const [notification, setNotification] = useState(null);
  
   const { current_car, cars, plans, basket } = useSelector(
     (state) => state.car
@@ -88,7 +86,7 @@ const Home = () => {
     
     Notifications.addNotificationReceivedListener(notification => {
       //when notification comes in
-      setNotification(notification);
+      // firestore.collection("Plans").doc(user.uid).collection("Plans").where("basketId", "==", notification.request.content.data.data.basketId).delete()
     });
 
     Notifications.addNotificationResponseReceivedListener(response => {
@@ -96,6 +94,7 @@ const Home = () => {
       // console.log(response)
       // navigation.navigate("Garage")
     });
+
   }, [])
   
   useEffect(() => {
