@@ -1,7 +1,6 @@
 import React from "react";
 import { Provider } from "react-redux";
 import { store } from "./store";
-import { createNativeStackNavigator } from "@react-navigation/native-stack";
 import Routes from './navigation/index';
 import { LogBox } from "react-native";
 import * as Notifications from 'expo-notifications'
@@ -19,7 +18,6 @@ Notifications.setNotificationHandler({
 
 export default function App() {
 
-  const Stack = createNativeStackNavigator();
   return (
     <Provider store={store}>
        <Routes />
