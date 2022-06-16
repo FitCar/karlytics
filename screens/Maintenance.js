@@ -88,6 +88,7 @@ const Maintenance = () => {
     const newdate = date.toString();
 
     const requestId = user.uid;
+
     const data = {
       requestIcon: "../assets/icons/maintain.png",
       requestType: "Maintenance",
@@ -134,7 +135,6 @@ const Maintenance = () => {
     setshowAlert(false);
   };
 
-  console.log(show);
   return (
     <View style={tw`bg-white flex-grow py-8`}>
       <View style={tw`ml-5 mt-5`}>

@@ -1,10 +1,11 @@
 import React from "react";
+import { useState } from "react";
 import { Image, StyleSheet, Text, View } from "react-native";
 import CircularProgress from "react-native-circular-progress-indicator";
 import tw from "tailwind-react-native-classnames";
 
-const HealthCard = ({ image }) => {
-  const carHealth = 65;
+const HealthCard = ({ image, healthScore }) => {
+  const carHealth = healthScore ? Number.parseInt(healthScore) : 0;
 
   const getCarColor = () => {
     if (carHealth >= 45 && carHealth < 80) return "orange";

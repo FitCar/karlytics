@@ -311,7 +311,10 @@ const Home = () => {
             <View style={tw`mb-5 flex-grow`}>
               {current_car && (
                 <View>
-                  <HealthCard image={image} />
+                  <HealthCard
+                    image={image}
+                    healthScore={current_car.healthScore}
+                  />
                 </View>
               )}
 
