@@ -24,6 +24,7 @@ import PlansForCar from "../components/PlansForCar";
 import Constants from "expo-constants";
 import * as Notifications from "expo-notifications";
 import { getPermission } from "../notificationsConfig";
+import { Icon } from "react-native-elements";
 
 const apikey = Constants.manifest.extra.carApi;
 const firestore = Firebase.firestore();
@@ -198,6 +199,10 @@ const Home = () => {
   // return () => { mounted = false }
   // }, [current_car]);
 
+  const makeSchedule = () => {
+    navigation.navigate("Schedule", { current_car });
+  };
+
   if (loading) {
     return (
       <View style={{ flex: 1, justifyContent: "center", alignItems: "center" }}>
@@ -272,19 +277,40 @@ const Home = () => {
           )}
 
           {cars.length > 0 ? (
-            <TouchableOpacity
-              style={[styles.selectCar, tw`mx-auto`]}
-              onPress={() => navigation.navigate("Garage")}
+            <View
+              style={tw`flex flex-row items-center justify-between px-4 pb-3`}
             >
-              <Text
-                style={[
-                  tw`text-white text-xl text-center`,
-                  { fontFamily: "SatushiBlack" },
-                ]}
+              <TouchableOpacity
+                style={styles.selectCar}
+                onPress={() => navigation.navigate("Garage")}
               >
-                {current_car ? "Change Car" : "Select Car"}
-              </Text>
-            </TouchableOpacity>
+                <Text
+                  style={[
+                    tw`text-white text-xl text-center`,
+                    { fontFamily: "SatushiBlack" },
+                  ]}
+                >
+                  {current_car ? "Change Car" : "Select Car"}
+                </Text>
+              </TouchableOpacity>
+
+              {current_car && (
+                <TouchableOpacity
+                  style={tw`p-3 flex-row justify-center bg-gray-200 rounded-lg`}
+                  onPress={() => makeSchedule()}
+                >
+                  <Text style={tw`font-bold text-gray-500 text-xs`}>
+                    Set Reminder
+                  </Text>
+                  <Icon
+                    name="bell"
+                    size={12}
+                    color="#737f8a"
+                    type="font-awesome"
+                  />
+                </TouchableOpacity>
+              )}
+            </View>
           ) : (
             <View style={tw`w-full items-center justify-center`}>
               <Text
@@ -410,10 +436,10 @@ const styles = StyleSheet.create({
     paddingHorizontal: 10,
     flexDirection: "row",
     justifyContent: "center",
-    borderRadius: 20,
-    marginBottom: 20,
-    width: "80%",
+    borderRadius: 10,
     paddingVertical: 5,
+    flex: 1,
+    marginRight: 10,
   },
 
   basket: {
