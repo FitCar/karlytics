@@ -144,21 +144,31 @@ const RequestCard = ({
         expanded={expanded}
         style={{ borderWidth: 0 }}
       >
-        <View>
+        <View style={tw`flex flex-row justify-center items-center`}>
           <TouchableOpacity
-            style={tw`border-0 rounded-3xl self-center w-10/12 p-2`}
+            style={tw`border-0 rounded-xl self-center p-2 bg-gray-200 mr-3`}
             onPress={openDiagnosis}
           >
-            <Text style={tw`text-center font-bold text-blue-500`}>
+            <Text
+              style={[
+                tw`text-center font-bold text-gray-500`,
+                { fontFamily: "SatushiBlack" },
+              ]}
+            >
               Diagnosis(Ongoing)
             </Text>
           </TouchableOpacity>
 
           <TouchableOpacity
-            style={tw`border-0 rounded-3xl self-center w-10/12 p-2`}
+            style={tw`border-2 border-gray-300 rounded-xl self-center px-2 py-1`}
             onPress={openQuotations}
           >
-            <Text style={tw`text-center font-bold text-blue-600`}>
+            <Text
+              style={[
+                tw`text-center font-bold text-gray-600`,
+                { fontFamily: "SatushiBlack" },
+              ]}
+            >
               Quotations
             </Text>
           </TouchableOpacity>
