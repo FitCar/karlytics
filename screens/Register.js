@@ -92,6 +92,7 @@ export default function Register() {
         placeholder="Enter Fullname"
         autoCapitalize="words"
         value={name}
+        placeholderTextColor="slategray"
         onChangeText={(text) => setName(text)}
       />
 
@@ -106,6 +107,7 @@ export default function Register() {
         autoFocus={true}
         value={email}
         testID="email"
+        placeholderTextColor="slategray"
         onChangeText={(text) => setEmail(text)}
       />
 
@@ -121,6 +123,7 @@ export default function Register() {
         rightIcon={rightIcon}
         value={password}
         testID="password"
+        placeholderTextColor="slategray"
         onChangeText={(text) => setPassword(text)}
         handlePasswordVisibility={handlePasswordVisibility}
       />
@@ -163,6 +166,7 @@ const styles = StyleSheet.create({
     fontSize: 24,
     fontWeight: "600",
     color: "black",
+    fontFamily: "SatushiBold",
     alignSelf: "center",
     paddingBottom: 24,
   },

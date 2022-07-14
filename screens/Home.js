@@ -214,11 +214,16 @@ const Home = () => {
             <View>
               <Text
                 testID="welcomeText"
-                style={tw`font-bold text-lg text-black`}
+                style={[
+                  tw`font-bold text-black`,
+                  { fontFamily: "SatushiBold", fontSize: 22 },
+                ]}
               >
                 Welcome {usersFullname}{" "}
               </Text>
-              <Text>How's your car feeling today</Text>
+              <Text style={{ fontFamily: "SatushiMedium", fontSize: 16 }}>
+                How's your car feeling today
+              </Text>
             </View>
 
             <TouchableOpacity
@@ -243,7 +248,7 @@ const Home = () => {
                   <Text
                     style={[
                       tw`text-2xl font-semibold mb-5`,
-                      { color: "#2bced6" },
+                      { color: "#2bced6", fontFamily: "SatushiBold" },
                     ]}
                   >
                     {current_car.Make} {current_car.Model}
@@ -252,7 +257,12 @@ const Home = () => {
                   <ServiceInfo current_car={current_car} />
                 </View>
               ) : (
-                <Text style={tw`text-xl text-gray-600 font-medium`}>
+                <Text
+                  style={[
+                    { fontFamily: "SatushiBoldI" },
+                    tw`text-xl text-gray-400 font-medium`,
+                  ]}
+                >
                   Select a car from your garage
                 </Text>
               )}
@@ -266,13 +276,23 @@ const Home = () => {
               style={[styles.selectCar, tw`mx-auto`]}
               onPress={() => navigation.navigate("Garage")}
             >
-              <Text style={tw`text-white text-xl text-center`}>
+              <Text
+                style={[
+                  tw`text-white text-xl text-center`,
+                  { fontFamily: "SatushiBlack" },
+                ]}
+              >
                 {current_car ? "Change Car" : "Select Car"}
               </Text>
             </TouchableOpacity>
           ) : (
             <View style={tw`w-full items-center justify-center`}>
-              <Text style={tw`font-semibold mb-5 text-gray-400`}>
+              <Text
+                style={[
+                  tw`font-semibold mb-5 text-gray-400`,
+                  { fontFamily: "SatushiMedium" },
+                ]}
+              >
                 No car(s) yet
               </Text>
             </View>
@@ -282,7 +302,12 @@ const Home = () => {
             {current_car && (
               <View style={tw`bg-gray-100 mt-5 w-full mx-auto p-3 rounded-lg`}>
                 <View style={tw`mb-5`}>
-                  <Text style={tw`text-xl font-semibold text-gray-800`}>
+                  <Text
+                    style={[
+                      tw`text-xl font-semibold text-gray-800`,
+                      { fontFamily: "SatushiBold" },
+                    ]}
+                  >
                     Membership Plan
                   </Text>
                   {plans.filter((item) => item.Name === "Membership").length >
@@ -292,13 +317,21 @@ const Home = () => {
                       .map((mem, index) => (
                         <Text
                           key={index}
-                          style={[tw`font-semibold text-sm text-gray-500`]}
+                          style={[
+                            tw`font-semibold text-sm text-gray-500`,
+                            { fontFamily: "SatushiMedium" },
+                          ]}
                         >
                           {mem.type} {mem.Name}
                         </Text>
                       ))
                   ) : (
-                    <Text style={tw`text-sm text-gray-400`}>
+                    <Text
+                      style={[
+                        tw`text-sm text-gray-400`,
+                        { fontFamily: "SatushiMedium" },
+                      ]}
+                    >
                       You have no membership plan yet
                     </Text>
                   )}
@@ -318,7 +351,12 @@ const Home = () => {
                 </View>
               )}
 
-              <Text style={tw`ml-7 mt-5 text-center font-bold mb-5 text-lg`}>
+              <Text
+                style={[
+                  { fontFamily: "SatushiBlack" },
+                  tw`m-5 text-center mb-5 text-lg`,
+                ]}
+              >
                 Make a request
               </Text>
             </View>
