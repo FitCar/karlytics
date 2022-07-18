@@ -5,27 +5,21 @@ import Home from "../screens/Home";
 import Requests from "../screens/Requests";
 import Garage from "../screens/Garage";
 import Options from "../screens/Options";
-import tw from "tailwind-react-native-classnames";
+import { Icon } from "react-native-elements"
 
 const Tab = createBottomTabNavigator();
 
 const Tabs = () => {
   return (
-    <Tab.Navigator screenOptions={{headerShown: false}}>
+    <Tab.Navigator screenOptions={{headerShown: false, tabBarStyle: { paddingBottom: 8 }}}>
       <Tab.Screen
         name="Home"
         component={Home}
         options={{
           tabBarIcon: ({ focused }) => (
-            <Image
-              source={require("../assets/icons/home.png")}
-              resizeMode="contain"
-              style={{
-                width: 25,
-                height: 25,
-              }}
-            />
+            <Icon name="home" type="material" color={focused ? "#2bced6" : "lightgrey"} />
           ),
+          tabBarActiveTintColor: "#2bced6"
         }}
       />
       <Tab.Screen
@@ -33,15 +27,9 @@ const Tabs = () => {
         component={Requests}
         options={{
           tabBarIcon: ({ focused }) => (
-            <Image
-              source={require("../assets/icons/requests.png")}
-              resizeMode="contain"
-              style={{
-                width: 25,
-                height: 25,
-              }}
-            />
+            <Icon name="sync-alt" type="material" color={focused ? "#2bced6" : "lightgrey"} />
           ),
+          tabBarActiveTintColor: "#2bced6"
         }}
       />
       <Tab.Screen
@@ -49,15 +37,9 @@ const Tabs = () => {
         component={Garage}
         options={{
           tabBarIcon: ({ focused }) => (
-            <Image
-              source={require("../assets/icons/garage.png")}
-              resizeMode="contain"
-              style={{
-                width: 25,
-                height: 25,
-              }}
-            />
+            <Icon name="directions-car" type="material" color={focused ? "#2bced6" : "lightgrey"} />
           ),
+          tabBarActiveTintColor: "#2bced6"
         }}
       />
       <Tab.Screen
@@ -65,15 +47,9 @@ const Tabs = () => {
         component={Options}
         options={{
           tabBarIcon: ({ focused }) => (
-            <Image
-              source={require("../assets/icons/more.png")}
-              resizeMode="contain"
-              style={{
-                width: 25,
-                height: 25,
-              }}
-            />
+            <Icon name="settings" type="material" color={focused ? "#2bced6" : "lightgrey"} />
           ),
+          tabBarActiveTintColor: "#2bced6"
         }}
       />
     </Tab.Navigator>

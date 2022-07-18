@@ -1,11 +1,12 @@
 import { useNavigation } from "@react-navigation/native";
 import React from "react";
 import {
-  FlatList,
+  ScrollView,
   StyleSheet,
   Text,
   TouchableOpacity,
   View,
+  Image
 } from "react-native";
 import tw from "tailwind-react-native-classnames";
 import { useDispatch } from "react-redux";
@@ -24,17 +25,18 @@ const CarMakes = () => {
   }
 
   return (
-    <View style={tw`mt-20`}>
-      <FlatList
-        data={cars}
-        renderItem={({ item }) => (
-          <TouchableOpacity style={tw`bg-gray-100 text-lg h-10 text-center py-1 border-t justify-center`} onPress={() => handleNext(item)} >
-            <Text style={tw`px-3`}>{item.model}</Text>
-          </TouchableOpacity>
-        )}
-        keyExtractor={(item) => item.index}
-      />
-    </View>
+    <ScrollView style={[tw`bg-gray-200 flex-grow pt-10`]}>
+      <View style={{ flexDirection: "row", flexWrap: "wrap", justifyContent: "center", marginBottom: 60 }}>
+        {
+          cars.map(car => (
+            <TouchableOpacity key={car.index} style={tw`bg-white py-4 px-3 m-3 shadow-md items-center rounded-md`} onPress={() => handleNext(car)} >
+              <Image source={car.img} style={{ height: 70, width: 130, resizeMode: "contain" }} />
+              <Text style={tw`mt-3`}>{car.model}</Text>
+            </TouchableOpacity>
+          ))
+        }
+      </View>
+    </ScrollView>
   );
 };
 

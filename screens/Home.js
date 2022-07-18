@@ -1,6 +1,7 @@
 import { useNavigation, useRoute } from "@react-navigation/native";
-import React, { useContext, useEffect, useRef, useState } from "react";
+import React, { useContext, useEffect, useState } from "react";
 import {
+  ActivityIndicator,
   Image,
   Modal,
   ScrollView,
@@ -30,7 +31,6 @@ const firestore = Firebase.firestore();
 const Home = () => {
   const [loading, setLoading] = useState(true); // Set loading to true on component mount
   const [usersFullname, setusersFullname] = useState(null);
-  const [showAlert, setshowAlert] = useState(false);
   const [image, setImage] = useState();
 
   const navigation = useNavigation();
@@ -45,7 +45,19 @@ const Home = () => {
   const dispatch = useDispatch();
 
   useEffect(() => {
-    const subscriber = firestore
+    let mounted = true
+
+    const fetchuserData = async () => {
+      await firestore
+        .collection("users")
+        .doc(user.uid)
+        .get()
+        .then((doc) => setusersFullname(doc.data().name))
+        .catch((error) => console.log(error));
+    };
+    
+    const fetchGarage = async () => {
+      await firestore
       .collection("Garage")
       .doc(user.uid)
       .collection("Garage")
@@ -60,8 +72,15 @@ const Home = () => {
           });
         });
         dispatch(getCars(garage));
-        // setLoading(false);
+        setLoading(false);
       });
+    }
+    if(mounted){
+      fetchGarage()
+      fetchuserData()
+    }
+
+    return () => { mounted = false }
   }, []);
 
   useEffect(() => {
@@ -80,19 +99,8 @@ const Home = () => {
   }, [])
   
   useEffect(() => {
-    const fetchuserData = async () => {
-      await firestore
-        .collection("users")
-        .doc(user.uid)
-        .get()
-        .then((doc) => setusersFullname(doc.data().name))
-        .catch((error) => console.log(error));
-    };
+    let mounted = true
 
-    fetchuserData()
-  }, [user]);
-
-  useEffect(() => {
     const fetchPlans = async () => {
       if (!current_car) return;
 
@@ -127,7 +135,11 @@ const Home = () => {
       return dispatch(getPlans(plan_arr));
     };
 
-    fetchPlans();
+    if(mounted) {
+      fetchPlans();
+    }
+
+    return () => { mounted = false }
   }, []);
 
   useEffect(() => {
@@ -156,23 +168,39 @@ const Home = () => {
     return false;
   };
 
-  useEffect(() => {
-    const fetchImage = async () => {
-      const img = await fetch(
-        `http://api.carsxe.com/images?key=${apikey}&make=${current_car.Make}&model=${current_car.Model}&year=${current_car.Year}&transparent=true`,
-        {
-          method: "GET",
-        }
-      );
-      const res = await img.json();
-      return res;
-    };
-    fetchImage().then((images) => setImage(images.images[0].thumbnailLink)).catch(err => console.log(err.message));
-    setLoading(false);
-  }, [current_car]);
+  // useEffect(() => {
+    // let mounted = true
+    // const fetchImage = async () => {
+    //   const img = await fetch(
+    //     `http://api.carsxe.com/images?key=${apikey}&make=${current_car.Make}&model=${current_car.Model}&year=${current_car.Year}&transparent=true`,
+    //     {
+    //       method: "GET",
+    //     }
+    //   );
+    //   const res = await img.json();
+    //   return res;
+    // };
+    
+    // fetchImage().then((images) => {
+    //   if(mounted){
+    //     setImage(images.images[0].thumbnailLink)
+    //   }
+    // }).catch(err => { return err })
+    // setLoading(false);
+
+    // return () => { mounted = false }
+  // }, [current_car]);
+
+  if (loading) {
+    return (
+      <View style={{ flex: 1, justifyContent: 'center', alignItems: 'center' }}>
+        <ActivityIndicator size='large' color={"#2bced6"} />
+      </View>
+    );
+  }
 
   return (
-    <View style={tw`bg-white pt-16`}>
+    <View style={tw`bg-white pt-16 flex-grow`}>
       <ScrollView>
         <View style={tw`bg-white ${checkModal() && "opacity-40"}`}>
           <View style={tw`flex-row justify-between px-3`}>
@@ -270,7 +298,7 @@ const Home = () => {
               </View>
             )}
 
-            <View style={tw`mb-5`}>
+            <View style={tw`mb-5 flex-grow`}>
               <View>
                 {loading ? (
                   <Text>Loading</Text>
@@ -325,24 +353,6 @@ const Home = () => {
   );
 };
 
-{
-  /* <Modal
-  transparent={true}
-  visible={showAlert}
->
-  <View style={tw`mt-10 bg-green-400 mx-auto w-11/12 p-3 rounded-lg`}>
-    <TouchableOpacity style={tw`w-full items-end`} onPress={() => setshowAlert(false)}>
-      <Icon name="close" type="font-awesome" color='white' size={20} />
-    </TouchableOpacity>
-    
-    <View style={tw`w-full items-center`}>
-      <Icon name="check-circle-o" color='white' type="font-awesome" />
-      <Text style={tw`text-white font-semibold`}>{router.params?.alert}</Text>
-    </View>
-  </View>
-  
-</Modal> */
-}
 
 export default Home;
 
