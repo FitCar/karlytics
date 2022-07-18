@@ -3,12 +3,13 @@ import { Image, StyleSheet, Text, TouchableOpacity, View } from "react-native";
 import { Icon } from "react-native-elements";
 import tw from "tailwind-react-native-classnames";
 import CollapsibleView from "@eliav2/react-native-collapsible-view";
-import { NavigationContainer, useNavigation } from "@react-navigation/native";
-import Diagnostic from "../screens/Diagnostic";
-import Inspection from "../screens/Inspection";
-import Maintenance from "../screens/Maintenance";
-import { useDispatch, useSelector } from "react-redux";
+import { useNavigation } from "@react-navigation/native";
+import { useDispatch } from "react-redux";
 import { setRequestId } from "../slices/carSlice";
+import AwesomeAlert from "react-native-awesome-alerts";
+import Firebase from "../config/firebase";
+
+const firestore = Firebase.firestore();
 
 const RequestCard = ({
   car,
@@ -17,9 +18,11 @@ const RequestCard = ({
   location,
   requestType,
   status,
+  user,
 }) => {
   const [expanded, setExpanded] = useState(false);
   const navigation = useNavigation();
+  const [showAlert, setshowAlert] = useState(false);
   const dispatch = useDispatch();
 
   const toggle = () => {
@@ -38,11 +41,38 @@ const RequestCard = ({
     navigation.navigate("Quotation");
   };
 
+  const handleRequestDelete = () => {
+    firestore
+      .collection("Requests")
+      .doc(user.uid)
+      .collection("Requests")
+      .doc(requestid)
+      .delete();
+
+    setshowAlert(false);
+  };
+
   return (
     <TouchableOpacity
       onPress={() => toggle()}
+      onLongPress={() => setshowAlert(true)}
       style={tw`bg-white mx-4 rounded-xl mb-4 p-5 justify-center shadow-2xl`}
     >
+      <AwesomeAlert
+        show={showAlert}
+        title={"Delete Request?"}
+        message={`Are you sure you want to delete this request`}
+        closeOnTouchOutside={true}
+        closeOnHardwareBackPress={false}
+        showCancelButton={true}
+        showConfirmButton={true}
+        cancelText="No, cancel"
+        confirmText="Yes, delete it"
+        confirmButtonColor="#DD6B55"
+        onCancelPressed={() => setshowAlert(false)}
+        onConfirmPressed={() => handleRequestDelete()}
+      />
+
       <View style={tw`flex-row justify-between`}>
         {requestType == "Maintenance" ? (
           <Image

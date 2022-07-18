@@ -61,6 +61,7 @@ const Requests = () => {
           data={requests}
           renderItem={({ item }) => (
             <RequestCard
+              user={user}
               car={item.Car}
               schedule={item.Schedule}
               location={item.Location}
