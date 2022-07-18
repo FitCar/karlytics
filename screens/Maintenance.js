@@ -139,10 +139,12 @@ const Maintenance = () => {
     <View style={tw`bg-white flex-grow py-8`}>
       <View style={tw`ml-5 mt-5`}>
         <View style={tw`mb-8`}>
-          <Text style={tw`font-bold text-lg text-black`}>
+          <Text style={[tw`text-lg`, { fontFamily: "SatushiBlack" }]}>
             Request Maintenance
           </Text>
-          <Text>Select a car</Text>
+          <Text style={{ fontFamily: "SatushiMedium", color: "grey" }}>
+            Select a car
+          </Text>
         </View>
       </View>
       <View>
@@ -221,6 +223,7 @@ const Maintenance = () => {
             testID="dateTimePicker"
             value={date}
             mode={mode}
+            textColor="black"
             is24Hour={true}
             display="default"
             onChange={onChange}

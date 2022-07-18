@@ -138,10 +138,12 @@ const Inspection = () => {
     <View style={tw`bg-white flex-grow`}>
       <View style={tw`ml-5 mt-8`}>
         <View style={tw`mb-8`}>
-          <Text style={tw`font-bold text-lg text-black`}>
+          <Text style={[tw`text-lg`, { fontFamily: "SatushiBlack" }]}>
             Request Inspection
           </Text>
-          <Text>Select a car</Text>
+          <Text style={{ fontFamily: "SatushiMedium", color: "grey" }}>
+            Select a car
+          </Text>
         </View>
       </View>
 
@@ -223,6 +225,7 @@ const Inspection = () => {
             mode={mode}
             is24Hour={true}
             display="default"
+            textColor="black"
             onChange={onChange}
           />
         )}
