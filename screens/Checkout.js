@@ -7,6 +7,7 @@ import { resetBasket, selectGrandTotal } from "../slices/carSlice";
 import { AuthenticatedUserContext } from "../navigation/AuthenticatedUserProvider";
 import Firebase from '../config/firebase';
 import firebase from 'firebase';
+import { SchedulePlanNotification } from '../notificationsConfig';
 
 const firestore = Firebase.firestore()
 
@@ -28,8 +29,10 @@ const Checkout = () => {
     plans_in_basket.forEach(async (plan) => {
       if(plan?.Name) {
         await plansRef.doc().set({...plan, createdAt: firebase.firestore.FieldValue.serverTimestamp()})
+        SchedulePlanNotification(plan)
       }else {
         await plansRef.doc().set({ carId: plan.key,  plan: plan.plan, garage_id: plan.garageId, createdAt: firebase.firestore.FieldValue.serverTimestamp() })
+        SchedulePlanNotification(plan)
       }
       
     })
@@ -46,6 +49,7 @@ const Checkout = () => {
     });
 
     return navigation.push('Tabs', { alert: `Payment was successful` })
+
   }
    
 
@@ -59,7 +63,7 @@ const Checkout = () => {
         onCancel={() => navigation.push('Basket')}
         onSuccess={() => handleSuccess()}
         autoStart={true}
-      />  
+      />
     </View>
   )
 }

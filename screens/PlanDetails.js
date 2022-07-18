@@ -6,8 +6,8 @@ import tw from "tailwind-react-native-classnames";
 
 const PlanDetails = () => {
     const route = useRoute()
-    const startDate = route.params.plan.createdAt ? new Date(route.params.plan.createdAt.seconds*1000) : new Date(Date.now())
-    const endDate = route.params.plan.createdAt ? new Date((route.params.plan.createdAt.seconds+31556926.000001)*1000) : new Date(Date.now()+(31556926.000001*1000))
+    const startDate = route.params.plan.createdAt ? new Date(route.params.plan.createdAt*1000) : new Date(Date.now())
+    const endDate = route.params.plan.createdAt ? new Date((route.params.plan.createdAt+31556926.000001)*1000) : new Date(Date.now()+(31556926.000001*1000))
 
     const addCommaToValue = (num) =>{
         let to_string = `${num}`
@@ -45,10 +45,10 @@ const PlanDetails = () => {
                 <Text style={tw`text-lg`}>{endDate.toLocaleDateString()}</Text>
             </View>
             
-            {/* <View style={tw`w-full  mb-5 flex-row justify-between px-3 rounded-lg mx-auto bg-white py-2`}>
+            <View style={tw`w-full  mb-5 flex-row justify-between px-3 rounded-lg mx-auto bg-white py-2`}>
                 <Text style={tw`text-lg text-gray-400`}>Price: </Text>
-                <Text style={tw`text-lg`}>{addCommaToValue(route.params.plan.plan.price)}</Text>
-            </View> */}
+                <Text style={tw`text-lg`}>₦ {addCommaToValue(route.params.plan.plan.price)}</Text>
+            </View>
         </View>
 
     </View>

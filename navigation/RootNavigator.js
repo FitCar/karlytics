@@ -19,9 +19,9 @@ export default function RootNavigator() {
     // onAuthStateChanged returns an unsubscriber
     let mount = true
 
-    auth.onAuthStateChanged(authenticatedUser => {
+    auth.onAuthStateChanged(async (authenticatedUser) => {
       if(mount) {
-        authenticatedUser ? setUser(authenticatedUser) : setUser(null)
+        await authenticatedUser ? setUser(authenticatedUser) : setUser(null)
         setIsLoading(false);
       }
     });
