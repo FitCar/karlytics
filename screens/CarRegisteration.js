@@ -113,7 +113,7 @@ const CarRegisteration = () => {
 
     carRef.doc().set(data);
     dispatch(setNextDate(nextDate.toString()));
-    navigation.navigate("Garage");
+    navigation.navigate("Garage", { bannerCar: data });
   };
 
   return (
