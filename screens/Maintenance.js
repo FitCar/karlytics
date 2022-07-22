@@ -18,6 +18,7 @@ import { AuthenticatedUserContext } from "../navigation/AuthenticatedUserProvide
 import AwesomeAlert from "react-native-awesome-alerts";
 import { changeTime } from "../cardata";
 import { useSelector } from "react-redux";
+import firebase from "firebase";
 
 const firestore = Firebase.firestore();
 
@@ -96,6 +97,7 @@ const Maintenance = () => {
       CarId: current_car.key,
       Location: selectedLocation,
       Schedule: newdate,
+      createdAt: firebase.firestore.FieldValue.serverTimestamp(),
       requestId,
       status: "Pending",
     };

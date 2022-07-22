@@ -22,6 +22,7 @@ const Requests = () => {
       .doc(user.uid)
       .collection("Requests")
       .where("requestId", "==", user.uid)
+      .orderBy("createdAt", "desc")
       .onSnapshot((querySnapshot) => {
         const request = [];
 
