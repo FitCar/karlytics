@@ -19,4 +19,4 @@ if (firebase.apps.length === 0) {
   Firebase = firebase.app();
 }
 
-export default Firebase;
+module.exports = Firebase;

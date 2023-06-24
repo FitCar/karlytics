@@ -48,8 +48,15 @@ const OnBoardScreen = () => {
         <Image source={value.source} />
 
         <View style={tw`mt-7 items-center mb-7`}>
-          <Text style={tw`text-xl font-semibold`}>{value.title}</Text>
-          <Text style={tw`text-gray-400 font-medium text-center text-lg`}>
+          <Text style={[tw`text-xl`, { fontFamily: "SatushiVariable" }]}>
+            {value.title}
+          </Text>
+          <Text
+            style={[
+              tw`text-gray-400 font-medium text-center text-lg`,
+              { fontFamily: "SatushiMediumI" },
+            ]}
+          >
             {value.info}
           </Text>
         </View>

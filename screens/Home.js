@@ -24,6 +24,7 @@ import PlansForCar from "../components/PlansForCar";
 import Constants from "expo-constants";
 import * as Notifications from "expo-notifications";
 import { getPermission } from "../notificationsConfig";
+import { Icon } from "react-native-elements";
 
 const apikey = Constants.manifest.extra.carApi;
 const firestore = Firebase.firestore();
@@ -198,6 +199,10 @@ const Home = () => {
   // return () => { mounted = false }
   // }, [current_car]);
 
+  const makeSchedule = () => {
+    navigation.navigate("Schedule", { current_car });
+  };
+
   if (loading) {
     return (
       <View style={{ flex: 1, justifyContent: "center", alignItems: "center" }}>
@@ -214,11 +219,16 @@ const Home = () => {
             <View>
               <Text
                 testID="welcomeText"
-                style={tw`font-bold text-lg text-black`}
+                style={[
+                  tw`font-bold text-black`,
+                  { fontFamily: "SatushiBold", fontSize: 22 },
+                ]}
               >
                 Welcome {usersFullname}{" "}
               </Text>
-              <Text>How's your car feeling today</Text>
+              <Text style={{ fontFamily: "SatushiMedium", fontSize: 16 }}>
+                How's your car feeling today
+              </Text>
             </View>
 
             <TouchableOpacity
@@ -243,7 +253,7 @@ const Home = () => {
                   <Text
                     style={[
                       tw`text-2xl font-semibold mb-5`,
-                      { color: "#2bced6" },
+                      { color: "#2bced6", fontFamily: "SatushiBold" },
                     ]}
                   >
                     {current_car.Make} {current_car.Model}
@@ -252,7 +262,12 @@ const Home = () => {
                   <ServiceInfo current_car={current_car} />
                 </View>
               ) : (
-                <Text style={tw`text-xl text-gray-600 font-medium`}>
+                <Text
+                  style={[
+                    { fontFamily: "SatushiBoldI" },
+                    tw`text-xl text-gray-400 font-medium`,
+                  ]}
+                >
                   Select a car from your garage
                 </Text>
               )}
@@ -262,17 +277,48 @@ const Home = () => {
           )}
 
           {cars.length > 0 ? (
-            <TouchableOpacity
-              style={[styles.selectCar, tw`mx-auto`]}
-              onPress={() => navigation.navigate("Garage")}
+            <View
+              style={tw`flex flex-row items-center justify-between px-4 pb-3`}
             >
-              <Text style={tw`text-white text-xl text-center`}>
-                {current_car ? "Change Car" : "Select Car"}
-              </Text>
-            </TouchableOpacity>
+              <TouchableOpacity
+                style={styles.selectCar}
+                onPress={() => navigation.navigate("Garage")}
+              >
+                <Text
+                  style={[
+                    tw`text-white text-xl text-center`,
+                    { fontFamily: "SatushiBlack" },
+                  ]}
+                >
+                  {current_car ? "Change Car" : "Select Car"}
+                </Text>
+              </TouchableOpacity>
+
+              {current_car && (
+                <TouchableOpacity
+                  style={tw`p-3 flex-row justify-center bg-gray-200 rounded-lg`}
+                  onPress={() => makeSchedule()}
+                >
+                  <Text style={tw`font-bold text-gray-500 text-xs`}>
+                    Set Reminder
+                  </Text>
+                  <Icon
+                    name="bell"
+                    size={12}
+                    color="#737f8a"
+                    type="font-awesome"
+                  />
+                </TouchableOpacity>
+              )}
+            </View>
           ) : (
             <View style={tw`w-full items-center justify-center`}>
-              <Text style={tw`font-semibold mb-5 text-gray-400`}>
+              <Text
+                style={[
+                  tw`font-semibold mb-5 text-gray-400`,
+                  { fontFamily: "SatushiMedium" },
+                ]}
+              >
                 No car(s) yet
               </Text>
             </View>
@@ -282,7 +328,12 @@ const Home = () => {
             {current_car && (
               <View style={tw`bg-gray-100 mt-5 w-full mx-auto p-3 rounded-lg`}>
                 <View style={tw`mb-5`}>
-                  <Text style={tw`text-xl font-semibold text-gray-800`}>
+                  <Text
+                    style={[
+                      tw`text-xl font-semibold text-gray-800`,
+                      { fontFamily: "SatushiBold" },
+                    ]}
+                  >
                     Membership Plan
                   </Text>
                   {plans.filter((item) => item.Name === "Membership").length >
@@ -292,13 +343,21 @@ const Home = () => {
                       .map((mem, index) => (
                         <Text
                           key={index}
-                          style={[tw`font-semibold text-sm text-gray-500`]}
+                          style={[
+                            tw`font-semibold text-sm text-gray-500`,
+                            { fontFamily: "SatushiMedium" },
+                          ]}
                         >
                           {mem.type} {mem.Name}
                         </Text>
                       ))
                   ) : (
-                    <Text style={tw`text-sm text-gray-400`}>
+                    <Text
+                      style={[
+                        tw`text-sm text-gray-400`,
+                        { fontFamily: "SatushiMedium" },
+                      ]}
+                    >
                       You have no membership plan yet
                     </Text>
                   )}
@@ -318,7 +377,12 @@ const Home = () => {
                 </View>
               )}
 
-              <Text style={tw`ml-7 mt-5 text-center font-bold mb-5 text-lg`}>
+              <Text
+                style={[
+                  { fontFamily: "SatushiBlack" },
+                  tw`m-5 text-center mb-5 text-lg`,
+                ]}
+              >
                 Make a request
               </Text>
             </View>
@@ -372,10 +436,10 @@ const styles = StyleSheet.create({
     paddingHorizontal: 10,
     flexDirection: "row",
     justifyContent: "center",
-    borderRadius: 20,
-    marginBottom: 20,
-    width: "80%",
+    borderRadius: 10,
     paddingVertical: 5,
+    flex: 1,
+    marginRight: 10,
   },
 
   basket: {

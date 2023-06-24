@@ -138,8 +138,12 @@ const Scan = () => {
     <View style={tw`bg-white flex-grow py-5`}>
       <View style={tw`ml-5 mt-5`}>
         <View style={tw`mb-8`}>
-          <Text style={tw`font-bold text-lg text-black`}>Request Scan</Text>
-          <Text>Select a car</Text>
+          <Text style={[tw`text-lg`, { fontFamily: "SatushiBlack" }]}>
+            Request Scan
+          </Text>
+          <Text style={{ fontFamily: "SatushiMedium", color: "grey" }}>
+            Select a car
+          </Text>
         </View>
       </View>
 
@@ -221,6 +225,7 @@ const Scan = () => {
             mode={mode}
             is24Hour={true}
             display="default"
+            textColor="black"
             onChange={onChange}
           />
         )}

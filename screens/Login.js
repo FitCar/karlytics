@@ -33,15 +33,17 @@ export default function Login() {
   const onLogin = async () => {
     setloading(true);
 
-    try {
-      if (email !== "" && password !== "") {
-        await auth.signInWithEmailAndPassword(email, password);
-      } else {
-        setLoginError("please enter all the fields");
-      }
-    } catch (error) {
-      setLoginError(error.message);
+    // try {
+    if (email !== "" && password !== "") {
+      await auth
+        .signInWithEmailAndPassword(email, password)
+        .catch((error) => setLoginError(error.message));
+    } else {
+      setLoginError("please enter all the fields");
     }
+    // } catch (error) {
+    // setLoginError(error.message);
+    // }
 
     return setloading(false);
   };
@@ -59,6 +61,7 @@ export default function Login() {
         leftIcon="email"
         testID="emailInput"
         placeholder="Enter email"
+        placeholderTextColor="slategray"
         autoCapitalize="none"
         keyboardType="email-address"
         textContentType="emailAddress"
@@ -73,6 +76,7 @@ export default function Login() {
         leftIcon="lock"
         placeholder="Enter password"
         autoCapitalize="none"
+        placeholderTextColor="slategray"
         testID="passwordInput"
         autoCorrect={false}
         secureTextEntry={passwordVisibility}
@@ -108,9 +112,11 @@ const styles = StyleSheet.create({
     paddingTop: 50,
     paddingHorizontal: 12,
   },
+
   title: {
     fontSize: 30,
     fontWeight: "600",
+    fontFamily: "SatushiMedium",
     color: "black",
     alignSelf: "center",
     paddingBottom: 24,
@@ -125,6 +131,7 @@ const styles = StyleSheet.create({
 
   input: {
     fontSize: 24,
+    fontFamily: "SatushiRegular",
   },
 
   login: {
@@ -132,5 +139,6 @@ const styles = StyleSheet.create({
     backgroundColor: "#2bced6",
     color: "#fff",
     fontSize: 20,
+    fontFamily: "SatushiBlack",
   },
 });

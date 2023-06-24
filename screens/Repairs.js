@@ -132,11 +132,15 @@ const Repairs = () => {
   };
 
   return (
-    <View style={tw`bg-white`}>
+    <View style={tw`bg-white flex-grow`}>
       <View style={tw`ml-5 mt-8`}>
         <View style={tw`mb-8`}>
-          <Text style={tw`font-bold text-lg text-black`}>Request Repairs</Text>
-          <Text>Select a car</Text>
+          <Text style={[tw`text-lg`, { fontFamily: "SatushiBlack" }]}>
+            Request Repairs
+          </Text>
+          <Text style={{ fontFamily: "SatushiMedium", color: "grey" }}>
+            Select a car
+          </Text>
         </View>
       </View>
 
@@ -216,6 +220,7 @@ const Repairs = () => {
             value={date}
             mode={mode}
             is24Hour={true}
+            textColor="black"
             display="default"
             onChange={onChange}
           />
