@@ -1,12 +1,5 @@
 import React, { useContext, useEffect, useState } from "react";
-import {
-  Button,
-  Image,
-  StyleSheet,
-  Text,
-  TouchableOpacity,
-  View,
-} from "react-native";
+import { StyleSheet, Text, TouchableOpacity, View } from "react-native";
 import tw from "tailwind-react-native-classnames";
 // import CollapsibleView from "@eliav2/react-native-collapsible-view";
 import { Icon } from "react-native-elements";
@@ -18,6 +11,7 @@ import { AuthenticatedUserContext } from "../navigation/AuthenticatedUserProvide
 import AwesomeAlert from "react-native-awesome-alerts";
 import { changeTime } from "../cardata";
 import { useSelector } from "react-redux";
+import firebase from "firebase";
 
 const firestore = Firebase.firestore();
 
@@ -97,6 +91,7 @@ const Scan = () => {
       Location: selectedLocation,
       Schedule: newdate,
       requestId,
+      createdAt: firebase.firestore.FieldValue.serverTimestamp(),
       status: "Pending",
     };
 

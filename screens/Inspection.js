@@ -17,6 +17,7 @@ import SelectDropdown from "react-native-select-dropdown";
 import { AuthenticatedUserContext } from "../navigation/AuthenticatedUserProvider";
 import { changeTime } from "../cardata";
 import { useSelector } from "react-redux";
+import firebase from "firebase";
 
 const firestore = Firebase.firestore();
 
@@ -96,6 +97,7 @@ const Inspection = () => {
       Location: selectedLocation,
       Schedule: newdate,
       requestId,
+      createdAt: firebase.firestore.FieldValue.serverTimestamp(),
       status: "Pending",
     };
 

@@ -2,6 +2,7 @@ import { useNavigation } from "@react-navigation/native";
 import React from "react";
 import {
   FlatList,
+  ScrollView,
   StyleSheet,
   Text,
   TouchableOpacity,
@@ -10,41 +11,59 @@ import {
 import tw from "tailwind-react-native-classnames";
 import { useDispatch, useSelector } from "react-redux";
 import { addModel, selectMake } from "../slices/carSlice";
-import models from './models'
+import models from "./models";
 
 const CarModels = () => {
-  const navigation = useNavigation()
-  const dispatch = useDispatch()
-  const make = useSelector(selectMake)
-  
+  const navigation = useNavigation();
+  const dispatch = useDispatch();
+  const make = useSelector(selectMake);
+
   let target = [];
 
-  models.filter((mod)=>{
-    return mod.model_make_id === make
-  }).map((mod) => {
-    target.push(mod.model_name)
-  })
-  
+  models
+    .filter((mod) => {
+      return mod.model_make_id === make;
+    })
+    .map((mod) => {
+      target.push(mod.model_name);
+    });
+
   const handleNext = (item) => {
-    navigation.navigate('CarRegisteration')
-    dispatch(addModel(item))
-  }
+    navigation.navigate("CarRegisteration");
+    dispatch(addModel(item));
+  };
 
   return (
-    <View style={tw`mt-10 pb-20`}>
+    <View style={tw`mt-10 pb-20 bg-gray-100 flex-1`}>
       <View style={tw`flex-row justify-center mb-4`}>
-        <Text style={tw`font-bold text-xl`}>{make}</Text>
+        <Text style={[tw`font-bold text-2xl`, { fontFamily: "SatushiBold" }]}>
+          {make}
+        </Text>
       </View>
-      
-      <FlatList
-        data={target}
-        renderItem={({item}) => (
-          <TouchableOpacity style={tw`bg-gray-100 text-lg h-10 text-center py-1 border-t justify-center `} onPress={() => handleNext(item)}>
-            <Text style={tw`px-3`}>{item}</Text>
-          </TouchableOpacity>
+
+      <ScrollView
+        contentContainerStyle={tw`flex flex-row flex-wrap justify-center`}
+      >
+        {target.length ? (
+          target.map((car, index) => (
+            <TouchableOpacity
+              key={index}
+              style={tw`bg-white m-4 w-32 text-lg h-16 py-1 justify-center rounded-lg shadow-lg`}
+              onPress={() => handleNext(car)}
+            >
+              <Text style={[tw`text-center`, { fontFamily: "SatushiMedium" }]}>
+                {car}
+              </Text>
+            </TouchableOpacity>
+          ))
+        ) : (
+          <View>
+            <Text style={tw`text-gray-400 text-lg`}>
+              No Models available yet
+            </Text>
+          </View>
         )}
-        keyExtractor={item => item.index}
-      />
+      </ScrollView>
     </View>
   );
 };

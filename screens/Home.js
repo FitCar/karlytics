@@ -18,7 +18,7 @@ import Firebase from "../config/firebase";
 import { AuthenticatedUserContext } from "../navigation/AuthenticatedUserProvider";
 import ServiceInfo from "../components/ServiceInfo";
 import { useSelector, useDispatch } from "react-redux";
-import { getPlans } from "../slices/carSlice";
+import { getPlans, setCurrentCar } from "../slices/carSlice";
 import { getCars, fetchBasketItems } from "../slices/carSlice";
 import PlansForCar from "../components/PlansForCar";
 import Constants from "expo-constants";
@@ -83,6 +83,18 @@ const Home = () => {
       mounted = false;
     };
   }, []);
+
+  useEffect(() => {
+    const checkifOneCar = () => {
+      if (cars.length < 1) return;
+
+      if (cars.length === 1) {
+        dispatch(setCurrentCar(cars[0]));
+      }
+    };
+
+    checkifOneCar();
+  }, [cars]);
 
   useEffect(() => {
     getPermission(user.uid);

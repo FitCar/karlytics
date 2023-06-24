@@ -22,6 +22,7 @@ const Requests = () => {
       .doc(user.uid)
       .collection("Requests")
       .where("requestId", "==", user.uid)
+      .orderBy("createdAt", "desc")
       .onSnapshot((querySnapshot) => {
         const request = [];
 
@@ -61,6 +62,7 @@ const Requests = () => {
           data={requests}
           renderItem={({ item }) => (
             <RequestCard
+              user={user}
               car={item.Car}
               schedule={item.Schedule}
               location={item.Location}
