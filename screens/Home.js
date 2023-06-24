@@ -21,11 +21,11 @@ import { useSelector, useDispatch } from "react-redux";
 import { getPlans } from "../slices/carSlice";
 import { getCars, fetchBasketItems } from "../slices/carSlice";
 import PlansForCar from "../components/PlansForCar";
-import Constants from 'expo-constants';
-import * as Notifications from 'expo-notifications'
+import Constants from "expo-constants";
+import * as Notifications from "expo-notifications";
 import { getPermission } from "../notificationsConfig";
 
-const apikey = Constants.manifest.extra.carApi
+const apikey = Constants.manifest.extra.carApi;
 const firestore = Firebase.firestore();
 
 const Home = () => {
@@ -36,14 +36,14 @@ const Home = () => {
   const navigation = useNavigation();
   const router = useRoute();
   const { user } = useContext(AuthenticatedUserContext);
- 
+
   const { current_car, cars, plans, basket } = useSelector(
     (state) => state.car
   );
   const dispatch = useDispatch();
 
   useEffect(() => {
-    let mounted = true
+    let mounted = true;
 
     const fetchuserData = async () => {
       await firestore
@@ -53,52 +53,53 @@ const Home = () => {
         .then((doc) => setusersFullname(doc.data().name))
         .catch((error) => console.log(error));
     };
-    
+
     const fetchGarage = async () => {
       await firestore
-      .collection("Garage")
-      .doc(user.uid)
-      .collection("Garage")
-      .where("garageId", "==", user.uid)
-      .onSnapshot((querySnapshot) => {
-        const garage = [];
+        .collection("Garage")
+        .doc(user.uid)
+        .collection("Garage")
+        .where("garageId", "==", user.uid)
+        .onSnapshot((querySnapshot) => {
+          const garage = [];
 
-        querySnapshot.forEach((documentSnapshot) => {
-          garage.push({
-            ...documentSnapshot.data(),
-            key: documentSnapshot.id,
+          querySnapshot.forEach((documentSnapshot) => {
+            garage.push({
+              ...documentSnapshot.data(),
+              key: documentSnapshot.id,
+            });
           });
+          dispatch(getCars(garage));
+          setLoading(false);
         });
-        dispatch(getCars(garage));
-        setLoading(false);
-      });
-    }
-    if(mounted){
-      fetchGarage()
-      fetchuserData()
+    };
+    if (mounted) {
+      fetchGarage();
+      fetchuserData();
     }
 
-    return () => { mounted = false }
+    return () => {
+      mounted = false;
+    };
   }, []);
 
   useEffect(() => {
-    getPermission(user.uid)
-    
-    Notifications.addNotificationReceivedListener(notification => {
+    getPermission(user.uid);
+
+    Notifications.addNotificationReceivedListener((notification) => {
       //when notification comes in
       // firestore.collection("Plans").doc(user.uid).collection("Plans").where("basketId", "==", notification.request.content.data.data.basketId).delete()
     });
 
-    Notifications.addNotificationResponseReceivedListener(response => {
+    Notifications.addNotificationResponseReceivedListener((response) => {
       //when the notification is clicked
       // console.log(response)
       // navigation.navigate("Garage")
     });
+  }, []);
 
-  }, [])
-  
   useEffect(() => {
-    let mounted = true
+    let mounted = true;
 
     const fetchPlans = async () => {
       if (!current_car) return;
@@ -113,7 +114,10 @@ const Home = () => {
         .get()
         .then((res) => {
           res.forEach((plan) => {
-            plan_arr = [...plan_arr, { ...plan.data(), createdAt: plan.data().createdAt.seconds }];
+            plan_arr = [
+              ...plan_arr,
+              { ...plan.data(), createdAt: plan.data().createdAt.seconds },
+            ];
           });
         })
         .catch((error) => console.log(error));
@@ -126,7 +130,10 @@ const Home = () => {
         .get()
         .then((res) => {
           res.forEach((plan) => {
-            plan_arr = [...plan_arr, { ...plan.data(), createdAt: plan.data().createdAt.seconds }];
+            plan_arr = [
+              ...plan_arr,
+              { ...plan.data(), createdAt: plan.data().createdAt.seconds },
+            ];
           });
         })
         .catch((error) => console.log(error));
@@ -134,24 +141,26 @@ const Home = () => {
       return dispatch(getPlans(plan_arr));
     };
 
-  
-    fetchPlans()
+    fetchPlans();
 
-    return () => { mounted = false }
+    return () => {
+      mounted = false;
+    };
   }, [current_car]);
 
   useEffect(() => {
-    const fetchBasket = () =>{
-      firestore.collection("Basket")
-      .doc(user.uid)
-      .collection("Basket")
-      .onSnapshot(snapshot => {
-        dispatch(fetchBasketItems(snapshot.docs?.map(doc => doc.data())))
-      })
-  }
+    const fetchBasket = () => {
+      firestore
+        .collection("Basket")
+        .doc(user.uid)
+        .collection("Basket")
+        .onSnapshot((snapshot) => {
+          dispatch(fetchBasketItems(snapshot.docs?.map((doc) => doc.data())));
+        });
+    };
 
-  fetchBasket()
-  }, [])
+    fetchBasket();
+  }, []);
 
   const handleServiceButton = (route) => {
     if (cars.length === 0)
@@ -167,32 +176,32 @@ const Home = () => {
   };
 
   // useEffect(() => {
-    // let mounted = true
-    // const fetchImage = async () => {
-    //   const img = await fetch(
-    //     `http://api.carsxe.com/images?key=${apikey}&make=${current_car.Make}&model=${current_car.Model}&year=${current_car.Year}&transparent=true`,
-    //     {
-    //       method: "GET",
-    //     }
-    //   );
-    //   const res = await img.json();
-    //   return res;
-    // };
-    
-    // fetchImage().then((images) => {
-    //   if(mounted){
-    //     setImage(images.images[0].thumbnailLink)
-    //   }
-    // }).catch(err => { return err })
-    // setLoading(false);
+  // let mounted = true
+  // const fetchImage = async () => {
+  //   const img = await fetch(
+  //     `http://api.carsxe.com/images?key=${apikey}&make=${current_car.Make}&model=${current_car.Model}&year=${current_car.Year}&transparent=true`,
+  //     {
+  //       method: "GET",
+  //     }
+  //   );
+  //   const res = await img.json();
+  //   return res;
+  // };
 
-    // return () => { mounted = false }
+  // fetchImage().then((images) => {
+  //   if(mounted){
+  //     setImage(images.images[0].thumbnailLink)
+  //   }
+  // }).catch(err => { return err })
+  // setLoading(false);
+
+  // return () => { mounted = false }
   // }, [current_car]);
 
   if (loading) {
     return (
-      <View style={{ flex: 1, justifyContent: 'center', alignItems: 'center' }}>
-        <ActivityIndicator size='large' color={"#2bced6"} />
+      <View style={{ flex: 1, justifyContent: "center", alignItems: "center" }}>
+        <ActivityIndicator size="large" color={"#2bced6"} />
       </View>
     );
   }
@@ -203,7 +212,10 @@ const Home = () => {
         <View style={tw`bg-white ${checkModal() && "opacity-40"}`}>
           <View style={tw`flex-row justify-between px-3`}>
             <View>
-              <Text style={tw`font-bold text-lg text-black`}>
+              <Text
+                testID="welcomeText"
+                style={tw`font-bold text-lg text-black`}
+              >
                 Welcome {usersFullname}{" "}
               </Text>
               <Text>How's your car feeling today</Text>
@@ -297,13 +309,14 @@ const Home = () => {
             )}
 
             <View style={tw`mb-5 flex-grow`}>
-              <View>
-                {loading ? (
-                  <Text>Loading</Text>
-                ) : (
-                  <HealthCard image={image} />
-                )}
-              </View>
+              {current_car && (
+                <View>
+                  <HealthCard
+                    image={image}
+                    healthScore={current_car.healthScore}
+                  />
+                </View>
+              )}
 
               <Text style={tw`ml-7 mt-5 text-center font-bold mb-5 text-lg`}>
                 Make a request
@@ -350,7 +363,6 @@ const Home = () => {
     </View>
   );
 };
-
 
 export default Home;
 

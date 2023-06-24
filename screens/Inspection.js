@@ -16,6 +16,7 @@ import { useNavigation } from "@react-navigation/native";
 import SelectDropdown from "react-native-select-dropdown";
 import { AuthenticatedUserContext } from "../navigation/AuthenticatedUserProvider";
 import { changeTime } from "../cardata";
+import { useSelector } from "react-redux";
 
 const firestore = Firebase.firestore();
 
@@ -28,33 +29,35 @@ const Inspection = () => {
   const [garage, setGarage] = useState([]); // Initial empty array of users
   const [selectedCar, setSelectedCar] = useState("");
   const [selectedLocation, setSelectedLocation] = useState("");
-  const [showAlert, setshowAlert] = useState(false)
-  const [error, seterror] = useState("")
+  const [showAlert, setshowAlert] = useState(false);
+  const [error, seterror] = useState("");
 
   const [date, setDate] = useState(new Date());
   const [mode, setMode] = useState("date");
   const [show, setShow] = useState(false);
   const [dateText, setdateText] = useState({
     date: "Choose Date",
-    time: "Choose Time"
-  })
-
+    time: "Choose Time",
+  });
+  const { current_car } = useSelector((state) => state.car);
 
   const onChange = (selectedDate, dateTime) => {
     const currentDate = dateTime || date;
     setShow(Platform.OS === "ios");
     setDate(currentDate);
 
-    if(mode === 'date') {
+    if (mode === "date") {
       setdateText({
         ...dateText,
-        date: currentDate.toLocaleDateString()
-      })
-    }else {
+        date: currentDate.toLocaleDateString(),
+      });
+    } else {
       setdateText({
         ...dateText,
-        time: `${changeTime(currentDate.getUTCHours(), 'hours')}: ${changeTime(currentDate.getUTCMinutes())} `
-      })
+        time: `${changeTime(currentDate.getUTCHours(), "hours")}: ${changeTime(
+          currentDate.getUTCMinutes()
+        )} `,
+      });
     }
   };
 
@@ -72,14 +75,14 @@ const Inspection = () => {
   };
 
   const submit = () => {
-    if(!selectedCar) {
-      seterror("Please a select a car for scan")
-      return setshowAlert(true)
+    if (!selectedCar) {
+      seterror("Please a select a car for scan");
+      return setshowAlert(true);
     }
 
-    if(!selectedLocation) {
-      seterror("Please Choose location for car pickup")
-      return setshowAlert(true)
+    if (!selectedLocation) {
+      seterror("Please Choose location for car pickup");
+      return setshowAlert(true);
     }
 
     const newdate = date.toString();
@@ -89,10 +92,11 @@ const Inspection = () => {
       requestIcon: "../assets/icons/Inspect.png",
       requestType: "Inspection",
       Car: selectedCar,
+      CarId: current_car.key,
       Location: selectedLocation,
       Schedule: newdate,
       requestId,
-      status: "Pending"
+      status: "Pending",
     };
 
     const requestRef = firestore
@@ -126,9 +130,9 @@ const Inspection = () => {
       });
   }, []);
 
-  const confirm = () =>{
-    return setshowAlert(false)
-  }
+  const confirm = () => {
+    return setshowAlert(false);
+  };
 
   return (
     <View style={tw`bg-white flex-grow`}>
@@ -155,7 +159,7 @@ const Inspection = () => {
         />
 
         <SelectDropdown
-         buttonStyle={tw`mb-5 self-center bg-gray-200 rounded-lg w-5/6 shadow-lg`}
+          buttonStyle={tw`mb-5 self-center bg-gray-200 rounded-lg w-5/6 shadow-lg`}
           data={garage}
           onSelect={(selectedItem, index) => {
             console.log(selectedItem.Make, index);
@@ -173,9 +177,9 @@ const Inspection = () => {
             return item.Make + " " + item.Model;
           }}
         />
-       
+
         <SelectDropdown
-         buttonStyle={tw`mb-5 self-center bg-gray-200 rounded-lg w-5/6 shadow-lg`}
+          buttonStyle={tw`mb-5 self-center bg-gray-200 rounded-lg w-5/6 shadow-lg`}
           data={location}
           onSelect={(selectedItem, index) => {
             console.log(selectedItem, index);
@@ -194,12 +198,22 @@ const Inspection = () => {
           }}
         />
 
-        <TouchableOpacity onPress={() => showDatepicker()} style={tw`mb-5 w-5/6 border-2 mx-auto rounded-lg border-blue-300 py-2`}>
-          <Text style={tw`text-blue-500 font-semibold text-center text-xl`}>{dateText.date}</Text>
+        <TouchableOpacity
+          onPress={() => showDatepicker()}
+          style={tw`mb-5 w-5/6 border-2 mx-auto rounded-lg border-blue-300 py-2`}
+        >
+          <Text style={tw`text-blue-500 font-semibold text-center text-xl`}>
+            {dateText.date}
+          </Text>
         </TouchableOpacity>
 
-        <TouchableOpacity onPress={() => showTimepicker()} style={tw`mb-5 w-5/6 border-2 mx-auto rounded-lg border-blue-300 py-2`}>
-          <Text style={tw`text-blue-500 font-semibold text-center text-xl`}>{dateText.time}</Text>
+        <TouchableOpacity
+          onPress={() => showTimepicker()}
+          style={tw`mb-5 w-5/6 border-2 mx-auto rounded-lg border-blue-300 py-2`}
+        >
+          <Text style={tw`text-blue-500 font-semibold text-center text-xl`}>
+            {dateText.time}
+          </Text>
         </TouchableOpacity>
 
         {show && (
@@ -214,7 +228,13 @@ const Inspection = () => {
         )}
       </View>
 
-      <TouchableOpacity style={[{ backgroundColor: "#2bced6" }, tw`mx-auto w-5/6 rounded-lg p-3 mt-3 shadow-lg`]} onPress={() => submit()}>
+      <TouchableOpacity
+        style={[
+          { backgroundColor: "#2bced6" },
+          tw`mx-auto w-5/6 rounded-lg p-3 mt-3 shadow-lg`,
+        ]}
+        onPress={() => submit()}
+      >
         <Text style={tw`text-white text-center`}>Submit</Text>
       </TouchableOpacity>
     </View>

@@ -1,75 +1,47 @@
 import React from "react";
+import { useState } from "react";
 import { Image, StyleSheet, Text, View } from "react-native";
-import {
-  LineChart,
-  BarChart,
-  PieChart,
-  ProgressChart,
-  ContributionGraph,
-  StackedBarChart,
-} from "react-native-chart-kit";
-import { Dimensions } from "react-native";
+import CircularProgress from "react-native-circular-progress-indicator";
 import tw from "tailwind-react-native-classnames";
 
-const HealthCard = ({image}) => {
-  const chartConfig = {
-    backgroundGradientFrom: "#ffffff",
-    backgroundGradientFromOpacity: 1,
-    backgroundGradientTo: "#ffffff",
-    backgroundGradientToOpacity: 0,
-    color: (opacity = 1) => `rgba(${color}, ${opacity})`,
-    strokeWidth: 2, // optional, default 3
-    useShadowColorFromDataset: false, // optional
+const HealthCard = ({ image, healthScore }) => {
+  const carHealth = healthScore ? Number.parseInt(healthScore) : 0;
+
+  const getCarColor = () => {
+    if (carHealth >= 45 && carHealth < 80) return "orange";
+    if (carHealth >= 80) return "#2ca21e";
+    return "red";
   };
-
-  const health = 0.6;
-
-  let color = "";
-
-  if (health < 0.7) {
-    color = "220,20,60";
-  } else {
-    color = "80, 200, 120";
-  }
-
-  const data = {
-    labels: ["Car Health"], // optional
-    data: [health],
-  };
-
-  const screenWidth = Dimensions.get("window").width;
 
   return (
-    <View style={tw`bg-white rounded-2xl mx-2 mt-5`}>
-      <Text style={tw`font-bold text-center text-lg`}>
-        Vehicle Health (Coming soon)
-      </Text>
+    <View style={tw`bg-white rounded-2xl mx-2 mt-5 px-3 py-5`}>
+      <Text style={tw`font-bold text-center text-lg`}>Car Health</Text>
 
-      <View style={tw`flex-row`}>
-        <ProgressChart
-          data={data}
-          width={screenWidth}
-          height={220}
-          strokeWidth={10}
-          radius={65}
-          chartConfig={chartConfig}
-          hideLegend={true}
-          style={tw`-ml-24`}
+      <View style={tw`flex-row items-center justify-around mt-3`}>
+        <CircularProgress
+          value={carHealth}
+          inActiveStrokeColor={getCarColor(carHealth)}
+          inActiveStrokeOpacity={0.3}
+          textColor={"#ecf0f1"}
+          maxValue={100}
+          activeStrokeColor={getCarColor(carHealth)}
+          valueSuffix={"%"}
         />
-        <View style={tw`-ml-28 mt-8 mb-5`}>
+
+        <View>
           <View>
-          <Image
-            style={styles.logo}
-            source={{
-              uri:
-                `${image}`,
-            }}
-          />
+            <Image
+              style={styles.logo}
+              source={{
+                uri: `${image}`,
+              }}
+            />
           </View>
+
           <View>
-          <Text>Distance travelled: 23km</Text>
-          <Text>Faults: 0</Text>
-          <Text>Status: Very good</Text>
+            <Text>Distance travelled: 23km</Text>
+            <Text>Faults: 0</Text>
+            <Text>Status: Very good</Text>
           </View>
         </View>
       </View>
@@ -82,8 +54,7 @@ export default HealthCard;
 const styles = StyleSheet.create({
   logo: {
     width: 190,
-    height:90,
+    height: 90,
     marginBottom: 15,
-   
-  }
+  },
 });

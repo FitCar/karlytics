@@ -17,6 +17,7 @@ import SelectDropdown from "react-native-select-dropdown";
 import { AuthenticatedUserContext } from "../navigation/AuthenticatedUserProvider";
 import AwesomeAlert from "react-native-awesome-alerts";
 import { changeTime } from "../cardata";
+import { useSelector } from "react-redux";
 
 const firestore = Firebase.firestore();
 
@@ -29,34 +30,36 @@ const Scan = () => {
   const [garage, setGarage] = useState([]); // Initial empty array of users
   const [selectedCar, setSelectedCar] = useState(null);
   const [selectedLocation, setSelectedLocation] = useState(null);
-  const [error, seterror] = useState("")
+  const [error, seterror] = useState("");
 
   const [date, setDate] = useState(new Date());
   const [mode, setMode] = useState("date");
   const [show, setShow] = useState(false);
-  const [showAlert, setshowAlert] = useState(false)
+  const [showAlert, setshowAlert] = useState(false);
   const [dateText, setdateText] = useState({
     date: "Choose Date",
-    time: "Choose Time"
-  })
- 
+    time: "Choose Time",
+  });
+  const { current_car } = useSelector((state) => state.car);
+
   const onChange = (selectedDate, dateTime) => {
     const currentDate = dateTime || date;
     setShow(Platform.OS === "ios");
     setDate(currentDate);
 
-    if(mode === 'date') {
+    if (mode === "date") {
       setdateText({
         ...dateText,
-        date: currentDate.toLocaleDateString()
-      })
-    }else {
+        date: currentDate.toLocaleDateString(),
+      });
+    } else {
       setdateText({
         ...dateText,
-        time: `${changeTime(currentDate.getUTCHours(), 'hours')}: ${changeTime(currentDate.getUTCMinutes())} `
-      })
+        time: `${changeTime(currentDate.getUTCHours(), "hours")}: ${changeTime(
+          currentDate.getUTCMinutes()
+        )} `,
+      });
     }
-
   };
 
   const showMode = (currentMode) => {
@@ -73,31 +76,34 @@ const Scan = () => {
   };
 
   const submit = () => {
-    
-    if(!selectedCar) {
-      seterror("Please a select a car for scan")
-      return setshowAlert(true)
+    if (!selectedCar) {
+      seterror("Please a select a car for scan");
+      return setshowAlert(true);
     }
 
-    if(!selectedLocation) {
-      seterror("Please Choose location for car pickup")
-      return setshowAlert(true)
+    if (!selectedLocation) {
+      seterror("Please Choose location for car pickup");
+      return setshowAlert(true);
     }
 
     const newdate = date.toString();
-    const requestId = user.uid
+    const requestId = user.uid;
 
     const data = {
       requestIcon: "../assets/icons/maintain.png",
       requestType: "Scan",
       Car: selectedCar,
+      CarId: current_car.key,
       Location: selectedLocation,
       Schedule: newdate,
       requestId,
-      status: "Pending"
+      status: "Pending",
     };
 
-    const requestRef = firestore.collection("Requests").doc(requestId).collection('Requests');;
+    const requestRef = firestore
+      .collection("Requests")
+      .doc(requestId)
+      .collection("Requests");
 
     requestRef.doc().set(data);
 
@@ -106,7 +112,10 @@ const Scan = () => {
 
   useEffect(() => {
     const subscriber = firestore
-      .collection("Garage").doc(user.uid).collection('Garage').where('garageId', '==', user.uid)
+      .collection("Garage")
+      .doc(user.uid)
+      .collection("Garage")
+      .where("garageId", "==", user.uid)
       .onSnapshot((querySnapshot) => {
         const garage = [];
 
@@ -119,25 +128,23 @@ const Scan = () => {
         setGarage(garage);
         setLoading(false);
       });
-  },[]);
+  }, []);
 
-  const confirm = () =>{
-    return setshowAlert(false)
-  }
+  const confirm = () => {
+    return setshowAlert(false);
+  };
 
   return (
     <View style={tw`bg-white flex-grow py-5`}>
       <View style={tw`ml-5 mt-5`}>
         <View style={tw`mb-8`}>
-          <Text style={tw`font-bold text-lg text-black`}>
-            Request Scan
-          </Text>
+          <Text style={tw`font-bold text-lg text-black`}>Request Scan</Text>
           <Text>Select a car</Text>
         </View>
       </View>
 
       <View>
-      <AwesomeAlert
+        <AwesomeAlert
           show={showAlert}
           title={"Failed to make request"}
           message={error}
@@ -148,7 +155,7 @@ const Scan = () => {
           confirmButtonColor="red"
           onConfirmPressed={() => confirm()}
         />
-        
+
         <SelectDropdown
           buttonStyle={tw`mb-5 self-center bg-gray-200 rounded-lg w-5/6 shadow-lg`}
           data={garage}
@@ -168,7 +175,7 @@ const Scan = () => {
             return item.Make + " " + item.Model;
           }}
         />
-       
+
         <SelectDropdown
           buttonStyle={tw`mb-5 self-center bg-gray-200 rounded-lg w-5/6 shadow-lg`}
           data={location}
@@ -189,12 +196,22 @@ const Scan = () => {
           }}
         />
 
-        <TouchableOpacity onPress={() => showDatepicker()} style={tw`mb-5 w-5/6 border-2 mx-auto rounded-lg border-blue-300 py-2`}>
-          <Text style={tw`text-blue-500 font-semibold text-center text-xl`}>{dateText.date}</Text>
+        <TouchableOpacity
+          onPress={() => showDatepicker()}
+          style={tw`mb-5 w-5/6 border-2 mx-auto rounded-lg border-blue-300 py-2`}
+        >
+          <Text style={tw`text-blue-500 font-semibold text-center text-xl`}>
+            {dateText.date}
+          </Text>
         </TouchableOpacity>
 
-        <TouchableOpacity onPress={() => showTimepicker()} style={tw`mb-5 w-5/6 border-2 mx-auto rounded-lg border-blue-300 py-2`}>
-          <Text style={tw`text-blue-500 font-semibold text-center text-xl`}>{dateText.time}</Text>
+        <TouchableOpacity
+          onPress={() => showTimepicker()}
+          style={tw`mb-5 w-5/6 border-2 mx-auto rounded-lg border-blue-300 py-2`}
+        >
+          <Text style={tw`text-blue-500 font-semibold text-center text-xl`}>
+            {dateText.time}
+          </Text>
         </TouchableOpacity>
 
         {show && (
@@ -209,7 +226,13 @@ const Scan = () => {
         )}
       </View>
 
-      <TouchableOpacity style={[{ backgroundColor: "#2bced6" }, tw`mx-auto w-5/6 rounded-lg p-3 mt-3 shadow-lg`]} onPress={() => submit()}>
+      <TouchableOpacity
+        style={[
+          { backgroundColor: "#2bced6" },
+          tw`mx-auto w-5/6 rounded-lg p-3 mt-3 shadow-lg`,
+        ]}
+        onPress={() => submit()}
+      >
         <Text style={tw`text-white text-center`}>Submit</Text>
       </TouchableOpacity>
     </View>
